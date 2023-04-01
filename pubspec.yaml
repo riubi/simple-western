@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   flame: ^1.6.0
-
+  flame_audio: ^1.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -53,13 +53,15 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-  uses-material-design: true
+  # uses-material-design: true
   assets:   
     - assets/images/fighters/player-1.png
     - assets/images/fighters/player-1-shooting.png
     - assets/images/fighters/player-2.png
     - assets/images/fighters/player-2-shooting.png
     - assets/images/backgrounds/background-1.png
+    - assets/audio/background-music.mp3
+    - assets/audio/gunshot-1.mp3
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

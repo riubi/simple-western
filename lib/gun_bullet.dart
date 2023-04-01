@@ -1,11 +1,11 @@
 import 'dart:ui';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:simple_western/global_config.dart';
 
 class GunBullet extends PositionComponent with CollisionCallbacks {
-  int _directionModifier = 1;
+  final int _directionModifier;
 
   GunBullet(position, this._directionModifier) {
     this.position = position;
@@ -15,6 +15,7 @@ class GunBullet extends PositionComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
     position.y += 46;
     if (_directionModifier > 0) {
       position.x += 72;
@@ -22,6 +23,24 @@ class GunBullet extends PositionComponent with CollisionCallbacks {
       anchor = Anchor.topRight;
       position.x += 3;
     }
+
+    FlameAudio.playLongAudio('gunshot-1.mp3', volume: 1);
+    add(RectangleHitbox());
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    print(other);
+    super.onCollision(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    print(other);
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
