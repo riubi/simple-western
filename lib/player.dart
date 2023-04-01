@@ -5,36 +5,43 @@ import 'package:simple_western/global_config.dart';
 import 'package:simple_western/player_state.dart';
 import 'package:simple_western/position_bordarable.dart';
 import 'package:simple_western/position_obstaclable.dart';
-import 'package:simple_western/player_key_set.dart';
+import 'package:simple_western/player_binging_set.dart';
+import 'package:simple_western/gun_bullet.dart';
 
-class Player extends SpriteAnimationComponent with PositionObstaclable, CollisionCallbacks, KeyboardHandler, HasGameRef {
-
+class Player extends SpriteAnimationComponent
+    with PositionObstaclable, CollisionCallbacks, KeyboardHandler, HasGameRef {
   static final Vector2 defaultSize = Vector2.all(70);
 
   Set<PlayerState> _currentStates = {PlayerState.regular};
 
-  final PlayerKeySet _keySet;
+  final PlayerBindingSet _keySet;
   late Map _stateToMoveFunctionMap;
 
+  bool get _isBlocked => animation == shooting && !shooting.done();
+
   final String _asset;
+  final String _shootingAsset;
 
   final int _xSpeed = 2;
   final int _ySpeed = 1;
 
   late SpriteAnimation going;
   late SpriteAnimation standing;
+  late SpriteAnimation shooting;
 
-  Player(this._keySet, this._asset) : super(size: defaultSize) {
+  Player(this._keySet, this._asset, this._shootingAsset)
+      : super(size: defaultSize) {
     _stateToMoveFunctionMap = {
-      PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy-_ySpeed),
-      PlayerState.down: (Offset offset) => Offset(offset.dx, offset.dy+_ySpeed),
+      PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),
+      PlayerState.down: (Offset offset) =>
+          Offset(offset.dx, offset.dy + _ySpeed),
       PlayerState.left: (Offset offset) {
         turnLeft();
-        return Offset(offset.dx-_xSpeed, offset.dy);
+        return Offset(offset.dx - _xSpeed, offset.dy);
       },
       PlayerState.right: (Offset offset) {
         turnRight();
-        return Offset(offset.dx+_xSpeed, offset.dy);
+        return Offset(offset.dx + _xSpeed, offset.dy);
       },
     };
 
@@ -45,19 +52,36 @@ class Player extends SpriteAnimationComponent with PositionObstaclable, Collisio
   Future<void> onLoad() async {
     await super.onLoad();
 
-    going = (await gameRef.loadSpriteAnimation(_asset, SpriteAnimationData.sequenced(
-      amount: 4,
-      textureSize: Vector2.all(192),
-      stepTime: 0.15,
-      loop: true,
-    )));
+    going = await gameRef.loadSpriteAnimation(
+        _asset,
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          textureSize: Vector2.all(192),
+          stepTime: 0.15,
+          loop: true,
+        ));
 
-    standing = (await gameRef.loadSpriteAnimation(_asset, SpriteAnimationData.sequenced(
-      amount: 1,
-      textureSize: Vector2.all(192),
-      stepTime: 1,
-      loop: false,
-    )));
+    standing = await gameRef.loadSpriteAnimation(
+        _asset,
+        SpriteAnimationData.sequenced(
+          amount: 2,
+          textureSize: Vector2.all(192),
+          stepTime: 0.3,
+          loop: true,
+        ));
+
+    shooting = await gameRef.loadSpriteAnimation(
+        _shootingAsset,
+        SpriteAnimationData.sequenced(
+          amount: 3,
+          textureSize: Vector2.all(192),
+          stepTime: 0.15,
+          loop: false,
+        ));
+
+    shooting.onComplete = () {
+      shoot();
+    };
 
     animation = standing;
 
@@ -72,16 +96,26 @@ class Player extends SpriteAnimationComponent with PositionObstaclable, Collisio
   }
 
   void _makeMoves() {
-    animation = standing;
-    if (_currentStates.isEmpty) {
+    if (_currentStates.contains(PlayerState.shoot)) {
+      animation = shooting;
+      if (shooting.done()) {
+        shooting.reset();
+        shooting.currentIndex = 1;
+      }
+    }
+
+    if (_isBlocked || _currentStates.isEmpty) {
       return;
     }
 
+    if (animation != shooting) {
+      animation = standing;
+    }
     Offset offset = Offset.zero;
-    
+
     _currentStates
-      .where((state) => _stateToMoveFunctionMap.containsKey(state))
-      .forEach((state) => offset = _stateToMoveFunctionMap[state]!(offset));
+        .where((state) => _stateToMoveFunctionMap.containsKey(state))
+        .forEach((state) => offset = _stateToMoveFunctionMap[state]!(offset));
 
     activeCollisions
         .whereType<PositionObstaclable>()
@@ -91,7 +125,11 @@ class Player extends SpriteAnimationComponent with PositionObstaclable, Collisio
         .whereType<PositionBordarable>()
         .forEach((border) => offset = border.inhib(this, offset));
 
-    if (offset != Offset.zero){
+    if (offset != Offset.zero) {
+      if (animation == shooting) {
+        shooting.reset();
+      }
+
       animation = going;
       position.x += offset.dx;
       position.y += offset.dy;
@@ -101,9 +139,9 @@ class Player extends SpriteAnimationComponent with PositionObstaclable, Collisio
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     _currentStates = keysPressed
-      .where((key) => _keySet.mapToState.containsKey(key))
-      .map((key) => _keySet.mapToState[key]!)
-      .toSet();
+        .where((key) => _keySet.mapToState.containsKey(key))
+        .map((key) => _keySet.mapToState[key]!)
+        .toSet();
 
     return true;
   }
@@ -122,5 +160,13 @@ class Player extends SpriteAnimationComponent with PositionObstaclable, Collisio
       anchor = Anchor.topLeft;
       position.x -= size.x;
     }
+  }
+
+  void shoot() {
+    // TODO: привязать выстрел к сцене от игрока
+    // TODO: добавить урон
+    final bullet = GunBullet(position, anchor == Anchor.topLeft ? 1 : -1);
+    parent?.add(bullet);
+    print('SHOOT!');
   }
 }

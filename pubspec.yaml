@@ -56,7 +56,9 @@ flutter:
   uses-material-design: true
   assets:   
     - assets/images/fighters/player-1.png
+    - assets/images/fighters/player-1-shooting.png
     - assets/images/fighters/player-2.png
+    - assets/images/fighters/player-2-shooting.png
     - assets/images/backgrounds/background-1.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
