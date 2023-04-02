@@ -6,5 +6,6 @@ enum PlayerState {
   down,
   hit,
   shoot,
-  absorb
+  absorb,
+  dead
 }

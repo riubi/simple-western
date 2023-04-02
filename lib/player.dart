@@ -1,15 +1,25 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:simple_western/audio_manager.dart';
+import 'package:simple_western/damagable.dart';
 import 'package:simple_western/global_config.dart';
 import 'package:simple_western/player_state.dart';
-import 'package:simple_western/position_bordarable.dart';
+import 'package:simple_western/position_inhiber.dart';
 import 'package:simple_western/position_obstaclable.dart';
 import 'package:simple_western/player_binging_set.dart';
-import 'package:simple_western/gun_bullet.dart';
+import 'package:simple_western/bullet.dart';
+import 'package:flame/rendering.dart';
 
 class Player extends SpriteAnimationComponent
-    with PositionObstaclable, CollisionCallbacks, KeyboardHandler, HasGameRef {
+    with
+        PositionObstaclable,
+        Damagable,
+        CollisionCallbacks,
+        KeyboardHandler,
+        HasGameRef {
   static final Vector2 defaultSize = Vector2.all(70);
 
   Set<PlayerState> _currentStates = {PlayerState.regular};
@@ -17,10 +27,15 @@ class Player extends SpriteAnimationComponent
   final PlayerBindingSet _keySet;
   late Map _stateToMoveFunctionMap;
 
-  bool get _isBlocked => animation == shooting && !shooting.done();
+  bool get _isBlocked =>
+      _currentStates.contains(PlayerState.dead) ||
+      (animation == shooting && !shooting.done());
 
   final String _asset;
   final String _shootingAsset;
+  final String _deathAsset;
+
+  late final RectangleHitbox hitbox;
 
   final int _xSpeed = 2;
   final int _ySpeed = 1;
@@ -28,9 +43,12 @@ class Player extends SpriteAnimationComponent
   late SpriteAnimation going;
   late SpriteAnimation standing;
   late SpriteAnimation shooting;
+  late SpriteAnimation dead;
 
-  Player(this._keySet, this._asset, this._shootingAsset)
+  Player(this._keySet, this._asset, this._shootingAsset, this._deathAsset)
       : super(size: defaultSize) {
+    debugMode = GlobalConfig.debugMode;
+
     _stateToMoveFunctionMap = {
       PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),
       PlayerState.down: (Offset offset) =>
@@ -45,7 +63,18 @@ class Player extends SpriteAnimationComponent
       },
     };
 
-    debugMode = GlobalConfig.debugMode;
+    hp = 4;
+
+    hitbox = RectangleHitbox(
+        position: Vector2(size.x * 0.35, size.y * 0.48),
+        size: Vector2(size.x * 0.3, size.y * 0.45));
+
+    decorator.addLast(Shadow3DDecorator(
+      base: Vector2(0, size.y * 0.89),
+      angle: 2.2,
+      blur: 0.4,
+      opacity: 0.5,
+    ));
   }
 
   @override
@@ -79,13 +108,22 @@ class Player extends SpriteAnimationComponent
           loop: false,
         ));
 
+    dead = await gameRef.loadSpriteAnimation(
+        _deathAsset,
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          textureSize: Vector2.all(192),
+          stepTime: 0.20,
+          loop: false,
+        ));
+
     shooting.onComplete = () {
       shoot();
     };
 
     animation = standing;
 
-    add(RectangleHitbox());
+    add(hitbox);
   }
 
   @override
@@ -96,6 +134,11 @@ class Player extends SpriteAnimationComponent
   }
 
   void _makeMoves() {
+    if (_currentStates.contains(PlayerState.dead)) {
+      animation = dead;
+      return;
+    }
+
     if (_currentStates.contains(PlayerState.shoot)) {
       animation = shooting;
       if (shooting.done()) {
@@ -111,6 +154,7 @@ class Player extends SpriteAnimationComponent
     if (animation != shooting) {
       animation = standing;
     }
+
     Offset offset = Offset.zero;
 
     _currentStates
@@ -118,14 +162,11 @@ class Player extends SpriteAnimationComponent
         .forEach((state) => offset = _stateToMoveFunctionMap[state]!(offset));
 
     activeCollisions
-        .whereType<PositionObstaclable>()
-        .forEach((obstaclable) => offset = obstaclable.inhib(this, offset));
-
-    activeCollisions
-        .whereType<PositionBordarable>()
-        .forEach((border) => offset = border.inhib(this, offset));
+        .whereType<PositionInhiber>()
+        .forEach((inhiber) => offset = inhiber.inhib(this, offset));
 
     if (offset != Offset.zero) {
+      // @TODO порешать за логику анимации
       if (animation == shooting) {
         shooting.reset();
       }
@@ -136,12 +177,15 @@ class Player extends SpriteAnimationComponent
     }
   }
 
+  // @TODO Прочекать коллизиии по коллбек методам методам.
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    _currentStates = keysPressed
-        .where((key) => _keySet.mapToState.containsKey(key))
-        .map((key) => _keySet.mapToState[key]!)
-        .toSet();
+    if (!_currentStates.contains(PlayerState.dead)) {
+      _currentStates = keysPressed
+          .where((key) => _keySet.mapToState.containsKey(key))
+          .map((key) => _keySet.mapToState[key]!)
+          .toSet();
+    }
 
     return true;
   }
@@ -163,10 +207,14 @@ class Player extends SpriteAnimationComponent
   }
 
   void shoot() {
-    // TODO: привязать выстрел к сцене от игрока
-    // TODO: добавить урон
-    final bullet = GunBullet(position, anchor == Anchor.topLeft ? 1 : -1);
-    parent?.add(bullet);
-    print('SHOOT!');
+    parent?.add(Bullet(position, anchor == Anchor.topLeft ? 1 : -1, this));
+  }
+
+  @override
+  void onEliminating() {
+    AudioManager.playAudio(AudioManager.manDeath);
+    _currentStates = {PlayerState.dead};
+    hitbox.size.y /= 2;
+    hitbox.position.y += hitbox.size.y;
   }
 }

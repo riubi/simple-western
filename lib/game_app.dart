@@ -1,14 +1,17 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame_audio/flame_audio.dart';
+import 'package:audioplayers/src/audioplayer.dart';
+import 'package:simple_western/audio_manager.dart';
 import 'package:simple_western/player.dart';
 import 'package:simple_western/battle_scene.dart';
 import 'package:simple_western/player_binging_set.dart';
 
-class GameApp extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
+class GameApp extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   late final BattleScene battleLayer;
   late final Set<Player> players;
+  // late AudioPlayer? lobbyAudio;
 
   GameApp() : super() {
     collisionDetection = StandardCollisionDetection();
@@ -17,20 +20,23 @@ class GameApp extends FlameGame with HasKeyboardHandlerComponents, HasCollisionD
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    await FlameAudio.audioCache.loadAll(['background-music.mp3', 'gunshot-1.mp3']);
+    await AudioManager.preload();
 
     players = {
       Player(PlayerBindingSet.arrows(), 'fighters/player-1.png',
-          'fighters/player-1-shooting.png'),
+          'fighters/player-1-shooting.png', 'fighters/player-1-death.png'),
       Player(PlayerBindingSet.wasd(), 'fighters/player-2.png',
-          'fighters/player-2-shooting.png'),
+          'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
     };
 
-    battleLayer = BattleScene(players);
+    // await AssetManager.playAudio(AssetManager.lobbyAudio, volume: 1)
+    //     .then((audio) => lobbyAudio = audio);
 
-    add(battleLayer);
+    startMatch(players);
+  }
 
-    FlameAudio.playLongAudio('background-music.mp3', volume: 0.3);
+  void startMatch(Set<Player> players) {
+    // lobbyAudio?.stop();
+    add(BattleScene(players));
   }
 }
