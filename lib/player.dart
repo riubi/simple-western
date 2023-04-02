@@ -58,7 +58,7 @@ class Player extends PositionComponent
     ));
 
     sprite =
-        PlayerAnimation(_currentStates, _asset, _shootingAsset, _deathAsset);
+        PlayerAnimation(_currentStates, shoot, _asset, _shootingAsset, _deathAsset);
   }
 
   @override

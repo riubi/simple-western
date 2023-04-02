@@ -19,9 +19,10 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
       (animation == shooting && !shooting.done());
 
   final Set<PlayerState> _currentStates;
+  final Function()? _shootCallback;
 
-  PlayerAnimation(
-      this._currentStates, this._asset, this._shootingAsset, this._deathAsset)
+  PlayerAnimation(this._currentStates, this._shootCallback, this._asset,
+      this._shootingAsset, this._deathAsset)
       : super(size: defaultSize);
 
   @override
@@ -64,12 +65,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           loop: false,
         ));
 
-    shooting.onComplete = () {
-      if (parent is Player) {
-        Player player = parent as Player;
-        player.shoot();
-      }
-    };
+    shooting.onComplete = _shootCallback;
 
     animation = standing;
   }
