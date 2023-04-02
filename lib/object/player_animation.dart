@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:simple_western/player.dart';
-import 'package:simple_western/player_state.dart';
+import 'package:simple_western/object/player_state.dart';
 
 class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   static final Vector2 defaultSize = Vector2.all(70);
@@ -27,8 +26,6 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     going = await gameRef.loadSpriteAnimation(
         _asset,
         SpriteAnimationData.sequenced(
@@ -65,8 +62,9 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           loop: false,
         ));
 
-    shooting.onComplete = _shootCallback;
+    await super.onLoad();
 
+    shooting.onComplete = _shootCallback;
     animation = standing;
   }
 

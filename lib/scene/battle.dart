@@ -1,13 +1,14 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:simple_western/player.dart';
-import 'package:simple_western/global_config.dart';
-import 'package:simple_western/behavioral/position_bordarable.dart';
+import 'package:simple_western/object/player.dart';
+import 'package:simple_western/config/global_config.dart';
+import 'package:simple_western/behavioral/bordarable.dart';
 
-class BattlePosition extends PositionComponent with PositionBordarable {
+class Battle extends PositionComponent with Bordarable {
   final Set<Player> _players;
 
-  BattlePosition(this._players, size, position): super(size: size, position: position) {
+  Battle(this._players, size, position)
+      : super(size: size, position: position) {
     debugMode = GlobalConfig.debugMode;
   }
 

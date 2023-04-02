@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter/widgets.dart';
 
 mixin Damagable on PositionComponent {
   bool eliminated = false;
@@ -13,10 +14,13 @@ mixin Damagable on PositionComponent {
 
     hp -= strength;
     if (hp <= 0) {
-      eliminated = true;
       onEliminating();
     }
   }
 
-  void onEliminating();
+  @mustCallSuper
+  void onEliminating() {
+    eliminated = true;
+    print('Target eliminating.');
+  }
 }

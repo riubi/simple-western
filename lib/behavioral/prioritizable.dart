@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-mixin PositionPrioritizable on PositionComponent {
+mixin Prioritizable on PositionComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -14,6 +14,6 @@ mixin PositionPrioritizable on PositionComponent {
   }
 
   void updatePriority() {
-    priority = position.y as int;
+    priority = position.y.toInt();
   }
 }

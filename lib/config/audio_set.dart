@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:audioplayers/src/audioplayer.dart';
 import 'package:flame_audio/flame_audio.dart';
 
-class AudioManager {
+class AudioSet {
   static const String bulletAudio1 = 'bullet-1.mp3';
   static const String bulletAudio2 = 'bullet-2.mp3';
   static const String bulletAudio3 = 'bullet-3.mp3';

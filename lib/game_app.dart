@@ -1,14 +1,14 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:simple_western/audio_manager.dart';
-import 'package:simple_western/player.dart';
-import 'package:simple_western/battle_scene.dart';
-import 'package:simple_western/player_binging_set.dart';
+import 'package:simple_western/config/audio_set.dart';
+import 'package:simple_western/config/player_binging_set.dart';
+import 'package:simple_western/object/player.dart';
+import 'package:simple_western/scene/match.dart';
 
 class GameApp extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
-  late final BattleScene battleLayer;
+  late final Match matchLayer;
   late final Set<Player> players;
   // late AudioPlayer? lobbyAudio;
 
@@ -19,12 +19,12 @@ class GameApp extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await AudioManager.preload();
+    await AudioSet.preload();
 
     players = {
-      Player(PlayerBindingSet.arrows(), 'fighters/player-1.png',
+      Player(PlayerBindingSet.wasd(), 'fighters/player-1.png',
           'fighters/player-1-shooting.png', 'fighters/player-1-death.png'),
-      Player(PlayerBindingSet.wasd(), 'fighters/player-2.png',
+      Player(PlayerBindingSet.arrows(), 'fighters/player-2.png',
           'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
     };
 
@@ -33,6 +33,6 @@ class GameApp extends FlameGame
   }
 
   void startMatch(Set<Player> players) {
-    add(BattleScene(players));
+    add(Match(players));
   }
 }

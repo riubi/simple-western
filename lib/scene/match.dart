@@ -1,15 +1,15 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_western/audio_manager.dart';
-import 'package:simple_western/battle_position.dart';
-import 'package:simple_western/player.dart';
-import 'package:simple_western/global_config.dart';
+import 'package:simple_western/config/global_config.dart';
+import 'package:simple_western/config/audio_set.dart';
+import 'package:simple_western/scene/battle.dart';
+import 'package:simple_western/object/player.dart';
 
-class BattleScene extends Component {
+class Match extends Component {
   final Set<Player> _players;
   late final Sprite _backgroundSprite;
 
-  BattleScene(this._players) {
+  Match(this._players) {
     debugMode = GlobalConfig.debugMode;
   }
 
@@ -19,7 +19,7 @@ class BattleScene extends Component {
 
     //AudioManager.playMatchAudio();
 
-    add(BattlePosition(_players, Vector2(800, 320), Vector2(180, 480)));
+    add(Battle(_players, Vector2(800, 320), Vector2(180, 480)));
 
     _backgroundSprite = await Sprite.load('backgrounds/background-1.png');
   }

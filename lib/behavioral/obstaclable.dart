@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flame/components.dart';
-import 'package:simple_western/behavioral/position_inhiber.dart';
+import 'package:simple_western/behavioral/inhiber.dart';
 
-mixin PositionObstaclable on PositionComponent implements PositionInhiber {
+mixin Obstaclable on PositionComponent implements Inhiber {
   @override
   Offset inhib(PositionComponent movable, Offset positionDelta) {
     // @TODO fix collision issue when both targets in move.

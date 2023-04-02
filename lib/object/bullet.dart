@@ -2,11 +2,10 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:simple_western/audio_manager.dart';
-import 'package:simple_western/global_config.dart';
-import 'package:simple_western/behavioral/position_obstaclable.dart';
-
-import 'damagable.dart';
+import 'package:simple_western/config/audio_set.dart';
+import 'package:simple_western/config/global_config.dart';
+import 'package:simple_western/behavioral/obstaclable.dart';
+import 'package:simple_western/behavioral/damagable.dart';
 
 class Bullet extends PositionComponent with CollisionCallbacks {
   final double _directionModifier;
@@ -55,7 +54,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       rect1 = const Rect.fromLTWH(5, 0, 28, 3);
     }
 
-    AudioManager.playBulletShot();
+    AudioSet.playBulletShot();
     add(RectangleHitbox(size: Vector2.all(10)));
   }
 
@@ -70,11 +69,11 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     }
 
     if (other is Damagable) {
-      AudioManager.playAudio(AudioManager.bulletDelivery);
+      AudioSet.playAudio(AudioSet.bulletDelivery);
       other.damage(_strength);
     }
 
-    if (other is PositionObstaclable) {
+    if (other is Obstaclable) {
       parent?.remove(this);
     }
   }

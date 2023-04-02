@@ -1,22 +1,22 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:simple_western/behavioral/position_prioritizable.dart';
-import 'package:simple_western/behavioral/position_inhiber.dart';
-import 'package:simple_western/behavioral/position_obstaclable.dart';
-import 'package:simple_western/audio_manager.dart';
-import 'package:simple_western/damagable.dart';
-import 'package:simple_western/global_config.dart';
-import 'package:simple_western/player_animation.dart';
-import 'package:simple_western/player_state.dart';
-import 'package:simple_western/player_binging_set.dart';
-import 'package:simple_western/bullet.dart';
+import 'package:simple_western/behavioral/prioritizable.dart';
+import 'package:simple_western/behavioral/inhiber.dart';
+import 'package:simple_western/behavioral/obstaclable.dart';
+import 'package:simple_western/config/audio_set.dart';
+import 'package:simple_western/config/player_binging_set.dart';
+import 'package:simple_western/config/global_config.dart';
+import 'package:simple_western/behavioral/damagable.dart';
+import 'package:simple_western/object/player_animation.dart';
+import 'package:simple_western/object/player_state.dart';
+import 'package:simple_western/object/bullet.dart';
 import 'package:flame/rendering.dart';
 
 class Player extends PositionComponent
     with
-        PositionObstaclable,
-        PositionPrioritizable,
+        Obstaclable,
+        Prioritizable,
         Damagable,
         CollisionCallbacks,
         KeyboardHandler,
@@ -57,8 +57,8 @@ class Player extends PositionComponent
       opacity: 0.5,
     ));
 
-    sprite =
-        PlayerAnimation(_currentStates, shoot, _asset, _shootingAsset, _deathAsset);
+    sprite = PlayerAnimation(
+        _currentStates, shoot, _asset, _shootingAsset, _deathAsset);
   }
 
   @override
@@ -67,8 +67,6 @@ class Player extends PositionComponent
 
     add(sprite);
     add(hitbox);
-
-    priority = position.y as int;
   }
 
   @override
@@ -96,7 +94,7 @@ class Player extends PositionComponent
     }
 
     activeCollisions
-        .whereType<PositionInhiber>()
+        .whereType<Inhiber>()
         .forEach((inhiber) => offset = inhiber.inhib(this, offset));
 
     if (offset != Offset.zero) {
@@ -141,7 +139,9 @@ class Player extends PositionComponent
 
   @override
   void onEliminating() {
-    AudioManager.playAudio(AudioManager.manDeath);
+    super.onEliminating();
+
+    AudioSet.playAudio(AudioSet.manDeath);
     _currentStates.clear();
     _currentStates.add(PlayerState.dead);
 
