@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:audioplayers/src/audioplayer.dart';
 import 'package:simple_western/audio_manager.dart';
 import 'package:simple_western/player.dart';
 import 'package:simple_western/battle_scene.dart';
@@ -29,14 +28,12 @@ class GameApp extends FlameGame
           'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
     };
 
-    // await AssetManager.playAudio(AssetManager.lobbyAudio, volume: 1)
-    //     .then((audio) => lobbyAudio = audio);
+    AudioManager.playLobbyAudio();
 
     startMatch(players);
   }
 
   void startMatch(Set<Player> players) {
-    // lobbyAudio?.stop();
     add(BattleScene(players));
   }
 }

@@ -14,13 +14,22 @@ class AudioManager {
 
   static preload() async {
     await FlameAudio.audioCache.loadAll([
+      matchAudio,
+      lobbyAudio,
       bulletAudio1,
       bulletAudio2,
       bulletAudio3,
       bulletDelivery,
-      matchAudio,
-      lobbyAudio
+      manDeath,
     ]);
+  }
+
+  static void playMatchAudio() {
+    FlameAudio.bgm.play(matchAudio, volume: .3);
+  }
+
+  static void playLobbyAudio() {
+    FlameAudio.bgm.play(lobbyAudio, volume: .4);
   }
 
   static void playBulletShot() {

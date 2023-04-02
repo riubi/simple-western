@@ -4,12 +4,10 @@ import 'package:simple_western/audio_manager.dart';
 import 'package:simple_western/battle_position.dart';
 import 'package:simple_western/player.dart';
 import 'package:simple_western/global_config.dart';
-import 'package:audioplayers/src/audioplayer.dart';
 
 class BattleScene extends Component {
   final Set<Player> _players;
   late final Sprite _backgroundSprite;
-  late final AudioPlayer _backgroundAudio;
 
   BattleScene(this._players) {
     debugMode = GlobalConfig.debugMode;
@@ -17,19 +15,13 @@ class BattleScene extends Component {
 
   @override
   Future<void> onLoad() async {
-    await AudioManager.playAudio(AudioManager.matchAudio, volume: 0.25)
-        .then((audio) => _backgroundAudio = audio);
+    AudioManager.playMatchAudio();
 
     await super.onLoad();
 
     add(BattlePosition(_players, Vector2(800, 320), Vector2(180, 480)));
 
     _backgroundSprite = await Sprite.load('backgrounds/background-1.png');
-  }
-
-  @override
-  void onRemove() {
-    _backgroundAudio.stop();
   }
 
   @override
