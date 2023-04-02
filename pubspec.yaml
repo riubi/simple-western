@@ -57,11 +57,19 @@ flutter:
   assets:   
     - assets/images/fighters/player-1.png
     - assets/images/fighters/player-1-shooting.png
+    - assets/images/fighters/player-1-death.png
     - assets/images/fighters/player-2.png
     - assets/images/fighters/player-2-shooting.png
+    - assets/images/fighters/player-2-death.png
     - assets/images/backgrounds/background-1.png
-    - assets/audio/background-music.mp3
-    - assets/audio/gunshot-1.mp3
+    - assets/audio/lobby.mp3
+    - assets/audio/match.mp3
+    - assets/audio/bullet-1.mp3
+    - assets/audio/bullet-2.mp3
+    - assets/audio/bullet-3.mp3
+    - assets/audio/bullet-delivery.mp3
+    - assets/audio/man-death.mp3
+    
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
