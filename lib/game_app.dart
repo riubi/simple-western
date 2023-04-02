@@ -28,9 +28,8 @@ class GameApp extends FlameGame
           'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
     };
 
-    AudioManager.playLobbyAudio();
-
     startMatch(players);
+    //AudioManager.playLobbyAudio();
   }
 
   void startMatch(Set<Player> players) {

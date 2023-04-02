@@ -15,9 +15,9 @@ class BattleScene extends Component {
 
   @override
   Future<void> onLoad() async {
-    AudioManager.playMatchAudio();
-
     await super.onLoad();
+
+    //AudioManager.playMatchAudio();
 
     add(BattlePosition(_players, Vector2(800, 320), Vector2(180, 480)));
 

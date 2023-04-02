@@ -4,7 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/audio_manager.dart';
 import 'package:simple_western/global_config.dart';
-import 'package:simple_western/position_obstaclable.dart';
+import 'package:simple_western/behavioral/position_obstaclable.dart';
 
 import 'damagable.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flame/components.dart';
-import 'package:simple_western/position_inhiber.dart';
+import 'package:simple_western/behavioral/position_inhiber.dart';
 
 mixin PositionBordarable on PositionComponent implements PositionInhiber {
   @override
