@@ -14,6 +14,6 @@ mixin Prioritizable on PositionComponent {
   }
 
   void updatePriority() {
-    priority = position.y.toInt();
+    priority = 10000 + position.y.toInt() + size.y.toInt();
   }
 }

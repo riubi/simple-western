@@ -25,7 +25,7 @@ class Player extends PositionComponent
   static const _xSpeed = 2;
   static const _ySpeed = 1;
   static const _hp = 4;
-  static final _defaultSize = Vector2.all(70);
+  static final _defaultSize = Vector2(21, 28);
 
   static final Map _stateToMoveFunctionMap = {
     PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),
@@ -46,13 +46,10 @@ class Player extends PositionComponent
     debugMode = GlobalConfig.debugMode;
 
     hp = _hp;
-
-    hitbox = RectangleHitbox(
-        position: Vector2(size.x * 0.35, size.y * 0.48),
-        size: Vector2(size.x * 0.3, size.y * 0.45));
+    hitbox = RectangleHitbox();
 
     sprite = PlayerAnimation(
-        _currentStates, shoot, _asset, _shootingAsset, _deathAsset);
+        size, _currentStates, shoot, _asset, _shootingAsset, _deathAsset);
   }
 
   @override

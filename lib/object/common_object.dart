@@ -14,9 +14,9 @@ class CommonObject extends PositionComponent
   static const tree = 'objects/tree.png';
 
   static final _hitBoxes = {
-    cactus: Vector2.all(50),
-    bush: Vector2.all(50),
-    grass: Vector2.all(50),
+    cactus: Vector2(26, 27),
+    bush: Vector2(26, 14),
+    grass: Vector2(26, 18),
     tree: Vector2.all(50),
   };
 
@@ -30,10 +30,13 @@ class CommonObject extends PositionComponent
   @override
   Future<void> onLoad() async {
     final sprite = await Sprite.load(_asset);
-    final spriteSize = sprite!.originalSize * 0.6;
+    final spriteSize = sprite.originalSize * 0.5;
 
-    await addAll(
-        {RectangleHitbox(), SpriteComponent(sprite: sprite, size: spriteSize)});
+    final spriteComponent = SpriteComponent(sprite: sprite, size: spriteSize);
+    spriteComponent.position.y = size.y - spriteSize.y - 2;
+    spriteComponent.position.x = size.x / 2 - spriteSize.x / 2;
+
+    await addAll({RectangleHitbox(), spriteComponent});
 
     await super.onLoad();
   }

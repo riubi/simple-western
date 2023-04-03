@@ -20,9 +20,12 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   final Set<PlayerState> _currentStates;
   final Function()? _shootCallback;
 
-  PlayerAnimation(this._currentStates, this._shootCallback, this._asset,
-      this._shootingAsset, this._deathAsset)
-      : super(size: defaultSize);
+  PlayerAnimation(Vector2 parentSize, this._currentStates, this._shootCallback,
+      this._asset, this._shootingAsset, this._deathAsset)
+      : super(size: defaultSize) {
+    position.y = 6 + parentSize.y - size.y;
+    position.x = parentSize.x / 2 - size.x / 2;
+  }
 
   @override
   void onLoad() async {

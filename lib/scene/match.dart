@@ -23,7 +23,7 @@ class Match extends Component {
 
     await super.onLoad();
 
-    AudioSet.playMatchAudio();
+    // AudioSet.playMatchAudio();
   }
 
   @override
