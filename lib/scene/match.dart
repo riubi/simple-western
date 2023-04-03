@@ -29,7 +29,9 @@ class Match extends Component with HasGameRef {
   @override
   Future<void> onLoad() async {
     skyComponent.sprite = await Sprite.load(skyAsset);
+    skyComponent.size = skyComponent.sprite!.originalSize;
     landComponent.sprite = await Sprite.load(landAsset);
+    landComponent.size = landComponent.sprite!.originalSize;
 
     resize(gameRef.canvasSize);
 
@@ -47,7 +49,7 @@ class Match extends Component with HasGameRef {
     battlePosition.x = parentSize.x * 0.5;
     battlePosition.y = parentSize.y * 0.9 - 320;
 
-    skyComponent.position = battlePosition;
+    skyComponent.position = battlePosition + Vector2(0, 1);
     landComponent.position = battlePosition;
     battleLayer.position = battlePosition;
   }
@@ -56,7 +58,7 @@ class Match extends Component with HasGameRef {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    final paint = Paint()..color = Colors.black;
-    canvas.drawRect(const Rect.fromLTWH(0, 0, 1280, 840), paint);
+    // final paint = Paint()..color = Colors.black;
+    // canvas.drawRect(const Rect.fromLTWH(0, 0, 1280, 840), paint);
   }
 }
