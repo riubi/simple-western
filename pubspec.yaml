@@ -62,6 +62,13 @@ flutter:
     - assets/images/fighters/player-2-shooting.png
     - assets/images/fighters/player-2-death.png
     - assets/images/backgrounds/background-1.png
+    - assets/images/objects/bush.png
+    - assets/images/objects/cactus.png
+    - assets/images/objects/cloud1.png
+    - assets/images/objects/cloud2.png
+    - assets/images/objects/grass.png
+    - assets/images/objects/sun.png
+    - assets/images/objects/tree.png
     - assets/audio/lobby.mp3
     - assets/audio/match.mp3
     - assets/audio/bullet-1.mp3

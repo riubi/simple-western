@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:simple_western/object/player_state.dart';
 
 class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
-  static final Vector2 defaultSize = Vector2.all(70);
+  static final defaultSize = Vector2.all(70);
 
   late SpriteAnimation going;
   late SpriteAnimation standing;
@@ -15,7 +15,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   bool get isBlocked =>
       _currentStates.contains(PlayerState.dead) ||
-      (animation == shooting && !shooting.done());
+      (animation == shooting && !shooting!.done());
 
   final Set<PlayerState> _currentStates;
   final Function()? _shootCallback;
@@ -25,7 +25,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
       : super(size: defaultSize);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() async {
     going = await gameRef.loadSpriteAnimation(
         _asset,
         SpriteAnimationData.sequenced(
@@ -44,15 +44,6 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           loop: true,
         ));
 
-    shooting = await gameRef.loadSpriteAnimation(
-        _shootingAsset,
-        SpriteAnimationData.sequenced(
-          amount: 3,
-          textureSize: Vector2.all(192),
-          stepTime: 0.15,
-          loop: false,
-        ));
-
     dead = await gameRef.loadSpriteAnimation(
         _deathAsset,
         SpriteAnimationData.sequenced(
@@ -62,10 +53,19 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           loop: false,
         ));
 
-    await super.onLoad();
+    shooting = await gameRef.loadSpriteAnimation(
+        _shootingAsset,
+        SpriteAnimationData.sequenced(
+          amount: 3,
+          textureSize: Vector2.all(192),
+          stepTime: 0.15,
+          loop: false,
+        ));
 
     shooting.onComplete = _shootCallback;
     animation = standing;
+
+    super.onLoad();
   }
 
   @override

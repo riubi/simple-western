@@ -8,10 +8,14 @@ import 'package:simple_western/behavioral/obstaclable.dart';
 import 'package:simple_western/behavioral/damagable.dart';
 
 class Bullet extends PositionComponent with CollisionCallbacks {
+  static const _strength = 1;
+  static const _speed = 7;
+  static const _distance = 400;
+  static const _extraDistance = 250;
+  static final _defaultSize = Vector2(5, 3);
+
   final double _directionModifier;
-  final int _strength = 1;
-  final int _bulletSpeed = 7;
-  late int _distance;
+  late int _maxDistance;
 
   static final Paint paint = Paint()
     ..color = const Color.fromARGB(255, 0, 0, 0);
@@ -23,22 +27,19 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   final PositionComponent owner;
 
-  Bullet(position, this._directionModifier, this.owner) {
-    this.position = position;
-    size = Vector2(5, 3);
+  Bullet(position, this._directionModifier, this.owner)
+      : super(position: position, size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
+
+    _maxDistance = Random().nextInt(_extraDistance) + _distance;
     if (_directionModifier < 0) {
       anchor = Anchor.topRight;
     }
-
-    _distance = Random().nextInt(250) + 400;
   }
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
-    // @TODO move position to player control.
+    // @TODO move position offset to player control.
     position.y += 46;
     if (_directionModifier > 0) {
       position.x += 72;
@@ -56,6 +57,8 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
     AudioSet.playBulletShot();
     add(RectangleHitbox(size: Vector2.all(10)));
+
+    return super.onLoad();
   }
 
   @override
@@ -69,7 +72,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     }
 
     if (other is Damagable) {
-      AudioSet.playAudio(AudioSet.bulletDelivery);
+      AudioSet.play(AudioSet.bulletDelivery);
       other.damage(_strength);
     }
 
@@ -82,9 +85,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
   void update(double dt) {
     super.update(dt);
 
-    position.x += _bulletSpeed * _directionModifier;
-    _distance -= _bulletSpeed;
-    if (_distance < 0) {
+    position.x += _speed * _directionModifier;
+    _maxDistance -= _speed;
+    if (_maxDistance < 0) {
       parent?.remove(this);
     }
   }

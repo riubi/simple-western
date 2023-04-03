@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:simple_western/behavioral/prioritizable.dart';
 import 'package:simple_western/behavioral/inhiber.dart';
 import 'package:simple_western/behavioral/obstaclable.dart';
+import 'package:simple_western/behavioral/shadowable.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/player_binging_set.dart';
 import 'package:simple_western/config/global_config.dart';
@@ -11,20 +12,21 @@ import 'package:simple_western/behavioral/damagable.dart';
 import 'package:simple_western/object/player_animation.dart';
 import 'package:simple_western/object/player_state.dart';
 import 'package:simple_western/object/bullet.dart';
-import 'package:flame/rendering.dart';
 
 class Player extends PositionComponent
     with
         Obstaclable,
         Prioritizable,
         Damagable,
+        Shadowable,
         CollisionCallbacks,
         KeyboardHandler,
         HasGameRef {
-  static const int _xSpeed = 2;
-  static const int _ySpeed = 1;
+  static const _xSpeed = 2;
+  static const _ySpeed = 1;
+  static const _hp = 4;
+  static final _defaultSize = Vector2.all(70);
 
-  static final Vector2 _defaultSize = Vector2.all(70);
   static final Map _stateToMoveFunctionMap = {
     PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),
     PlayerState.down: (Offset offset) => Offset(offset.dx, offset.dy + _ySpeed),
@@ -34,7 +36,6 @@ class Player extends PositionComponent
   };
 
   final Set<PlayerState> _currentStates = {PlayerState.regular};
-
   final PlayerBindingSet _keySet;
 
   late final PlayerAnimation sprite;
@@ -44,18 +45,11 @@ class Player extends PositionComponent
       : super(size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
-    hp = GlobalConfig.playerHP;
+    hp = _hp;
 
     hitbox = RectangleHitbox(
         position: Vector2(size.x * 0.35, size.y * 0.48),
         size: Vector2(size.x * 0.3, size.y * 0.45));
-
-    decorator.addLast(Shadow3DDecorator(
-      base: Vector2(0, size.y * 0.89),
-      angle: 2.2,
-      blur: 0.4,
-      opacity: 0.5,
-    ));
 
     sprite = PlayerAnimation(
         _currentStates, shoot, _asset, _shootingAsset, _deathAsset);
@@ -63,10 +57,9 @@ class Player extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    await addAll({sprite, hitbox});
 
-    add(sprite);
-    add(hitbox);
+    await super.onLoad();
   }
 
   @override
@@ -141,7 +134,7 @@ class Player extends PositionComponent
   void onEliminating() {
     super.onEliminating();
 
-    AudioSet.playAudio(AudioSet.manDeath);
+    AudioSet.play(AudioSet.manDeath);
     _currentStates.clear();
     _currentStates.add(PlayerState.dead);
 

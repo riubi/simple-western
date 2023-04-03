@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_western/config/global_config.dart';
@@ -15,13 +17,13 @@ class Match extends Component {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
-    //AudioManager.playMatchAudio();
-
-    add(Battle(_players, Vector2(800, 320), Vector2(180, 480)));
+    await add(Battle(_players, Vector2(800, 320), Vector2(180, 480)));
 
     _backgroundSprite = await Sprite.load('backgrounds/background-1.png');
+
+    await super.onLoad();
+
+    AudioSet.playMatchAudio();
   }
 
   @override

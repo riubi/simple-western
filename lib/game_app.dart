@@ -18,8 +18,8 @@ class GameApp extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     await AudioSet.preload();
+    await super.onLoad();
 
     players = {
       Player(PlayerBindingSet.wasd(), 'fighters/player-1.png',
@@ -29,6 +29,7 @@ class GameApp extends FlameGame
     };
 
     startMatch(players);
+
     //AudioManager.playLobbyAudio();
   }
 
