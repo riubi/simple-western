@@ -31,6 +31,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       : super(position: position, size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
+    AudioSet.playBulletShot();
     _maxDistance = Random().nextInt(_extraDistance) + _distance;
     if (_directionModifier < 0) {
       anchor = Anchor.topRight;
@@ -47,7 +48,6 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       rect1 = const Rect.fromLTWH(5, 0, 28, 3);
     }
 
-    AudioSet.playBulletShot();
     add(RectangleHitbox(size: Vector2.all(5)));
 
     return super.onLoad();
@@ -58,7 +58,6 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    super.onCollisionStart(intersectionPoints, other);
     if (ignored.contains(other)) {
       return;
     }
@@ -71,6 +70,8 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     if (other is Obstaclable) {
       parent?.remove(this);
     }
+
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   @override

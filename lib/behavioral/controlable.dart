@@ -110,9 +110,11 @@ mixin Controlable on PositionComponent
   }
 
   Offset _applyInhiberEffect(Offset offset) {
-    activeCollisions
-        .whereType<Inhiber>()
-        .forEach((inhiber) => offset = inhiber.inhib(this, offset));
+    if (isColliding) {
+      activeCollisions
+          .whereType<Inhiber>()
+          .forEach((inhiber) => offset = inhiber.inhib(this, offset));
+    }
 
     return offset;
   }
