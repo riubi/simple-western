@@ -21,7 +21,7 @@ class Player extends PositionComponent
         HasGameRef {
   static const _xSpeed = 180;
   static const _ySpeed = 120;
-  static const _hp = 4;
+  static const _hp = 5;
   static final _defaultSize = Vector2(21, 27);
   static final _bulletPosition = Vector2(32, 8);
 

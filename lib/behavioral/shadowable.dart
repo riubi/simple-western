@@ -9,8 +9,8 @@ mixin Shadowable on PositionComponent {
     decorator.addLast(Shadow3DDecorator(
       base: Vector2(0, size.y * 0.89),
       angle: 2.2,
-      blur: 0.4,
-      opacity: 0.5,
+      blur: 1,
+      opacity: 0.25,
     ));
   }
 }

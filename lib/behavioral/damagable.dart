@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 mixin Damagable on PositionComponent {
   bool eliminated = false;
   late int hp;
+  Function(int)? onDamage;
 
   void damage(int strength) {
     if (eliminated) {
@@ -12,6 +13,10 @@ mixin Damagable on PositionComponent {
 
     hp -= strength;
     print('Target damaged: $strength, hp: $hp');
+
+    if (onDamage != null) {
+      onDamage!(hp);
+    }
 
     if (hp <= 0) {
       onEliminating();
