@@ -11,7 +11,7 @@ class Battle extends PositionComponent with Bordarable {
   final Set<Player> _players;
 
   Battle(this._players, size, position)
-      : super(size: size, position: position) {
+      : super(size: size, anchor: Anchor.topCenter) {
     debugMode = GlobalConfig.debugMode;
 
     _players.first.position = Vector2(size.x * 0.3, size.y * 0.3);

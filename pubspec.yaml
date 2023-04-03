@@ -62,6 +62,8 @@ flutter:
     - assets/images/fighters/player-2-shooting.png
     - assets/images/fighters/player-2-death.png
     - assets/images/backgrounds/background-1.png
+    - assets/images/backgrounds/sky-bg.png
+    - assets/images/backgrounds/land-bg.png
     - assets/images/objects/bush.png
     - assets/images/objects/cactus.png
     - assets/images/objects/cloud1.png

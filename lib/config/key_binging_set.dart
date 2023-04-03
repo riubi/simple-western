@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:simple_western/object/object_state.dart';
+import 'package:simple_western/behavioral/object_state.dart';
 
 class KeyBindingSet {
   final LogicalKeyboardKey up;

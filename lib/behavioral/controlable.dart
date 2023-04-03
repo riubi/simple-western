@@ -1,14 +1,12 @@
-import 'dart:async';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_western/behavioral/inhiber.dart';
+import 'package:simple_western/behavioral/object_state.dart';
 import 'package:simple_western/config/key_binging_set.dart';
-import 'package:simple_western/object/object_state.dart';
 
 mixin Controlable on PositionComponent
-    implements KeyboardHandler, CollisionCallbacks {
+    implements CollisionCallbacks, KeyboardHandler {
   final Set<ObjectState> currentStates = {};
 
   late final Map<ObjectState, Function(Offset)> _stateToMoveFunctionMap;

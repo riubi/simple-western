@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:simple_western/object/object_state.dart';
+import 'package:simple_western/behavioral/object_state.dart';
 
 class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   static final defaultSize = Vector2.all(70);
