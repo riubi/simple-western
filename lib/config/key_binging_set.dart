@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
-import 'package:simple_western/object/player_state.dart';
+import 'package:simple_western/object/object_state.dart';
 
-class PlayerBindingSet {
+class KeyBindingSet {
   final LogicalKeyboardKey up;
   final LogicalKeyboardKey down;
   final LogicalKeyboardKey left;
@@ -9,21 +9,22 @@ class PlayerBindingSet {
   final LogicalKeyboardKey hit;
   final LogicalKeyboardKey shoot;
 
-  late final Map<LogicalKeyboardKey, PlayerState> mapToState;
+  late final Map<LogicalKeyboardKey, ObjectState> mapToState;
 
-  PlayerBindingSet(this.up, this.down, this.left, this.right, this.hit, this.shoot) {
+  KeyBindingSet(
+      this.up, this.down, this.left, this.right, this.hit, this.shoot) {
     mapToState = {
-      up: PlayerState.up,
-      down: PlayerState.down,
-      left: PlayerState.left,
-      right: PlayerState.right,
-      hit: PlayerState.hit,
-      shoot: PlayerState.shoot,
+      up: ObjectState.up,
+      down: ObjectState.down,
+      left: ObjectState.left,
+      right: ObjectState.right,
+      hit: ObjectState.hit,
+      shoot: ObjectState.shoot,
     };
   }
 
   static wasd() {
-    return PlayerBindingSet(
+    return KeyBindingSet(
       LogicalKeyboardKey.keyW,
       LogicalKeyboardKey.keyS,
       LogicalKeyboardKey.keyA,
@@ -34,7 +35,7 @@ class PlayerBindingSet {
   }
 
   static arrows() {
-    return PlayerBindingSet(
+    return KeyBindingSet(
       LogicalKeyboardKey.arrowUp,
       LogicalKeyboardKey.arrowDown,
       LogicalKeyboardKey.arrowLeft,

@@ -1,3 +1,3 @@
 class GlobalConfig {
-  static const debugMode = true;
+  static const debugMode = false;
 }

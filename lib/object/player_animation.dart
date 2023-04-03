@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:simple_western/object/player_state.dart';
+import 'package:simple_western/object/object_state.dart';
 
 class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   static final defaultSize = Vector2.all(70);
@@ -14,10 +14,10 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   final String _shootingAsset;
 
   bool get isBlocked =>
-      _currentStates.contains(PlayerState.dead) ||
+      _currentStates.contains(ObjectState.dead) ||
       (animation == shooting && !shooting.done());
 
-  final Set<PlayerState> _currentStates;
+  final Set<ObjectState> _currentStates;
   final Function()? _shootCallback;
 
   PlayerAnimation(Vector2 parentSize, this._currentStates, this._shootCallback,
@@ -29,6 +29,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   @override
   void onLoad() async {
+    // @TODO extract loading logic with easy customization options
     going = await gameRef.loadSpriteAnimation(
         _asset,
         SpriteAnimationData.sequenced(
@@ -99,11 +100,11 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   }
 
   bool _isPlayerDead() {
-    return _currentStates.contains(PlayerState.dead);
+    return _currentStates.contains(ObjectState.dead);
   }
 
   bool _isPlayerShooting() {
-    return _currentStates.contains(PlayerState.shoot);
+    return _currentStates.contains(ObjectState.shoot);
   }
 
   bool _isPlayerBlockedOrNoCurrentStates() {

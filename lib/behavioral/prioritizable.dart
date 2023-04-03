@@ -11,6 +11,8 @@ mixin Prioritizable on PositionComponent {
   @override
   void update(double dt) {
     updatePriority();
+
+    super.update(dt);
   }
 
   void updatePriority() {
