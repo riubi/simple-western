@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:simple_western/object/cloud.dart';
 
-class Sky extends SpriteComponent {
+class Sky extends SpriteComponent with HasGameRef {
   static const _sunOffset = 325.0;
   static const _cloudMinSpeed = 10.0;
   static const _cloudMaxSpeed = 30.0;
@@ -19,12 +20,12 @@ class Sky extends SpriteComponent {
 
   final List<Sprite> cloudSprites = [];
 
-  Sky() : super(anchor: Anchor.bottomCenter);
+  Sky() : super(anchor: Anchor.bottomCenter, autoResize: true);
 
   @override
   FutureOr<void> onLoad() async {
     sprite = await Sprite.load(sky);
-    size = sprite!.originalSize;
+    size = Vector2(gameRef.canvasSize.x, sprite!.originalSize.y);
 
     final sprite1 = await Sprite.load(cloud1);
     final sprite2 = await Sprite.load(cloud2);
