@@ -15,8 +15,8 @@ class CommonObject extends PositionComponent
 
   static final _hitBoxes = {
     cactus: Vector2(24, 27),
-    bush: Vector2(24, 14),
-    grass: Vector2(24, 18),
+    bush: Vector2(24, 11),
+    grass: Vector2(24, 14),
     tree: Vector2(22, 46),
   };
 

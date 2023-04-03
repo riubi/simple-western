@@ -9,13 +9,13 @@ import 'package:simple_western/behavioral/damagable.dart';
 
 class Bullet extends PositionComponent with CollisionCallbacks {
   static const _strength = 1;
-  static const _speed = 800;
-  static const _distance = 400;
+  static const _speed = 800.0;
+  static const _distance = 400.0;
   static const _extraDistance = 250;
   static final _defaultSize = Vector2(5, 3);
 
   final double _directionModifier;
-  late int _maxDistance;
+  late double _maxDistance;
 
   static final Paint paint = Paint()
     ..color = const Color.fromARGB(255, 0, 0, 0);
@@ -68,7 +68,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     }
 
     if (other is Obstaclable) {
-      parent?.remove(this);
+      removeFromParent();
     }
 
     super.onCollisionStart(intersectionPoints, other);
@@ -76,8 +76,8 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   @override
   void update(double dt) {
-    position.x += _speed * dt * _directionModifier;
-    _maxDistance -= _speed * dt.toInt();
+    position.x += _speed * dt.toDouble() * _directionModifier;
+    _maxDistance -= _speed * dt;
     if (_maxDistance < 0) {
       parent?.remove(this);
     }

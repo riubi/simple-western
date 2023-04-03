@@ -10,7 +10,6 @@ class GameApp extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
   late final Match matchLayer;
   late final Set<Player> players;
-  // late AudioPlayer? lobbyAudio;
 
   GameApp() : super() {
     collisionDetection = StandardCollisionDetection();
@@ -19,6 +18,7 @@ class GameApp extends FlameGame
   @override
   Future<void> onLoad() async {
     await AudioSet.preload();
+
     await super.onLoad();
 
     players = {
@@ -33,7 +33,7 @@ class GameApp extends FlameGame
     // AudioSet.playLobbyAudio();
   }
 
-  void startMatch(Set<Player> players) {
-    add(Match(players));
+  void startMatch(Set<Player> players) async {
+    await add(Match(players));
   }
 }
