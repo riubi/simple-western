@@ -25,9 +25,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
   late Rect rect;
   late Rect rect1;
 
-  final PositionComponent owner;
+  final Set<PositionComponent> ignored;
 
-  Bullet(position, this._directionModifier, this.owner)
+  Bullet(position, this._directionModifier, this.ignored)
       : super(position: position, size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
@@ -39,14 +39,6 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   @override
   Future<void> onLoad() async {
-    // @TODO move position offset to player control.
-    position.y += 46;
-    if (_directionModifier > 0) {
-      position.x += 72;
-    } else {
-      position.x += 3;
-    }
-
     if (_directionModifier > 0) {
       rect = const Rect.fromLTWH(0, 0, 5, 3);
       rect1 = const Rect.fromLTWH(-28, 0, 28, 3);
@@ -56,7 +48,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     }
 
     AudioSet.playBulletShot();
-    add(RectangleHitbox(size: Vector2.all(10)));
+    add(RectangleHitbox(size: Vector2.all(5)));
 
     return super.onLoad();
   }
@@ -67,7 +59,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    if (owner == other) {
+    if (ignored.contains(other)) {
       return;
     }
 

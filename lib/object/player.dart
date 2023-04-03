@@ -26,6 +26,7 @@ class Player extends PositionComponent
   static const _ySpeed = 1;
   static const _hp = 4;
   static final _defaultSize = Vector2(21, 28);
+  static final _bulletPosition = Vector2(32, 9);
 
   static final Map _stateToMoveFunctionMap = {
     PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),
@@ -124,7 +125,13 @@ class Player extends PositionComponent
   }
 
   void shoot() {
-    parent?.add(Bullet(position, anchor == Anchor.topLeft ? 1 : -1, this));
+    final fixedPosition = position + _bulletPosition;
+    if (anchor == Anchor.topRight) {
+      fixedPosition.x -= size.x / 2 + _bulletPosition.x;
+    }
+
+    parent
+        ?.add(Bullet(fixedPosition, anchor == Anchor.topLeft ? 1 : -1, {this}));
   }
 
   @override
