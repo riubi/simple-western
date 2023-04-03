@@ -15,7 +15,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   bool get isBlocked =>
       _currentStates.contains(PlayerState.dead) ||
-      (animation == shooting && !shooting!.done());
+      (animation == shooting && !shooting.done());
 
   final Set<PlayerState> _currentStates;
   final Function()? _shootCallback;
