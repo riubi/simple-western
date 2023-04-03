@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/object/common_object.dart';
-import 'package:simple_western/object/hp_bar.dart';
+import 'package:simple_western/ui/hp_bar.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/behavioral/bordarable.dart';

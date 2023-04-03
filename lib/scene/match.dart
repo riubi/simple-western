@@ -23,6 +23,12 @@ class Match extends Component with HasGameRef {
     skyComponent = Sky();
     landComponent = SpriteComponent(anchor: Anchor.topCenter);
     battleLayer = Battle(_players, battleSize, battlePosition);
+
+    _players.last.addDamageHandler((hp) {
+      if (hp <= 0) {
+        removeFromParent();
+      }
+    });
   }
 
   @override

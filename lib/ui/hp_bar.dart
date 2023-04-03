@@ -17,7 +17,7 @@ class HpBar extends Component {
 
   HpBar(Player player, this.position, this.anchor) {
     hp = player.hp;
-    player.onDamage = _onDamage;
+    player.addDamageHandler(_onDamage);
   }
 
   @override

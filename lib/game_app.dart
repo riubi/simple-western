@@ -5,11 +5,11 @@ import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/scene/match.dart';
+import 'package:simple_western/scene/menu.dart';
 
 class GameApp extends FlameGame
-    with HasKeyboardHandlerComponents, HasCollisionDetection {
-  late final Match matchLayer;
-  late final Set<Player> players;
+    with HasKeyboardHandlerComponents, HasCollisionDetection, HasTappables {
+  late Set<Player> players;
 
   GameApp() : super() {
     collisionDetection = StandardCollisionDetection();
@@ -21,6 +21,12 @@ class GameApp extends FlameGame
 
     await super.onLoad();
 
+    add(Menu(startMatch));
+
+    AudioSet.playLobbyAudio();
+  }
+
+  void startMatch() async {
     players = {
       Player(KeyBindingSet.wasd(), 'fighters/player-1.png',
           'fighters/player-1-shooting.png', 'fighters/player-1-death.png'),
@@ -28,12 +34,6 @@ class GameApp extends FlameGame
           'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
     };
 
-    startMatch(players);
-
-    // AudioSet.playLobbyAudio();
-  }
-
-  void startMatch(Set<Player> players) async {
     await add(Match(players));
   }
 }
