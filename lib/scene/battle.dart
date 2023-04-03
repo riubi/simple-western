@@ -8,7 +8,7 @@ import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/behavioral/bordarable.dart';
 
 class Battle extends PositionComponent with Bordarable {
-  static const _offset = 15.0;
+  static const _hpBarOffset = 30.0;
   final Set<Player> _players;
   late final List<HpBar> _hpBars = [];
 
@@ -17,12 +17,12 @@ class Battle extends PositionComponent with Bordarable {
     debugMode = GlobalConfig.debugMode;
 
     _players.first.position = Vector2(size.x * 0.3, size.y * 0.3);
-    var firstPosition = Vector2(_offset, size.y - _offset);
+    var firstPosition = Vector2(_hpBarOffset, size.y - _hpBarOffset);
     var firstHpBar = HpBar(_players.first, firstPosition, Anchor.bottomLeft);
 
     _players.last.position = Vector2(size.x * 0.7, size.y * 0.3);
     _players.last.turnLeft();
-    var secondPosition = Vector2(size.x - _offset, size.y - _offset);
+    var secondPosition = Vector2(size.x - _hpBarOffset, size.y - _hpBarOffset);
     var secondHpBar = HpBar(_players.last, secondPosition, Anchor.bottomRight);
 
     _hpBars.addAll([firstHpBar, secondHpBar]);

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/scene/battle.dart';
@@ -20,15 +22,20 @@ class Match extends Component with HasGameRef {
 
   Match(this._players) {
     debugMode = GlobalConfig.debugMode;
+
     skyComponent = Sky();
     landComponent = SpriteComponent(anchor: Anchor.topCenter);
     battleLayer = Battle(_players, battleSize, battlePosition);
 
-    _players.last.addDamageHandler((hp) {
-      if (hp <= 0) {
-        removeFromParent();
-      }
-    });
+    for (var element in _players) {
+      element.addDamageHandler((hp) {
+        if (hp <= 0) {
+          removeFromParent();
+        }
+      });
+    }
+
+    AudioSet.playMatchAudio();
   }
 
   @override
@@ -41,6 +48,13 @@ class Match extends Component with HasGameRef {
     await addAll({landComponent, skyComponent, battleLayer});
 
     await super.onLoad();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawColor(const Color.fromRGBO(194, 142, 50, 1), BlendMode.src);
+
+    super.render(canvas);
   }
 
   @override
