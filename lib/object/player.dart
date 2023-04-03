@@ -25,8 +25,8 @@ class Player extends PositionComponent
   static const _xSpeed = 2;
   static const _ySpeed = 1;
   static const _hp = 4;
-  static final _defaultSize = Vector2(21, 28);
-  static final _bulletPosition = Vector2(32, 9);
+  static final _defaultSize = Vector2(21, 27);
+  static final _bulletPosition = Vector2(32, 8);
 
   static final Map _stateToMoveFunctionMap = {
     PlayerState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),

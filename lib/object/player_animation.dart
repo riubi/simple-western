@@ -43,7 +43,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
         SpriteAnimationData.sequenced(
           amount: 2,
           textureSize: Vector2.all(192),
-          stepTime: 0.3,
+          stepTime: 0.30,
           loop: true,
         ));
 
@@ -74,30 +74,39 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   @override
   void update(double dt) {
     super.update(dt);
+    updatePlayerAnimationBasedOnState();
+  }
 
-    if (_currentStates.contains(PlayerState.dead)) {
+  void updatePlayerAnimationBasedOnState() {
+    if (_isPlayerDead()) {
       animation = dead;
-      return;
-    }
-
-    if (_currentStates.contains(PlayerState.shoot)) {
+    } else if (_isPlayerShooting()) {
       animation = shooting;
       if (shooting.done()) {
         shooting.reset();
         shooting.currentIndex = 1;
       }
+    } else if (_isPlayerBlockedOrNoCurrentStates()) {
+      if (animation != shooting) {
+        animation = standing;
+      }
+    } else {
+      if (animation == shooting) {
+        shooting.reset();
+      }
+      animation = going;
     }
+  }
 
-    if (isBlocked || _currentStates.isEmpty) {
-      return;
-    }
+  bool _isPlayerDead() {
+    return _currentStates.contains(PlayerState.dead);
+  }
 
-    if (animation != shooting) {
-      animation = standing;
-    } else if (animation == shooting) {
-      shooting.reset();
-    }
+  bool _isPlayerShooting() {
+    return _currentStates.contains(PlayerState.shoot);
+  }
 
-    animation = going;
+  bool _isPlayerBlockedOrNoCurrentStates() {
+    return isBlocked || _currentStates.isEmpty;
   }
 }

@@ -8,6 +8,9 @@ import 'package:simple_western/scene/battle.dart';
 import 'package:simple_western/object/player.dart';
 
 class Match extends Component {
+  static final battlePosition = Vector2(230, 510);
+  static final battleSize = Vector2(800, 320);
+
   final Set<Player> _players;
   late final Sprite _backgroundSprite;
 
@@ -17,7 +20,7 @@ class Match extends Component {
 
   @override
   Future<void> onLoad() async {
-    await add(Battle(_players, Vector2(800, 320), Vector2(180, 480)));
+    await add(Battle(_players, battleSize, battlePosition));
 
     _backgroundSprite = await Sprite.load('backgrounds/background-1.png');
 

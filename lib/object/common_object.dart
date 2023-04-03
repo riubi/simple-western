@@ -14,10 +14,10 @@ class CommonObject extends PositionComponent
   static const tree = 'objects/tree.png';
 
   static final _hitBoxes = {
-    cactus: Vector2(26, 27),
-    bush: Vector2(26, 14),
-    grass: Vector2(26, 18),
-    tree: Vector2.all(50),
+    cactus: Vector2(24, 27),
+    bush: Vector2(24, 14),
+    grass: Vector2(24, 18),
+    tree: Vector2(22, 46),
   };
 
   static const _randoms = [cactus, bush, grass, tree];
@@ -33,7 +33,7 @@ class CommonObject extends PositionComponent
     final spriteSize = sprite.originalSize * 0.5;
 
     final spriteComponent = SpriteComponent(sprite: sprite, size: spriteSize);
-    spriteComponent.position.y = size.y - spriteSize.y - 2;
+    spriteComponent.position.y = size.y - spriteSize.y - 1;
     spriteComponent.position.x = size.x / 2 - spriteSize.x / 2;
 
     await addAll({RectangleHitbox(), spriteComponent});

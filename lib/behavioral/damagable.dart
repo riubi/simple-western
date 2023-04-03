@@ -10,9 +10,9 @@ mixin Damagable on PositionComponent {
       return;
     }
 
+    hp -= strength;
     print('Target damaged: $strength, hp: $hp');
 
-    hp -= strength;
     if (hp <= 0) {
       onEliminating();
     }

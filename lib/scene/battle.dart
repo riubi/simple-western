@@ -21,8 +21,14 @@ class Battle extends PositionComponent with Bordarable {
 
   @override
   FutureOr<void> onLoad() async {
-    final commonObjects = CommonObject.getRandoms(
-        [Vector2.all(100), Vector2.all(200), Vector2.all(300)]);
+    final commonObjects = CommonObject.getRandoms([
+      Vector2(100, 70),
+      Vector2(160, 190),
+      Vector2(320, 240),
+      Vector2(345, 35),
+      Vector2(650, 150),
+      Vector2(550, 240),
+    ]);
 
     await addAll({RectangleHitbox(), ..._players, ...commonObjects});
     return super.onLoad();
