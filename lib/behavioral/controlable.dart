@@ -54,19 +54,21 @@ mixin Controlable on PositionComponent
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (!currentStates.contains(ObjectState.dead)) {
-      currentStates.clear();
-      currentStates.addAll(keysPressed
-          .where((key) => _keySet.mapToState.containsKey(key))
-          .map((key) => _keySet.mapToState[key]!)
-          .toSet());
+      currentStates
+        ..clear()
+        ..addAll(keysPressed
+            .where((key) => _keySet.mapToState.containsKey(key))
+            .map((key) => _keySet.mapToState[key]!)
+            .toSet());
     }
 
     return true;
   }
 
   void dead() {
-    currentStates.clear();
-    currentStates.add(ObjectState.dead);
+    currentStates
+      ..clear()
+      ..add(ObjectState.dead);
   }
 
   void turnLeft() {
@@ -121,8 +123,9 @@ mixin Controlable on PositionComponent
 
   void _updatePosition(Offset offset) {
     if (offset != Offset.zero) {
-      position.x += offset.dx;
-      position.y += offset.dy;
+      position
+        ..x += offset.dx
+        ..y += offset.dy;
     }
   }
 }

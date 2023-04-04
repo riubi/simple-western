@@ -62,9 +62,11 @@ flutter:
     - assets/images/fighters/player-2.png
     - assets/images/fighters/player-2-shooting.png
     - assets/images/fighters/player-2-death.png
+
     - assets/images/backgrounds/background-1.png
     - assets/images/backgrounds/sky-bg.png
     - assets/images/backgrounds/land-bg.png
+
     - assets/images/objects/bush.png
     - assets/images/objects/cactus.png
     - assets/images/objects/cloud1.png
@@ -72,8 +74,12 @@ flutter:
     - assets/images/objects/grass.png
     - assets/images/objects/sun.png
     - assets/images/objects/tree.png
+
+    - assets/images/ui/logo.png
     - assets/images/ui/full-hp.png
     - assets/images/ui/no-hp.png
+
+    - assets/audio/intro.mp3
     - assets/audio/lobby.mp3
     - assets/audio/match.mp3
     - assets/audio/bullet-1.mp3

@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 import 'package:simple_western/object/player.dart';
@@ -22,8 +23,6 @@ class GameApp extends FlameGame
     await super.onLoad();
 
     add(Menu(startMatch));
-
-    AudioSet.playLobbyAudio();
   }
 
   void startMatch() async {
@@ -35,5 +34,16 @@ class GameApp extends FlameGame
     };
 
     await add(Match(players));
+
+    AudioSet.playMatchAudio();
+  }
+
+  @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (child is Match && type == ChildrenChangeType.removed) {
+      AudioSet.playLobbyAudio();
+    }
+
+    super.onChildrenChanged(child, type);
   }
 }

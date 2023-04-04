@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_western/config/global_config.dart';
-import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/scene/battle.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/scene/sky.dart';
@@ -34,8 +33,6 @@ class Match extends Component with HasGameRef {
         }
       });
     }
-
-    AudioSet.playMatchAudio();
   }
 
   @override
@@ -67,7 +64,10 @@ class Match extends Component with HasGameRef {
     battlePosition.x = parentSize.x * 0.5;
     battlePosition.y = parentSize.y * 0.9 - 320;
 
-    skyComponent.position = battlePosition + Vector2(0, 1);
+    skyComponent
+      ..position = battlePosition + Vector2(0, 1)
+      ..size = Vector2(parentSize.x, skyComponent.size.y);
+
     landComponent.position = battlePosition;
     battleLayer.position = battlePosition;
   }

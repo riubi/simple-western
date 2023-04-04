@@ -32,9 +32,10 @@ class CommonObject extends PositionComponent
     final sprite = await Sprite.load(_asset);
     final spriteSize = sprite.originalSize * 0.5;
 
-    final spriteComponent = SpriteComponent(sprite: sprite, size: spriteSize);
-    spriteComponent.position.y = size.y - spriteSize.y - 1;
-    spriteComponent.position.x = size.x / 2 - spriteSize.x / 2;
+    final spriteComponent = SpriteComponent(sprite: sprite, size: spriteSize)
+      ..position
+      ..y = size.y - spriteSize.y - 1
+      ..x = size.x / 2 - spriteSize.x / 2;
 
     await addAll({RectangleHitbox(), spriteComponent});
 

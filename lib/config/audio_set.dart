@@ -9,8 +9,10 @@ class AudioSet {
   static const bulletDelivery = 'bullet-delivery.mp3';
 
   static const manDeath = 'man-death.mp3';
+
   static const match = 'match.mp3';
   static const lobby = 'lobby.mp3';
+  static const intro = 'intro.mp3';
 
   static preload() async {
     await FlameAudio.audioCache.loadAll([
@@ -24,12 +26,21 @@ class AudioSet {
     ]);
   }
 
+  static void preloadAndPlayIntro() async {
+    await FlameAudio.audioCache.load(intro);
+    playIntroAudio();
+  }
+
   static void playMatchAudio() {
-    FlameAudio.bgm.play(match, volume: .3);
+    _bgmPlay(match, .45);
+  }
+
+  static void playIntroAudio() {
+    _bgmPlay(intro, .55);
   }
 
   static void playLobbyAudio() {
-    FlameAudio.bgm.play(lobby, volume: .4);
+    _bgmPlay(lobby, .25);
   }
 
   static void playBulletShot() {
@@ -37,7 +48,14 @@ class AudioSet {
         .elementAt(Random().nextInt(3)));
   }
 
-  static Future<AudioPlayer> play(String name, {double volume = 1}) {
+  static Future<AudioPlayer> play(String name, {double volume = 0.8}) {
     return FlameAudio.playLongAudio(name, volume: volume);
+  }
+
+  static void _bgmPlay(String match, double volume) {
+    if (FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.stop();
+    }
+    FlameAudio.bgm.play(match, volume: .45);
   }
 }

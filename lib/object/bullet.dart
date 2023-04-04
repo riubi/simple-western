@@ -48,7 +48,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       rect1 = const Rect.fromLTWH(5, 0, 28, 3);
     }
 
-    add(RectangleHitbox(size: Vector2.all(5)));
+    add(RectangleHitbox(isSolid: true));
 
     return super.onLoad();
   }
@@ -87,7 +87,8 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(rect1, paint1);
-    canvas.drawRect(rect, paint);
+    canvas
+      ..drawRect(rect1, paint1)
+      ..drawRect(rect, paint);
   }
 }

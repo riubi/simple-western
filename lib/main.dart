@@ -1,19 +1,24 @@
 import 'package:flame/game.dart';
 import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/game_app.dart';
 
 void main() {
-  runApp(const MyApp());
+  final game = GameWidget(game: GameApp());
+
+  runApp(MyApp(game));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GameWidget<Game> game;
+
+  const MyApp(this.game, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const SplashScreenGame(),
+      home: SplashScreenGame(game),
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
     );
@@ -21,29 +26,33 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreenGame extends StatefulWidget {
-  const SplashScreenGame({super.key});
+  final GameWidget<Game> game;
+
+  const SplashScreenGame(this.game, {super.key});
 
   @override
-  SplashScreenGameState createState() => SplashScreenGameState();
+  SplashScreenGameState createState() => SplashScreenGameState(game);
 }
 
 class SplashScreenGameState extends State<SplashScreenGame> {
+  final GameWidget<Game> game;
+
+  SplashScreenGameState(this.game);
+
   late FlameSplashController controller;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FlameSplashScreen(
-        showBefore: (BuildContext context) {
-          return const Text('Before logo');
-        },
         showAfter: (BuildContext context) {
-          return const Text('After logo');
+          AudioSet.preloadAndPlayIntro();
+          return Image.asset('assets/images/ui/logo.png', width: 550);
         },
         theme: FlameSplashTheme.dark,
         onFinish: (context) => Navigator.pushReplacement<void, void>(
           context,
-          MaterialPageRoute(builder: (context) => GameWidget(game: GameApp())),
+          MaterialPageRoute(builder: (context) => game),
         ),
       ),
     );

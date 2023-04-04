@@ -23,8 +23,9 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   PlayerAnimation(Vector2 parentSize, this._currentStates, this._shootCallback,
       this._asset, this._shootingAsset, this._deathAsset)
       : super(size: defaultSize) {
-    position.y = 6 + parentSize.y - size.y;
-    position.x = parentSize.x / 2 - size.x / 2;
+    position
+      ..y = 6 + parentSize.y - size.y
+      ..x = parentSize.x / 2 - size.x / 2;
   }
 
   @override
@@ -64,9 +65,9 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           textureSize: Vector2.all(192),
           stepTime: 0.15,
           loop: false,
-        ));
+        ))
+      ..onComplete = _shootCallback;
 
-    shooting.onComplete = _shootCallback;
     animation = standing;
 
     super.onLoad();
@@ -84,8 +85,9 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
     } else if (_isPlayerShooting()) {
       animation = shooting;
       if (shooting.done()) {
-        shooting.reset();
-        shooting.currentIndex = 1;
+        shooting
+          ..reset()
+          ..currentIndex = 1;
       }
     } else if (_isPlayerBlockedOrNoCurrentStates()) {
       if (animation != shooting) {

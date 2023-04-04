@@ -34,7 +34,7 @@ class Player extends PositionComponent
     initControl(_xSpeed, _ySpeed, keySet, () => sprite.isBlocked);
 
     hp = _hp;
-    hitbox = RectangleHitbox();
+    hitbox = RectangleHitbox(isSolid: true);
 
     sprite = PlayerAnimation(
         size, currentStates, shoot, asset, shootingAsset, deathAsset);

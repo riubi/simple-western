@@ -12,14 +12,24 @@ class Menu extends Component with HasGameRef {
 
   @override
   FutureOr<void> onLoad() {
-    var pos = gameRef.canvasSize * 0.45;
-    for (var element in menus) {
-      element.position = pos;
-      pos.y += 40;
-    }
+    resize(gameRef.canvasSize);
 
     addAll(menus);
 
     return super.onLoad();
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    resize(size);
+    super.onGameResize(size);
+  }
+
+  void resize(Vector2 size) {
+    var pos = size * 0.45;
+    for (var element in menus) {
+      element.position = pos;
+      pos.y += 40;
+    }
   }
 }
