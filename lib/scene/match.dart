@@ -19,7 +19,7 @@ class Match extends Component with HasGameRef {
   late Battle battleLayer;
   late SpriteComponent skyComponent;
 
-  Match(this._players) {
+  Match(this._players, Function() battleFinisher) {
     debugMode = GlobalConfig.debugMode;
 
     skyComponent = Sky();
@@ -27,11 +27,7 @@ class Match extends Component with HasGameRef {
     battleLayer = Battle(_players, battleSize, battlePosition);
 
     for (var element in _players) {
-      element.addDamageHandler((hp) {
-        if (hp <= 0) {
-          removeFromParent();
-        }
-      });
+      element.addEliminatingHandler(() => battleFinisher());
     }
   }
 

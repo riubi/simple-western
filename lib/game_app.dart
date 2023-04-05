@@ -10,7 +10,9 @@ import 'package:simple_western/scene/menu.dart';
 
 class GameApp extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection, HasTappables {
-  late Set<Player> players;
+  late Set<Player> _players;
+  Match? _match;
+  late Menu _menu;
 
   GameApp() : super() {
     collisionDetection = StandardCollisionDetection();
@@ -22,28 +24,35 @@ class GameApp extends FlameGame
 
     await super.onLoad();
 
-    add(Menu(startMatch));
+    _menu = Menu(startMatch, stopGame);
+
+    add(_menu);
   }
 
   void startMatch() async {
-    players = {
+    stopGame();
+
+    _players = {
       Player(KeyBindingSet.wasd(), 'fighters/player-1.png',
           'fighters/player-1-shooting.png', 'fighters/player-1-death.png'),
       Player(KeyBindingSet.arrows(), 'fighters/player-2.png',
           'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
     };
 
-    await add(Match(players));
+    _match = Match(_players, () {
+      AudioSet.playLobbyAudio();
+      _menu.openEndGameMenu();
+    });
 
     AudioSet.playMatchAudio();
+
+    await add(_match!);
   }
 
-  @override
-  void onChildrenChanged(Component child, ChildrenChangeType type) {
-    if (child is Match && type == ChildrenChangeType.removed) {
-      AudioSet.playLobbyAudio();
+  void stopGame() {
+    if (_match != null) {
+      _match?.removeFromParent();
+      _match = null;
     }
-
-    super.onChildrenChanged(child, type);
   }
 }

@@ -19,9 +19,10 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   final Set<ObjectState> _currentStates;
   final Function()? _shootCallback;
+  final Function() _deathCallback;
 
   PlayerAnimation(Vector2 parentSize, this._currentStates, this._shootCallback,
-      this._asset, this._shootingAsset, this._deathAsset)
+      this._deathCallback, this._asset, this._shootingAsset, this._deathAsset)
       : super(size: defaultSize) {
     position
       ..y = 6 + parentSize.y - size.y
@@ -56,7 +57,8 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           textureSize: Vector2.all(192),
           stepTime: 0.20,
           loop: false,
-        ));
+        ))
+      ..onComplete = _deathCallback;
 
     shooting = await gameRef.loadSpriteAnimation(
         _shootingAsset,

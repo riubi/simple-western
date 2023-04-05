@@ -14,6 +14,8 @@ class AudioSet {
   static const lobby = 'lobby.mp3';
   static const intro = 'intro.mp3';
 
+  static bool _audioEnabled = true;
+
   static preload() async {
     await FlameAudio.audioCache.loadAll([
       match,
@@ -48,14 +50,34 @@ class AudioSet {
         .elementAt(Random().nextInt(3)));
   }
 
-  static Future<AudioPlayer> play(String name, {double volume = 0.8}) {
-    return FlameAudio.playLongAudio(name, volume: volume);
+  static void play(String name, {double volume = 0.8}) {
+    if (!_audioEnabled) {
+      return;
+    }
+
+    FlameAudio.playLongAudio(name, volume: volume);
   }
 
   static void _bgmPlay(String match, double volume) {
+    if (!_audioEnabled) {
+      return;
+    }
+
     if (FlameAudio.bgm.isPlaying) {
       FlameAudio.bgm.stop();
     }
-    FlameAudio.bgm.play(match, volume: .45);
+    FlameAudio.bgm.play(match, volume: volume);
+  }
+
+  static void disable() {
+    print("Audio disabled.");
+    FlameAudio.bgm.stop();
+    _audioEnabled = false;
+  }
+
+  static void enable() {
+    print("Audio enabled.");
+
+    _audioEnabled = true;
   }
 }

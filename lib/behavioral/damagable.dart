@@ -5,6 +5,7 @@ mixin Damagable on PositionComponent {
   bool eliminated = false;
   late int hp;
   final List<Function(int)> _onDamage = [];
+  final List<Function()> _onEliminate = [];
 
   void damage(int strength) {
     if (eliminated) {
@@ -12,26 +13,28 @@ mixin Damagable on PositionComponent {
     }
 
     hp -= strength;
-    print('Target damaged: $strength, hp: $hp');
 
-    if (_onDamage.isNotEmpty) {
-      for (var fn in _onDamage) {
-        fn(hp);
-      }
-    }
+    print('Target damaged: $strength, hp: $hp');
+    _onDamage.forEach((fn) => fn(hp));
 
     if (hp <= 0) {
+      eliminated = true;
       onEliminating();
     }
   }
 
   @mustCallSuper
   void onEliminating() {
-    eliminated = true;
     print('Target eliminating.');
+
+    _onEliminate.forEach((fn) => fn());
   }
 
   addDamageHandler(Function(int) handler) {
     _onDamage.add(handler);
+  }
+
+  addEliminatingHandler(Function() handler) {
+    _onEliminate.add(handler);
   }
 }

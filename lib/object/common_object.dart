@@ -37,7 +37,7 @@ class CommonObject extends PositionComponent
       ..y = size.y - spriteSize.y - 1
       ..x = size.x / 2 - spriteSize.x / 2;
 
-    await addAll({RectangleHitbox(), spriteComponent});
+    await addAll({RectangleHitbox(isSolid: true), spriteComponent});
 
     await super.onLoad();
   }

@@ -37,6 +37,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +55,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-  # uses-material-design: true
+  uses-material-design: true
+  fonts:
+    - family: RaleWay
+      fonts:
+        - asset: assets/fonts/raleway.ttf
   assets:   
     - assets/images/fighters/player-1.png
     - assets/images/fighters/player-1-shooting.png
@@ -63,7 +68,6 @@ flutter:
     - assets/images/fighters/player-2-shooting.png
     - assets/images/fighters/player-2-death.png
 
-    - assets/images/backgrounds/background-1.png
     - assets/images/backgrounds/sky-bg.png
     - assets/images/backgrounds/land-bg.png
 
@@ -76,6 +80,7 @@ flutter:
     - assets/images/objects/tree.png
 
     - assets/images/ui/logo.png
+    - assets/images/ui/credits.gif
     - assets/images/ui/full-hp.png
     - assets/images/ui/no-hp.png
 

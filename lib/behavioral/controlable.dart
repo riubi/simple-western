@@ -34,6 +34,8 @@ mixin Controlable on PositionComponent
 
   @override
   void update(double dt) {
+    super.update(dt);
+
     if (_isDeadOrBlocked()) {
       return;
     }
@@ -47,8 +49,6 @@ mixin Controlable on PositionComponent
     offset = _applyInhiberEffect(offset);
 
     _updatePosition(offset);
-
-    super.update(dt);
   }
 
   @override

@@ -36,8 +36,8 @@ class Player extends PositionComponent
     hp = _hp;
     hitbox = RectangleHitbox(isSolid: true);
 
-    sprite = PlayerAnimation(
-        size, currentStates, shoot, asset, shootingAsset, deathAsset);
+    sprite = PlayerAnimation(size, currentStates, shoot,
+        () => super.onEliminating(), asset, shootingAsset, deathAsset);
   }
 
   @override
@@ -59,12 +59,11 @@ class Player extends PositionComponent
 
   @override
   void onEliminating() {
-    super.onEliminating();
-
     AudioSet.play(AudioSet.manDeath);
-    dead();
 
     hitbox.size.y /= 2;
     hitbox.position.y += hitbox.size.y;
+
+    dead();
   }
 }
