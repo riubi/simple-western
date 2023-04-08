@@ -30,7 +30,7 @@ class Sky extends SpriteComponent {
 
     add(SpriteComponent(
         sprite: sunSprite,
-        position: Vector2(position.x / 2 + _sunOffset, position.y - _sunOffset),
+        position: Vector2(position.x / 2 + _sunOffset, position.y / 2),
         anchor: Anchor.center));
 
     cloudSprites.addAll([sprite1, sprite2]);

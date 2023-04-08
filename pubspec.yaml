@@ -62,9 +62,11 @@ flutter:
         - asset: assets/fonts/raleway.ttf
   assets:   
     - assets/images/fighters/player-1.png
+    - assets/images/fighters/player-1-going.png
     - assets/images/fighters/player-1-shooting.png
     - assets/images/fighters/player-1-death.png
     - assets/images/fighters/player-2.png
+    - assets/images/fighters/player-2-going.png
     - assets/images/fighters/player-2-shooting.png
     - assets/images/fighters/player-2-death.png
 

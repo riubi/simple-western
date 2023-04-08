@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/components/core/component.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 import 'package:simple_western/object/player.dart';
@@ -33,10 +32,18 @@ class GameApp extends FlameGame
     stopGame();
 
     _players = {
-      Player(KeyBindingSet.wasd(), 'fighters/player-1.png',
-          'fighters/player-1-shooting.png', 'fighters/player-1-death.png'),
-      Player(KeyBindingSet.arrows(), 'fighters/player-2.png',
-          'fighters/player-2-shooting.png', 'fighters/player-2-death.png'),
+      Player(
+          KeyBindingSet.wasd(),
+          'fighters/player-1.png',
+          'fighters/player-1-going.png',
+          'fighters/player-1-shooting.png',
+          'fighters/player-1-death.png'),
+      Player(
+          KeyBindingSet.arrows(),
+          'fighters/player-2.png',
+          'fighters/player-2-going.png',
+          'fighters/player-2-shooting.png',
+          'fighters/player-2-death.png'),
     };
 
     _match = Match(_players, () {

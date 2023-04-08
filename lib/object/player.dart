@@ -28,7 +28,7 @@ class Player extends PositionComponent
   late final PlayerAnimation sprite;
   late final RectangleHitbox hitbox;
 
-  Player(keySet, asset, shootingAsset, deathAsset) : super(size: _defaultSize) {
+  Player(keySet, asset, goingAsset, shootingAsset, deathAsset) : super(size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
     initControl(_xSpeed, _ySpeed, keySet, () => sprite.isBlocked);
@@ -37,7 +37,7 @@ class Player extends PositionComponent
     hitbox = RectangleHitbox(isSolid: true);
 
     sprite = PlayerAnimation(size, currentStates, shoot,
-        () => super.onEliminating(), asset, shootingAsset, deathAsset);
+        () => super.onEliminating(), asset, goingAsset, shootingAsset, deathAsset);
   }
 
   @override

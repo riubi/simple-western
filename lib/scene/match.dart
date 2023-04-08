@@ -7,7 +7,7 @@ import 'package:simple_western/scene/battle.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/scene/sky.dart';
 
-class Match extends Component with HasGameRef {
+class Match extends PositionComponent with HasGameRef {
   static const landAsset = 'backgrounds/land-bg.png';
 
   static final battleSize = Vector2(800, 320);

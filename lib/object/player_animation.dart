@@ -10,6 +10,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   late SpriteAnimation dead;
 
   final String _asset;
+  final String _goingAsset;
   final String _deathAsset;
   final String _shootingAsset;
 
@@ -21,8 +22,15 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   final Function()? _shootCallback;
   final Function() _deathCallback;
 
-  PlayerAnimation(Vector2 parentSize, this._currentStates, this._shootCallback,
-      this._deathCallback, this._asset, this._shootingAsset, this._deathAsset)
+  PlayerAnimation(
+      Vector2 parentSize,
+      this._currentStates,
+      this._shootCallback,
+      this._deathCallback,
+      this._asset,
+      this._goingAsset,
+      this._shootingAsset,
+      this._deathAsset)
       : super(size: defaultSize) {
     position
       ..y = 6 + parentSize.y - size.y
@@ -32,14 +40,6 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   @override
   void onLoad() async {
     // @TODO extract loading logic with easy customization options
-    going = await gameRef.loadSpriteAnimation(
-        _asset,
-        SpriteAnimationData.sequenced(
-          amount: 4,
-          textureSize: Vector2.all(192),
-          stepTime: 0.15,
-          loop: true,
-        ));
 
     standing = await gameRef.loadSpriteAnimation(
         _asset,
@@ -47,6 +47,15 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           amount: 2,
           textureSize: Vector2.all(192),
           stepTime: 0.30,
+          loop: true,
+        ));
+
+    going = await gameRef.loadSpriteAnimation(
+        _goingAsset,
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          textureSize: Vector2.all(192),
+          stepTime: 0.15,
           loop: true,
         ));
 
