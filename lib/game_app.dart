@@ -7,6 +7,8 @@ import 'package:simple_western/object/player.dart';
 import 'package:simple_western/scene/match.dart';
 import 'package:simple_western/scene/menu.dart';
 
+import 'object/bot.dart';
+
 class GameApp extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection, HasTappables {
   late Set<Player> _players;
@@ -32,8 +34,32 @@ class GameApp extends FlameGame
     stopGame();
 
     _players = {
-      Player(
-          KeyBindingSet.wasd(),
+      Bot(
+          KeyBindingSet.bot(),
+          'fighters/player-1.png',
+          'fighters/player-1-going.png',
+          'fighters/player-1-shooting.png',
+          'fighters/player-1-death.png'),
+      Bot(
+          KeyBindingSet.bot(),
+          'fighters/player-1.png',
+          'fighters/player-1-going.png',
+          'fighters/player-1-shooting.png',
+          'fighters/player-1-death.png'),
+      Bot(
+          KeyBindingSet.bot(),
+          'fighters/player-1.png',
+          'fighters/player-1-going.png',
+          'fighters/player-1-shooting.png',
+          'fighters/player-1-death.png'),
+      Bot(
+          KeyBindingSet.bot(),
+          'fighters/player-1.png',
+          'fighters/player-1-going.png',
+          'fighters/player-1-shooting.png',
+          'fighters/player-1-death.png'),
+      Bot(
+          KeyBindingSet.bot(),
           'fighters/player-1.png',
           'fighters/player-1-going.png',
           'fighters/player-1-shooting.png',
