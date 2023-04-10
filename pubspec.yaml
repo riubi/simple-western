@@ -92,6 +92,7 @@ flutter:
     - assets/audio/bullet-1.mp3
     - assets/audio/bullet-2.mp3
     - assets/audio/bullet-3.mp3
+    - assets/audio/bullet-4.mp3
     - assets/audio/bullet-delivery.mp3
     - assets/audio/man-death.mp3
     

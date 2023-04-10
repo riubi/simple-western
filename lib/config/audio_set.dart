@@ -1,12 +1,19 @@
 import 'dart:math';
-import 'package:audioplayers/src/audioplayer.dart';
 import 'package:flame_audio/flame_audio.dart';
 
 class AudioSet {
   static const bulletAudio1 = 'bullet-1.mp3';
   static const bulletAudio2 = 'bullet-2.mp3';
   static const bulletAudio3 = 'bullet-3.mp3';
+  static const bulletAudioMain = 'bullet-4.mp3';
   static const bulletDelivery = 'bullet-delivery.mp3';
+
+  static final bulletsAudio = [
+    bulletAudio1,
+    bulletAudio2,
+    bulletAudio3,
+    bulletAudioMain
+  ];
 
   static const manDeath = 'man-death.mp3';
 
@@ -18,13 +25,15 @@ class AudioSet {
 
   static preload() async {
     await FlameAudio.audioCache.loadAll([
+      manDeath,
       match,
       lobby,
+      intro,
       bulletAudio1,
       bulletAudio2,
       bulletAudio3,
+      bulletAudioMain,
       bulletDelivery,
-      manDeath,
     ]);
   }
 
@@ -46,8 +55,12 @@ class AudioSet {
   }
 
   static void playBulletShot() {
-    play([bulletAudio1, bulletAudio2, bulletAudio3]
-        .elementAt(Random().nextInt(3)));
+    final random = Random().nextInt(bulletsAudio.length * 3);
+    if (random >= bulletsAudio.length) {
+      play(bulletsAudio.elementAt(bulletsAudio.length - 1));
+    } else {
+      play(bulletsAudio.elementAt(random));
+    }
   }
 
   static void play(String name, {double volume = 0.8}) {
