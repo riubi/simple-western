@@ -9,27 +9,43 @@ import 'package:simple_western/behavioral/bordarable.dart';
 
 class Battle extends PositionComponent with Bordarable {
   static const _hpBarOffset = 30.0;
-  final Set<Player> _players;
-  late final List<HpBar> _hpBars = [];
+  static const _hpBarStep = 13.0;
+  static const _positionStep = 40.0;
+  final Set<Player> _leftTeam;
+  final Set<Player> _rightTeam;
 
-  Battle(this._players, size, position)
+  Battle(this._leftTeam, this._rightTeam, size, position)
       : super(size: size, position: position, anchor: Anchor.topCenter) {
     debugMode = GlobalConfig.debugMode;
+  }
 
-    _players.first.position = Vector2(size.x * 0.3, size.y * 0.3);
-    var firstPosition = Vector2(_hpBarOffset, size.y - _hpBarOffset);
-    var firstHpBar = HpBar(_players.first, firstPosition, Anchor.bottomLeft);
+  void _loadTeam(Anchor anchor, Set<Player> team) {
+    var yPos = _positionStep;
+    var xPos = anchor == Anchor.bottomLeft ? size.x * 0.3 : size.x * 0.7;
 
-    _players.last.position = Vector2(size.x * 0.7, size.y * 0.3);
-    _players.last.turnLeft();
-    var secondPosition = Vector2(size.x - _hpBarOffset, size.y - _hpBarOffset);
-    var secondHpBar = HpBar(_players.last, secondPosition, Anchor.bottomRight);
+    var xHpPos =
+        anchor == Anchor.bottomLeft ? _hpBarOffset : size.x - _hpBarOffset;
+    var hpPosition = Vector2(xHpPos, size.y - _hpBarOffset);
 
-    _hpBars.addAll([firstHpBar, secondHpBar]);
+    for (var partner in team) {
+      if (anchor == Anchor.bottomRight) {
+        partner.turnLeft();
+      }
+
+      partner.position = Vector2(xPos, yPos);
+      yPos += _positionStep;
+
+      add(partner);
+      add(HpBar(partner, hpPosition, anchor));
+
+      hpPosition = Vector2(hpPosition.x, hpPosition.y += _hpBarStep);
+    }
   }
 
   @override
   FutureOr<void> onLoad() async {
+    await super.onLoad();
+
     final commonObjects = CommonObject.getRandoms([
       Vector2(100, 70),
       Vector2(160, 190),
@@ -39,9 +55,9 @@ class Battle extends PositionComponent with Bordarable {
       Vector2(550, 240),
     ]);
 
-    await addAll(
-        {RectangleHitbox(), ..._players, ..._hpBars, ...commonObjects});
+    await addAll({RectangleHitbox(), ...commonObjects});
 
-    return super.onLoad();
+    _loadTeam(Anchor.bottomLeft, _leftTeam);
+    _loadTeam(Anchor.bottomRight, _rightTeam);
   }
 }

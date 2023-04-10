@@ -11,7 +11,6 @@ import 'object/bot.dart';
 
 class GameApp extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection, HasTappables {
-  late Set<Player> _players;
   Match? _match;
   late Menu _menu;
 
@@ -25,54 +24,61 @@ class GameApp extends FlameGame
 
     await super.onLoad();
 
-    _menu = Menu(startMatch, stopGame);
+    _menu = Menu(startDuel, startBattle, stopGame);
 
     add(_menu);
   }
 
-  void startMatch() async {
-    stopGame();
-
-    _players = {
-      Bot(
-          KeyBindingSet.bot(),
+  void startDuel() {
+    startMatch({
+      Player(
+          KeyBindingSet.wasd(),
           'fighters/player-1.png',
           'fighters/player-1-going.png',
           'fighters/player-1-shooting.png',
           'fighters/player-1-death.png'),
-      Bot(
-          KeyBindingSet.bot(),
-          'fighters/player-1.png',
-          'fighters/player-1-going.png',
-          'fighters/player-1-shooting.png',
-          'fighters/player-1-death.png'),
-      Bot(
-          KeyBindingSet.bot(),
-          'fighters/player-1.png',
-          'fighters/player-1-going.png',
-          'fighters/player-1-shooting.png',
-          'fighters/player-1-death.png'),
-      Bot(
-          KeyBindingSet.bot(),
-          'fighters/player-1.png',
-          'fighters/player-1-going.png',
-          'fighters/player-1-shooting.png',
-          'fighters/player-1-death.png'),
-      Bot(
-          KeyBindingSet.bot(),
-          'fighters/player-1.png',
-          'fighters/player-1-going.png',
-          'fighters/player-1-shooting.png',
-          'fighters/player-1-death.png'),
+    }, {
       Player(
           KeyBindingSet.arrows(),
           'fighters/player-2.png',
           'fighters/player-2-going.png',
           'fighters/player-2-shooting.png',
           'fighters/player-2-death.png'),
-    };
+    });
+  }
 
-    _match = Match(_players, () {
+  void startBattle() {
+    final Set<Bot> bots = {};
+
+    for (var i = 0; i < 6; i++) {
+      bots.add(Bot(
+          KeyBindingSet.bot(),
+          'fighters/player-1.png',
+          'fighters/player-1-going.png',
+          'fighters/player-1-shooting.png',
+          'fighters/player-1-death.png'));
+    }
+
+    startMatch({
+      Player(
+          KeyBindingSet.wasd(),
+          'fighters/player-2.png',
+          'fighters/player-2-going.png',
+          'fighters/player-2-shooting.png',
+          'fighters/player-2-death.png'),
+      Player(
+          KeyBindingSet.arrows(),
+          'fighters/player-2.png',
+          'fighters/player-2-going.png',
+          'fighters/player-2-shooting.png',
+          'fighters/player-2-death.png'),
+    }, bots);
+  }
+
+  void startMatch(leftParty, rightParty) async {
+    stopGame();
+
+    _match = Match(leftParty, rightParty, () {
       AudioSet.playLobbyAudio();
       _menu.openEndGameMenu();
     });

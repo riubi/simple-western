@@ -10,11 +10,12 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
   static const lobbyAsset = 'images/ui/logo.png';
   static const creditsAsset = 'images/ui/credits.gif';
 
-  final Function() _gameInit;
+  final Function() _duelInit;
+  final Function() _teamBattleInit;
   final Function() _gameStop;
   bool _isMenuHiddable = false;
 
-  Menu(this._gameInit, this._gameStop);
+  Menu(this._duelInit, this._teamBattleInit, this._gameStop);
 
   @override
   FutureOr<void> onLoad() {
@@ -22,7 +23,8 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       ..addEntry(
         'LobbyMenu',
         (context, game) => TextBuilder.buildMenu({
-          "START": _gameStart,
+          "DUEL": _duelStart,
+          "BATTLE": _battleStart,
           'OPTIONS': _menuSwitcher('Options'),
           'CREDITS': _menuSwitcher('Credits'),
         },
@@ -37,7 +39,8 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       ..addEntry(
         'PauseMenu',
         (context, game) => TextBuilder.buildMenu({
-          'NEW GAME': _gameStart,
+          'NEW DUEL': _duelStart,
+          'NEW BATTLE': _battleStart,
           'TO LOBBY': openLobbyMenu,
         }, title: 'PAUSED'),
       )
@@ -107,10 +110,18 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     ..clear()
     ..add(title);
 
-  _gameStart() {
+  void _duelStart() {
+    _gameStart(_duelInit);
+  }
+
+  void _battleStart() {
+    _gameStart(_teamBattleInit);
+  }
+
+  void _gameStart(Function() gameInit) {
     _isMenuHiddable = true;
     gameRef.overlays.clear();
-    _gameInit();
+    gameInit();
     if (gameRef.paused) {
       gameRef.resumeEngine();
     }

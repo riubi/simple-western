@@ -13,21 +13,30 @@ class Match extends PositionComponent with HasGameRef {
   static final battleSize = Vector2(800, 320);
   final Vector2 battlePosition = Vector2.all(0);
 
-  final Set<Player> _players;
+  final Set<Player> _leftTeam;
+  final Set<Player> _rightTeam;
 
   late SpriteComponent landComponent;
   late Battle battleLayer;
   late SpriteComponent skyComponent;
 
-  Match(this._players, Function() battleFinisher) {
+  Match(this._leftTeam, this._rightTeam, Function() battleFinisher) {
     debugMode = GlobalConfig.debugMode;
 
     skyComponent = Sky();
     landComponent = SpriteComponent(anchor: Anchor.topCenter);
-    battleLayer = Battle(_players, battleSize, battlePosition);
+    battleLayer = Battle(_leftTeam, _rightTeam, battleSize, battlePosition);
 
-    for (var element in _players) {
-      element.addEliminatingHandler(() => battleFinisher());
+    for (var team in {_leftTeam, _rightTeam}) {
+      var teamSize = team.length;
+      for (var partner in team) {
+        partner.addEliminatingHandler(() {
+          teamSize--;
+          if (teamSize <= 0) {
+            battleFinisher();
+          }
+        });
+      }
     }
   }
 
