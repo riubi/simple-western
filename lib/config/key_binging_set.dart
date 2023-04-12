@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:simple_western/behavioral/object_state.dart';
 
 class KeyBindingSet {
-  final Map<LogicalKeyboardKey, ObjectState> mapToState;
+  final Map<PhysicalKeyboardKey, ObjectState> mapToState;
 
   KeyBindingSet(this.mapToState);
 
@@ -12,23 +12,23 @@ class KeyBindingSet {
 
   static wasd() {
     return KeyBindingSet({
-      LogicalKeyboardKey.keyW: ObjectState.up,
-      LogicalKeyboardKey.keyS: ObjectState.down,
-      LogicalKeyboardKey.keyA: ObjectState.left,
-      LogicalKeyboardKey.keyD: ObjectState.right,
-      LogicalKeyboardKey.keyE: ObjectState.hit,
-      LogicalKeyboardKey.keyQ: ObjectState.shoot,
+      PhysicalKeyboardKey.keyW: ObjectState.up,
+      PhysicalKeyboardKey.keyS: ObjectState.down,
+      PhysicalKeyboardKey.keyA: ObjectState.left,
+      PhysicalKeyboardKey.keyD: ObjectState.right,
+      PhysicalKeyboardKey.keyE: ObjectState.hit,
+      PhysicalKeyboardKey.keyQ: ObjectState.shoot,
     });
   }
 
   static arrows() {
     return KeyBindingSet({
-      LogicalKeyboardKey.arrowUp: ObjectState.up,
-      LogicalKeyboardKey.arrowDown: ObjectState.down,
-      LogicalKeyboardKey.arrowLeft: ObjectState.left,
-      LogicalKeyboardKey.arrowRight: ObjectState.right,
-      LogicalKeyboardKey.enter: ObjectState.hit,
-      LogicalKeyboardKey.shiftRight: ObjectState.shoot,
+      PhysicalKeyboardKey.arrowUp: ObjectState.up,
+      PhysicalKeyboardKey.arrowDown: ObjectState.down,
+      PhysicalKeyboardKey.arrowLeft: ObjectState.left,
+      PhysicalKeyboardKey.arrowRight: ObjectState.right,
+      PhysicalKeyboardKey.enter: ObjectState.hit,
+      PhysicalKeyboardKey.shiftRight: ObjectState.shoot,
     });
   }
 }

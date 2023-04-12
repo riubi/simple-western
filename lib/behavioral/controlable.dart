@@ -53,13 +53,15 @@ mixin Controlable on PositionComponent
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (!currentStates.contains(ObjectState.dead)) {
-      currentStates
-        ..clear()
-        ..addAll(keysPressed
-            .where((key) => _keySet.mapToState.containsKey(key))
-            .map((key) => _keySet.mapToState[key]!)
-            .toSet());
+    if (_keySet.mapToState.containsKey(event.physicalKey)) {
+      switch (event.runtimeType) {
+        case RawKeyUpEvent:
+          currentStates.remove(_keySet.mapToState[event.physicalKey]!);
+          break;
+        case RawKeyDownEvent:
+          currentStates.add(_keySet.mapToState[event.physicalKey]!);
+          break;
+      }
     }
 
     return true;
