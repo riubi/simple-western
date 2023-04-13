@@ -74,7 +74,7 @@ mixin Controlable on PositionComponent
   }
 
   void turnLeft() {
-    if (anchor == Anchor.topLeft) {
+    if (anchor.x == Anchor.centerLeft.x) {
       flipHorizontallyAroundCenter();
       anchor = Anchor.topRight;
       position.x -= size.x;
@@ -82,7 +82,7 @@ mixin Controlable on PositionComponent
   }
 
   void turnRight() {
-    if (anchor == Anchor.topRight) {
+    if (anchor.x == Anchor.centerRight.x) {
       flipHorizontallyAroundCenter();
       anchor = Anchor.topLeft;
       position.x -= size.x;

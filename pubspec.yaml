@@ -89,6 +89,9 @@ flutter:
     - assets/audio/intro.mp3
     - assets/audio/lobby.mp3
     - assets/audio/match.mp3
+    - assets/audio/gun-trigger.mp3
+    - assets/audio/gun-reload.mp3
+    - assets/audio/gun-empty-clip.mp3
     - assets/audio/bullet-1.mp3
     - assets/audio/bullet-2.mp3
     - assets/audio/bullet-3.mp3

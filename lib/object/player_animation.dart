@@ -7,6 +7,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   late SpriteAnimation going;
   late SpriteAnimation standing;
   late SpriteAnimation shooting;
+  late SpriteAnimation reloading;
   late SpriteAnimation dead;
 
   final String _asset;
@@ -16,16 +17,20 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   bool get isBlocked =>
       _currentStates.contains(ObjectState.dead) ||
-      (animation == shooting && !shooting.done());
+      ((animation == shooting || animation == reloading) && !animation!.done());
 
   final Set<ObjectState> _currentStates;
+  final Function()? _preShootCallback;
   final Function()? _shootCallback;
+  final Function() _reloadCallback;
   final Function() _deathCallback;
 
   PlayerAnimation(
       Vector2 parentSize,
       this._currentStates,
+      this._preShootCallback,
       this._shootCallback,
+      this._reloadCallback,
       this._deathCallback,
       this._asset,
       this._goingAsset,
@@ -77,7 +82,19 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
           stepTime: 0.15,
           loop: false,
         ))
-      ..onComplete = _shootCallback;
+      ..onComplete = _shootCallback
+      ..onStart = _preShootCallback;
+
+    reloading = await gameRef.loadSpriteAnimation(
+        _shootingAsset,
+        SpriteAnimationData.sequenced(
+          amount: 2,
+          textureSize: Vector2.all(192),
+          stepTime: 0.15,
+          loop: false,
+        ))
+      ..reversed()
+      ..onComplete = _reloadCallback;
 
     animation = standing;
 
@@ -93,8 +110,19 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   void updatePlayerAnimationBasedOnState() {
     if (_isPlayerDead()) {
       animation = dead;
+    } else if (_isPlayerReloading()) {
+      if (animation != reloading) {
+        animation = reloading;
+      }
+      if (reloading.done()) {
+        reloading
+          ..reset()
+          ..currentIndex = 1;
+      }
     } else if (_isPlayerShooting()) {
-      animation = shooting;
+      if (animation != shooting) {
+        animation = shooting;
+      }
       if (shooting.done()) {
         shooting
           ..reset()
@@ -118,6 +146,10 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   bool _isPlayerShooting() {
     return _currentStates.contains(ObjectState.shoot);
+  }
+
+  bool _isPlayerReloading() {
+    return _currentStates.contains(ObjectState.reload);
   }
 
   bool _isPlayerBlockedOrNoCurrentStates() {

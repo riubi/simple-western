@@ -27,11 +27,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   final Set<PositionComponent> ignored;
 
-  Bullet(position, this._directionModifier, this.ignored)
-      : super(position: position, size: _defaultSize) {
+  Bullet(this._directionModifier, this.ignored) : super(size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
-    AudioSet.playBulletShot();
     _maxDistance = Random().nextInt(_extraDistance) + _distance;
     if (_directionModifier < 0) {
       anchor = Anchor.topRight;

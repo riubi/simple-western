@@ -1,1 +1,1 @@
-enum ObjectState { left, right, up, down, hit, shoot, absorb, dead }
+enum ObjectState { left, right, up, down, reload, shoot, absorb, dead }

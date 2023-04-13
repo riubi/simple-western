@@ -2,15 +2,17 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/object/common_object.dart';
+import 'package:simple_western/ui/clip_bar.dart';
 import 'package:simple_western/ui/hp_bar.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/behavioral/bordarable.dart';
 
 class Battle extends PositionComponent with Bordarable {
-  static const _hpBarOffset = 30.0;
-  static const _hpBarStep = 13.0;
+  static const _barOffset = 30.0;
+  static const _barStep = 16.0;
   static const _positionStep = 40.0;
+
   final Set<Player> _leftTeam;
   final Set<Player> _rightTeam;
 
@@ -21,14 +23,16 @@ class Battle extends PositionComponent with Bordarable {
 
   void _loadTeam(Anchor anchor, Set<Player> team) {
     var yPos = _positionStep;
-    var xPos = anchor == Anchor.bottomLeft ? size.x * 0.3 : size.x * 0.7;
+    var xPos = anchor.x == Anchor.centerLeft.x ? size.x * 0.3 : size.x * 0.7;
 
-    var xHpPos =
-        anchor == Anchor.bottomLeft ? _hpBarOffset : size.x - _hpBarOffset;
-    var hpPosition = Vector2(xHpPos, size.y - _hpBarOffset);
+    var xBarPos =
+        anchor.x == Anchor.centerLeft.x ? _barOffset : size.x - _barOffset;
+
+    var hpPosition = Vector2(xBarPos, size.y - _barOffset);
+    var clipPosition = Vector2(xBarPos - _barOffset, size.y - _barOffset / 3  );
 
     for (var partner in team) {
-      if (anchor == Anchor.bottomRight) {
+      if (anchor.x == Anchor.centerRight.x) {
         partner.turnLeft();
       }
 
@@ -37,8 +41,10 @@ class Battle extends PositionComponent with Bordarable {
 
       add(partner);
       add(HpBar(partner, hpPosition, anchor));
+      add(ClipBar(partner.gun, clipPosition, anchor));
 
-      hpPosition = Vector2(hpPosition.x, hpPosition.y += _hpBarStep);
+      hpPosition = Vector2(hpPosition.x, hpPosition.y += _barStep);
+      clipPosition = Vector2(clipPosition.x, clipPosition.y += _barStep);
     }
   }
 

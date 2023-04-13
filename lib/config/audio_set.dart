@@ -7,6 +7,9 @@ class AudioSet {
   static const bulletAudio3 = 'bullet-3.mp3';
   static const bulletAudioMain = 'bullet-4.mp3';
   static const bulletDelivery = 'bullet-delivery.mp3';
+  static const gunTrigger = 'gun-trigger.mp3';
+  static const gunReload = 'gun-reload.mp3';
+  static const gunEmptyClip = 'gun-empty-clip.mp3';
 
   static final bulletsAudio = [
     bulletAudio1,

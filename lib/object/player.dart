@@ -7,8 +7,9 @@ import 'package:simple_western/behavioral/shadowable.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/behavioral/damagable.dart';
-import 'package:simple_western/object/player_animation.dart';
 import 'package:simple_western/object/bullet.dart';
+import 'package:simple_western/object/gun.dart';
+import 'package:simple_western/object/player_animation.dart';
 
 class Player extends PositionComponent
     with
@@ -23,38 +24,56 @@ class Player extends PositionComponent
   static const _ySpeed = 120;
   static const _hp = 5;
   static final _defaultSize = Vector2(21, 27);
-  static final _bulletPosition = Vector2(32, 8);
 
-  late final PlayerAnimation sprite;
-  late final RectangleHitbox hitbox;
+  late final PlayerAnimation animation;
 
-  Player(keySet, asset, goingAsset, shootingAsset, deathAsset) : super(size: _defaultSize) {
+  late final RectangleHitbox hitbox = RectangleHitbox(isSolid: true);
+  late final Gun gun = Gun({this});
+
+  @override
+  late int hp = _hp;
+
+  Player(keySet, asset, goingAsset, shootingAsset, deathAsset)
+      : super(size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
-    initControl(_xSpeed, _ySpeed, keySet, () => sprite.isBlocked);
+    initControl(_xSpeed, _ySpeed, keySet, () => animation.isBlocked);
 
-    hp = _hp;
-    hitbox = RectangleHitbox(isSolid: true);
+    add(gun);
 
-    sprite = PlayerAnimation(size, currentStates, shoot,
-        () => super.onEliminating(), asset, goingAsset, shootingAsset, deathAsset);
+    animation = PlayerAnimation(
+        size,
+        currentStates,
+        gun.preShoot,
+        gun.shoot,
+        gun.reload,
+        () => super.onEliminating(),
+        asset,
+        goingAsset,
+        shootingAsset,
+        deathAsset);
   }
 
   @override
   Future<void> onLoad() async {
-    await addAll({sprite, hitbox});
+    await addAll({animation, hitbox});
 
     await super.onLoad();
   }
 
-  void shoot() {
-    final fixedPosition = position + _bulletPosition;
-    if (anchor == Anchor.topRight) {
-      fixedPosition.x -= size.x / 2 + _bulletPosition.x;
-    }
+  @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (type == ChildrenChangeType.added && child is Bullet) {
+      child.changeParent(parent!);
 
-    parent
-        ?.add(Bullet(fixedPosition, anchor == Anchor.topLeft ? 1 : -1, {this}));
+      var offset = Vector2(32, 8);
+
+      var isTurnedLeft = anchor.x == 1.0;
+      child.position = position + offset;
+      if (isTurnedLeft) {
+        child.position.x -= 35 + offset.x;
+      }
+    }
   }
 
   @override

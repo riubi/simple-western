@@ -16,7 +16,7 @@ class KeyBindingSet {
       PhysicalKeyboardKey.keyS: ObjectState.down,
       PhysicalKeyboardKey.keyA: ObjectState.left,
       PhysicalKeyboardKey.keyD: ObjectState.right,
-      PhysicalKeyboardKey.keyE: ObjectState.hit,
+      PhysicalKeyboardKey.keyE: ObjectState.reload,
       PhysicalKeyboardKey.keyQ: ObjectState.shoot,
     });
   }
@@ -27,7 +27,7 @@ class KeyBindingSet {
       PhysicalKeyboardKey.arrowDown: ObjectState.down,
       PhysicalKeyboardKey.arrowLeft: ObjectState.left,
       PhysicalKeyboardKey.arrowRight: ObjectState.right,
-      PhysicalKeyboardKey.enter: ObjectState.hit,
+      PhysicalKeyboardKey.enter: ObjectState.reload,
       PhysicalKeyboardKey.shiftRight: ObjectState.shoot,
     });
   }
