@@ -46,11 +46,11 @@ class AudioSet {
   }
 
   static void playMatchAudio() {
-    _bgmPlay(match, .45);
+    _bgmPlay(match, .35);
   }
 
   static void playIntroAudio() {
-    _bgmPlay(intro, .55);
+    _bgmPlay(intro, .35);
   }
 
   static void playLobbyAudio() {
