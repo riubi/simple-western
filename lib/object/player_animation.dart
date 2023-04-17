@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/object_state.dart';
+import 'package:simple_western/config/player_animation_set.dart';
 
 class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   static final defaultSize = Vector2.all(70);
@@ -10,15 +11,11 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   late SpriteAnimation reloading;
   late SpriteAnimation dead;
 
-  final String _asset;
-  final String _goingAsset;
-  final String _deathAsset;
-  final String _shootingAsset;
-
   bool get isBlocked =>
       _currentStates.contains(ObjectState.dead) ||
       ((animation == shooting || animation == reloading) && !animation!.done());
 
+  final PlayerAnimationSet _animationSet;
   final Set<ObjectState> _currentStates;
   final Function()? _preShootCallback;
   final Function()? _shootCallback;
@@ -32,10 +29,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
       this._shootCallback,
       this._reloadCallback,
       this._deathCallback,
-      this._asset,
-      this._goingAsset,
-      this._shootingAsset,
-      this._deathAsset)
+      this._animationSet)
       : super(size: defaultSize) {
     position
       ..y = 6 + parentSize.y - size.y
@@ -44,41 +38,39 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   @override
   void onLoad() async {
-    // @TODO extract loading logic with easy customization options
-
     standing = await gameRef.loadSpriteAnimation(
-        _asset,
+        _animationSet.standingData,
         SpriteAnimationData.sequenced(
           amount: 2,
-          textureSize: Vector2.all(192),
+          textureSize: _animationSet.size,
           stepTime: 0.30,
           loop: true,
         ));
 
     going = await gameRef.loadSpriteAnimation(
-        _goingAsset,
+        _animationSet.goingData,
         SpriteAnimationData.sequenced(
           amount: 4,
-          textureSize: Vector2.all(192),
+          textureSize: _animationSet.size,
           stepTime: 0.15,
           loop: true,
         ));
 
     dead = await gameRef.loadSpriteAnimation(
-        _deathAsset,
+        _animationSet.deathData,
         SpriteAnimationData.sequenced(
           amount: 4,
-          textureSize: Vector2.all(192),
+          textureSize: _animationSet.size,
           stepTime: 0.20,
           loop: false,
         ))
       ..onComplete = _deathCallback;
 
     shooting = await gameRef.loadSpriteAnimation(
-        _shootingAsset,
+        _animationSet.shootingData,
         SpriteAnimationData.sequenced(
           amount: 3,
-          textureSize: Vector2.all(192),
+          textureSize: _animationSet.size,
           stepTime: 0.15,
           loop: false,
         ))
@@ -86,14 +78,13 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
       ..onStart = _preShootCallback;
 
     reloading = await gameRef.loadSpriteAnimation(
-        _shootingAsset,
+        _animationSet.reloadData,
         SpriteAnimationData.sequenced(
           amount: 2,
-          textureSize: Vector2.all(192),
+          textureSize: _animationSet.size,
           stepTime: 0.15,
           loop: false,
         ))
-      ..reversed()
       ..onComplete = _reloadCallback;
 
     animation = standing;

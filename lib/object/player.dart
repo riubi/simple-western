@@ -33,7 +33,7 @@ class Player extends PositionComponent
   @override
   late int hp = _hp;
 
-  Player(keySet, asset, goingAsset, shootingAsset, deathAsset)
+  Player(keySet, animationSet)
       : super(size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
@@ -48,10 +48,7 @@ class Player extends PositionComponent
         gun.shoot,
         gun.reload,
         () => super.onEliminating(),
-        asset,
-        goingAsset,
-        shootingAsset,
-        deathAsset);
+        animationSet);
   }
 
   @override

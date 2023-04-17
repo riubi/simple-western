@@ -14,8 +14,7 @@ class Bot extends Player {
 
   double _timeToAction = 0;
 
-  Bot(keySet, asset, goingAsset, shootingAsset, deathAsset)
-      : super(keySet, asset, goingAsset, shootingAsset, deathAsset);
+  Bot(keySet, animationSet) : super(keySet, animationSet);
 
   @override
   void update(double dt) {

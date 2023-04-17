@@ -3,6 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
+import 'package:simple_western/config/player_animation_set.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/scene/match.dart';
 import 'package:simple_western/scene/menu.dart';
@@ -30,48 +31,20 @@ class GameApp extends FlameGame
   }
 
   void startDuel() {
-    startMatch({
-      Player(
-          KeyBindingSet.wasd(),
-          'fighters/player-1.png',
-          'fighters/player-1-going.png',
-          'fighters/player-1-shooting.png',
-          'fighters/player-1-death.png'),
-    }, {
-      Player(
-          KeyBindingSet.arrows(),
-          'fighters/player-2.png',
-          'fighters/player-2-going.png',
-          'fighters/player-2-shooting.png',
-          'fighters/player-2-death.png'),
-    });
+    startMatch({Player(KeyBindingSet.wasd(), PlayerAnimationSet.firstSkin())},
+        {Player(KeyBindingSet.arrows(), PlayerAnimationSet.secondSkin())});
   }
 
   void startBattle() {
     final Set<Bot> bots = {};
 
     for (var i = 0; i < 6; i++) {
-      bots.add(Bot(
-          KeyBindingSet.bot(),
-          'fighters/player-1.png',
-          'fighters/player-1-going.png',
-          'fighters/player-1-shooting.png',
-          'fighters/player-1-death.png'));
+      bots.add(Bot(KeyBindingSet.bot(), PlayerAnimationSet.firstSkin()));
     }
 
     startMatch({
-      Player(
-          KeyBindingSet.wasd(),
-          'fighters/player-2.png',
-          'fighters/player-2-going.png',
-          'fighters/player-2-shooting.png',
-          'fighters/player-2-death.png'),
-      Player(
-          KeyBindingSet.arrows(),
-          'fighters/player-2.png',
-          'fighters/player-2-going.png',
-          'fighters/player-2-shooting.png',
-          'fighters/player-2-death.png'),
+      Player(KeyBindingSet.wasd(), PlayerAnimationSet.secondSkin()),
+      Player(KeyBindingSet.arrows(), PlayerAnimationSet.secondSkin()),
     }, bots);
   }
 
