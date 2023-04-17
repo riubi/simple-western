@@ -10,16 +10,16 @@ mixin Controlable on PositionComponent
   final Set<ObjectState> currentStates = {};
 
   late final Map<ObjectState, Function(Offset)> _stateToMoveFunctionMap;
-  late final Function() _isBlock;
+  late final bool Function() _isBlocked;
   late final KeyBindingSet _keySet;
   late final int _xSpeed;
   late final int _ySpeed;
 
-  initControl(xSpeed, ySpeed, KeyBindingSet keySet, Function() isBlockCheck) {
+  initControl(xSpeed, ySpeed, KeyBindingSet keySet, bool Function() isBlocked) {
     _xSpeed = xSpeed;
     _ySpeed = ySpeed;
     _keySet = keySet;
-    _isBlock = isBlockCheck;
+    _isBlocked = isBlocked;
 
     _stateToMoveFunctionMap = {
       ObjectState.up: (Offset offset) => Offset(offset.dx, offset.dy - _ySpeed),
@@ -92,7 +92,7 @@ mixin Controlable on PositionComponent
   bool _isDeadOrBlocked() {
     return currentStates.contains(ObjectState.dead) ||
         currentStates.isEmpty ||
-        _isBlock();
+        _isBlocked();
   }
 
   Offset _calculateOffset() {

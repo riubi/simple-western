@@ -22,14 +22,14 @@ class Battle extends PositionComponent with Bordarable {
   }
 
   void _loadTeam(Anchor anchor, Set<Player> team) {
-    var yPos = _positionStep;
+    var yPos = _positionStep * 2;
     var xPos = anchor.x == Anchor.centerLeft.x ? size.x * 0.3 : size.x * 0.7;
 
     var xBarPos =
         anchor.x == Anchor.centerLeft.x ? _barOffset : size.x - _barOffset;
 
     var hpPosition = Vector2(xBarPos, size.y - _barOffset);
-    var clipPosition = Vector2(xBarPos - _barOffset, size.y - _barOffset / 3  );
+    var clipPosition = Vector2(xBarPos - _barOffset, size.y - _barOffset / 3);
 
     for (var partner in team) {
       if (anchor.x == Anchor.centerRight.x) {
@@ -56,7 +56,7 @@ class Battle extends PositionComponent with Bordarable {
       Vector2(100, 70),
       Vector2(160, 190),
       Vector2(320, 240),
-      Vector2(345, 35),
+      Vector2(345, 30),
       Vector2(650, 150),
       Vector2(550, 240),
     ]);

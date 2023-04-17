@@ -4,11 +4,11 @@ import 'package:flame/components.dart';
 import 'package:simple_western/object/cloud.dart';
 
 class Sky extends SpriteComponent {
-  static const _sunOffset = 325.0;
+  static const _sunOffset = 225.0;
   static const _cloudMinSpeed = 10.0;
   static const _cloudMaxSpeed = 30.0;
-  static const _upLimiter = 250;
-  static const _downLimiter = 100;
+  static const _bottomLimiter = 275;
+  static const _topLimiter = 100;
 
   static const sun = 'objects/sun.png';
   static const sky = 'backgrounds/sky-bg.png';
@@ -35,7 +35,7 @@ class Sky extends SpriteComponent {
 
     cloudSprites.addAll([sprite1, sprite2]);
 
-    createClouds([-150, size.x * 0.1, size.x * 0.5, size.x * 0.9]);
+    createClouds([-size.x * 0.1, size.x * 0.1, size.x * 0.5, size.x * 0.9]);
 
     return super.onLoad();
   }
@@ -60,7 +60,7 @@ class Sky extends SpriteComponent {
     final cloudStartPosition = x ?? -sprite.srcSize.x * 1.3;
 
     final cloudPosition = Vector2(cloudStartPosition,
-        (position.y - _upLimiter) * verticalOffset + _downLimiter);
+        (position.y - _bottomLimiter) * verticalOffset + _topLimiter);
     final cloud = Cloud(speed, sprite, cloudPosition);
 
     add(cloud);

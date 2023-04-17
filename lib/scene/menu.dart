@@ -7,8 +7,8 @@ import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/ui/text_builder.dart';
 
 class Menu extends Component with HasGameRef, KeyboardHandler {
-  static const lobbyAsset = 'images/ui/logo.png';
-  static const creditsAsset = 'images/ui/credits.gif';
+  static const lobbyAsset = 'assets/images/ui/logo.png';
+  static const creditsAsset = 'assets/images/ui/credits.gif';
 
   final Function() _duelInit;
   final Function() _teamBattleInit;
