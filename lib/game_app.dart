@@ -25,31 +25,31 @@ class GameApp extends FlameGame
 
     await super.onLoad();
 
-    _menu = Menu(startDuel, startBattle, stopGame);
+    _menu = Menu(startDuel, startBattle, _stopGame);
 
     add(_menu);
   }
 
   void startDuel() {
-    startMatch({Player(KeyBindingSet.wasd(), PlayerAnimationSet.firstSkin())},
+    _startMatch({Player(KeyBindingSet.wasd(), PlayerAnimationSet.firstSkin())},
         {Player(KeyBindingSet.arrows(), PlayerAnimationSet.secondSkin())});
   }
 
   void startBattle() {
     final Set<Bot> bots = {};
 
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 4; i++) {
       bots.add(Bot(KeyBindingSet.bot(), PlayerAnimationSet.firstSkin()));
     }
 
-    startMatch({
+    _startMatch({
       Player(KeyBindingSet.wasd(), PlayerAnimationSet.secondSkin()),
       Player(KeyBindingSet.arrows(), PlayerAnimationSet.secondSkin()),
     }, bots);
   }
 
-  void startMatch(Set<Player> leftParty, Set<Player> rightParty) async {
-    stopGame();
+  void _startMatch(Set<Player> leftParty, Set<Player> rightParty) async {
+    _stopGame();
 
     _match = Match(leftParty, rightParty, () {
       AudioSet.playLobbyAudio();
@@ -61,7 +61,7 @@ class GameApp extends FlameGame
     await add(_match!);
   }
 
-  void stopGame() {
+  void _stopGame() {
     if (_match != null) {
       _match?.removeFromParent();
       _match = null;
