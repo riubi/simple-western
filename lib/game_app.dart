@@ -48,7 +48,7 @@ class GameApp extends FlameGame
     }, bots);
   }
 
-  void startMatch(leftParty, rightParty) async {
+  void startMatch(Set<Player> leftParty, Set<Player> rightParty) async {
     stopGame();
 
     _match = Match(leftParty, rightParty, () {

@@ -16,7 +16,7 @@ class Battle extends PositionComponent with Bordarable {
   final Set<Player> _leftTeam;
   final Set<Player> _rightTeam;
 
-  Battle(this._leftTeam, this._rightTeam, size, position)
+  Battle(this._leftTeam, this._rightTeam, Vector2 size, Vector2 position)
       : super(size: size, position: position, anchor: Anchor.topCenter) {
     debugMode = GlobalConfig.debugMode;
   }
@@ -31,7 +31,7 @@ class Battle extends PositionComponent with Bordarable {
     var hpPosition = Vector2(xBarPos, size.y - _barOffset);
     var clipPosition = Vector2(xBarPos - _barOffset, size.y - _barOffset / 3);
 
-    for (var partner in team) {
+    for (final partner in team) {
       if (anchor.x == Anchor.centerRight.x) {
         partner.turnLeft();
       }

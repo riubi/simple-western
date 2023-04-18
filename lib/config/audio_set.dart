@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flame_audio/flame_audio.dart';
 
 class AudioSet {
@@ -26,8 +27,8 @@ class AudioSet {
 
   static bool _audioEnabled = true;
 
-  static preload() async {
-    await FlameAudio.audioCache.loadAll([
+  static Future<List<Uri>> preload() async {
+    return FlameAudio.audioCache.loadAll([
       manDeath,
       match,
       lobby,
@@ -86,13 +87,13 @@ class AudioSet {
   }
 
   static void disable() {
-    print("Audio disabled.");
+    print('Audio disabled.');
     FlameAudio.bgm.stop();
     _audioEnabled = false;
   }
 
   static void enable() {
-    print("Audio enabled.");
+    print('Audio enabled.');
 
     _audioEnabled = true;
   }

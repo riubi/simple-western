@@ -1,37 +1,21 @@
-import 'dart:math';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/obstaclable.dart';
 import 'package:simple_western/behavioral/prioritizable.dart';
 import 'package:simple_western/behavioral/shadowable.dart';
+import 'package:simple_western/config/common_object_asset.dart';
 
 class CommonObject extends PositionComponent
     with Obstaclable, Prioritizable, Shadowable {
-  static const cactus = 'objects/cactus.png';
-  static const bush = 'objects/bush.png';
-  static const grass = 'objects/grass.png';
-  static const tree = 'objects/tree.png';
+  final CommonObjectAsset _asset;
 
-  static final _hitBoxes = {
-    cactus: Vector2(24, 27),
-    bush: Vector2(24, 11),
-    grass: Vector2(24, 14),
-    tree: Vector2(22, 46),
-  };
-
-  static const _randoms = [cactus, bush, grass, tree];
-
-  final String _asset;
-
-  CommonObject(this._asset, position, size)
-      : super(position: position, size: size);
+  CommonObject(Vector2 position, this._asset) : super(position: position);
 
   @override
   Future<void> onLoad() async {
-    final sprite = await Sprite.load(_asset);
-    final spriteSize = sprite.originalSize * 0.5;
-
+    size = Vector2(_asset.hitbox.$0, _asset.hitbox.$1);
+    final sprite = await Sprite.load(_asset.asset);
+    final spriteSize = sprite.originalSize / 2;
     final spriteComponent = SpriteComponent(sprite: sprite, size: spriteSize)
       ..position
       ..y = size.y - spriteSize.y - 1
@@ -42,14 +26,7 @@ class CommonObject extends PositionComponent
     await super.onLoad();
   }
 
-  static CommonObject getRandom(Vector2 position) {
-    final generate = Random().nextInt(_randoms.length);
-    final asset = _randoms[generate];
-
-    return CommonObject(asset, position, _hitBoxes[asset]);
-  }
-
   static Iterable<CommonObject> getRandoms(List<Vector2> positions) {
-    return positions.map((p) => getRandom(p));
+    return positions.map((p) => CommonObject(p, CommonObjectAsset.getRandom()));
   }
 }

@@ -7,6 +7,8 @@ import 'package:simple_western/behavioral/shadowable.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/behavioral/damagable.dart';
+import 'package:simple_western/config/key_binging_set.dart';
+import 'package:simple_western/config/player_animation_set.dart';
 import 'package:simple_western/object/bullet.dart';
 import 'package:simple_western/object/gun.dart';
 import 'package:simple_western/object/player_animation.dart';
@@ -33,7 +35,7 @@ class Player extends PositionComponent
   @override
   late int hp = _hp;
 
-  Player(keySet, animationSet)
+  Player(KeyBindingSet keySet, PlayerAnimationSet animationSet)
       : super(size: _defaultSize) {
     debugMode = GlobalConfig.debugMode;
 
@@ -41,14 +43,8 @@ class Player extends PositionComponent
 
     add(gun);
 
-    animation = PlayerAnimation(
-        size,
-        currentStates,
-        gun.preShoot,
-        gun.shoot,
-        gun.reload,
-        () => super.onEliminating(),
-        animationSet);
+    animation = PlayerAnimation(size, currentStates, gun.preShoot, gun.shoot,
+        gun.reload, () => super.onEliminating(), animationSet);
   }
 
   @override

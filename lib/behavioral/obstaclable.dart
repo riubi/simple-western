@@ -5,7 +5,6 @@ import 'package:simple_western/behavioral/inhiber.dart';
 mixin Obstaclable on PositionComponent implements Inhiber {
   @override
   Offset inhib(PositionComponent movable, Offset positionDelta) {
-    // @TODO fix collision issue when both targets in move.
     if (positionDelta.dy != 0 &&
         !_isMovementBlocked(position.y, movable.position.y, size.y,
             movable.size.y, positionDelta.dy)) {

@@ -6,11 +6,11 @@ class KeyBindingSet {
 
   KeyBindingSet(this.mapToState);
 
-  static bot() {
+  static KeyBindingSet bot() {
     return KeyBindingSet({});
   }
 
-  static wasd() {
+  static KeyBindingSet wasd() {
     return KeyBindingSet({
       PhysicalKeyboardKey.keyW: ObjectState.up,
       PhysicalKeyboardKey.keyS: ObjectState.down,
@@ -21,7 +21,7 @@ class KeyBindingSet {
     });
   }
 
-  static arrows() {
+  static KeyBindingSet arrows() {
     return KeyBindingSet({
       PhysicalKeyboardKey.arrowUp: ObjectState.up,
       PhysicalKeyboardKey.arrowDown: ObjectState.down,

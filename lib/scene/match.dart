@@ -8,7 +8,9 @@ import 'package:simple_western/object/player.dart';
 import 'package:simple_western/scene/sky.dart';
 
 class Match extends PositionComponent with HasGameRef {
-  static const landAsset = 'backgrounds/land-bg.png';
+  static const _landAsset = 'backgrounds/land-bg.png';
+  static const _bgColor = Color.fromRGBO(194, 142, 50, 1);
+  static const _topOffset = 320;
 
   static final battleSize = Vector2(800, 320);
   final Vector2 battlePosition = Vector2.all(0);
@@ -20,16 +22,16 @@ class Match extends PositionComponent with HasGameRef {
   late Battle battleLayer;
   late SpriteComponent skyComponent;
 
-  Match(this._leftTeam, this._rightTeam, Function() battleFinisher) {
+  Match(this._leftTeam, this._rightTeam, void Function() battleFinisher) {
     debugMode = GlobalConfig.debugMode;
 
     skyComponent = Sky();
     landComponent = SpriteComponent(anchor: Anchor.topCenter);
     battleLayer = Battle(_leftTeam, _rightTeam, battleSize, battlePosition);
 
-    for (var team in {_leftTeam, _rightTeam}) {
+    for (final team in {_leftTeam, _rightTeam}) {
       var teamSize = team.length;
-      for (var partner in team) {
+      for (final partner in team) {
         partner.addEliminatingHandler(() {
           teamSize--;
           if (teamSize <= 0) {
@@ -42,7 +44,7 @@ class Match extends PositionComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    landComponent.sprite = await Sprite.load(landAsset);
+    landComponent.sprite = await Sprite.load(_landAsset);
     landComponent.size = landComponent.sprite!.originalSize;
 
     resize(gameRef.canvasSize);
@@ -54,9 +56,7 @@ class Match extends PositionComponent with HasGameRef {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawColor(const Color.fromRGBO(194, 142, 50, 1), BlendMode.src);
-
-    super.render(canvas);
+    super.render(canvas..drawColor(_bgColor, BlendMode.src));
   }
 
   @override
@@ -67,7 +67,7 @@ class Match extends PositionComponent with HasGameRef {
 
   void resize(Vector2 parentSize) {
     battlePosition.x = parentSize.x * 0.5;
-    battlePosition.y = parentSize.y * 0.9 - 320;
+    battlePosition.y = parentSize.y * 0.9 - _topOffset;
 
     skyComponent
       ..position = battlePosition + Vector2(0, 1)

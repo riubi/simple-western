@@ -6,7 +6,7 @@ class Gun extends PositionComponent {
   static const _defaultClipSize = 6;
 
   final Set<PositionComponent> _ignoreList;
-  final List<Function(int)> _handlers = [];
+  final List<void Function(int)> _handlers = [];
 
   int bulletCounts = _defaultClipSize;
 
@@ -52,12 +52,12 @@ class Gun extends PositionComponent {
     return true;
   }
 
-  void addClipHandler(Function(int) onUpdate) {
+  void addClipHandler(void Function(int) onUpdate) {
     _handlers.add(onUpdate);
   }
 
   void _handleCallbacks() {
-    for (var handler in _handlers) {
+    for (final handler in _handlers) {
       handler(bulletCounts);
     }
   }

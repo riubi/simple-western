@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class TextBuilder {
   static Widget buildMenu(
-    Map<String, Function()> buttons, {
+    Map<String, void Function()> buttons, {
     String? title,
     Widget? header,
   }) {
@@ -34,7 +34,7 @@ class TextBuilder {
     return Center(child: widget);
   }
 
-  static Widget buildElement(String text, Function() onTap) => MouseRegion(
+  static Widget buildElement(String text, void Function() onTap) => MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: onTap,
@@ -56,7 +56,9 @@ class TextBuilder {
   }
 
   static TextStyle buildStyle(bool isTitle,
-      {double? fontSize, lineHeight = 1.6, decoration = TextDecoration.none}) {
+      {double? fontSize,
+      lineHeight = 1.6,
+      TextDecoration decoration = TextDecoration.none}) {
     return TextStyle(
       fontFamily: 'RaleWay',
       height: 1.6,
@@ -80,7 +82,7 @@ class TextBuilder {
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           } else {
-            throw 'Could not launch $url';
+            throw Exception('Could not launch $url');
           }
         },
     );

@@ -10,9 +10,9 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
   static const lobbyAsset = 'assets/images/ui/logo.png';
   static const creditsAsset = 'assets/images/ui/credits.gif';
 
-  final Function() _duelInit;
-  final Function() _teamBattleInit;
-  final Function() _gameStop;
+  final void Function() _duelInit;
+  final void Function() _teamBattleInit;
+  final void Function() _gameStop;
   bool _isMenuHiddable = false;
 
   Menu(this._duelInit, this._teamBattleInit, this._gameStop);
@@ -23,8 +23,8 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       ..addEntry(
         'LobbyMenu',
         (context, game) => TextBuilder.buildMenu({
-          "DUEL": _duelStart,
-          "BATTLE": _battleStart,
+          'DUEL': _duelStart,
+          'BATTLE': _battleStart,
           'OPTIONS': _menuSwitcher('Options'),
           'CREDITS': _menuSwitcher('Credits'),
         },
@@ -47,10 +47,10 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       ..addEntry(
         'Options',
         (context, game) => TextBuilder.buildMenu({
-          "AUDIO ON": AudioSet.enable,
-          "AUDIO OFF": AudioSet.disable,
-          "BACK": _menuSwitcher('LobbyMenu')
-        }, title: "OPTIONS"),
+          'AUDIO ON': AudioSet.enable,
+          'AUDIO OFF': AudioSet.disable,
+          'BACK': _menuSwitcher('LobbyMenu')
+        }, title: 'OPTIONS'),
       )
       ..addEntry(
         'Credits',
@@ -106,7 +106,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     }
   }
 
-  _menuSwitcher(String title) => () => gameRef.overlays
+  void Function() _menuSwitcher(String title) => () => gameRef.overlays
     ..clear()
     ..add(title);
 
@@ -118,7 +118,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     _gameStart(_teamBattleInit);
   }
 
-  void _gameStart(Function() gameInit) {
+  void _gameStart(void Function() gameInit) {
     _isMenuHiddable = true;
     gameRef.overlays.clear();
     gameInit();
@@ -127,7 +127,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     }
   }
 
-  _exit(context) {
+  void _exit(BuildContext context) {
     try {
       exit(0);
     } catch (e) {
@@ -137,7 +137,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
 
   Widget _creditsMenuBuilder(context, game) => TextBuilder.buildMenu(
         {'BACK': _menuSwitcher('LobbyMenu')},
-        title: "CREDITS",
+        title: 'CREDITS',
         header: Column(
           textDirection: TextDirection.ltr,
           children: [
@@ -158,16 +158,16 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
         children: [
           const TextSpan(text: 'Contacts: clu@tut.by, '),
           TextBuilder.buildUrl(
-              "LinkedIn", "https://www.linkedin.com/in/ruslan-papina/"),
+              'LinkedIn', 'https://www.linkedin.com/in/ruslan-papina/'),
           const TextSpan(text: ', '),
           TextBuilder.buildUrl(
-              "Github", "https://github.com/riubi/simple_western"),
-          const TextSpan(text: "\n"),
-          const TextSpan(text: "Assets created by: "),
-          TextBuilder.buildUrl("@dara90", "https://www.fiverr.com/dara90"),
-          const TextSpan(text: ", "),
+              'Github', 'https://github.com/riubi/simple_western'),
+          const TextSpan(text: '\n'),
+          const TextSpan(text: 'Assets created by: '),
+          TextBuilder.buildUrl('@dara90', 'https://www.fiverr.com/dara90'),
+          const TextSpan(text: ', '),
           TextBuilder.buildUrl(
-              "@surajrenuka", "https://www.fiverr.com/surajrenuka"),
+              '@surajrenuka', 'https://www.fiverr.com/surajrenuka'),
         ],
       ),
     );

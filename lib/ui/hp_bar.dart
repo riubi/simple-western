@@ -38,7 +38,7 @@ class HpBar extends Component {
     return super.onLoad();
   }
 
-  _onDamage(int hp) {
+  void _onDamage(int hp) {
     sprites[hp].sprite = _noHpSprite;
   }
 }

@@ -9,13 +9,14 @@ mixin Controlable on PositionComponent
     implements CollisionCallbacks, KeyboardHandler {
   final Set<ObjectState> currentStates = {};
 
-  late final Map<ObjectState, Function(Offset)> _stateToMoveFunctionMap;
+  late final Map<ObjectState, Offset Function(Offset)> _stateToMoveFunctionMap;
   late final bool Function() _isBlocked;
   late final KeyBindingSet _keySet;
   late final int _xSpeed;
   late final int _ySpeed;
 
-  initControl(xSpeed, ySpeed, KeyBindingSet keySet, bool Function() isBlocked) {
+  void initControl(
+      int xSpeed, int ySpeed, KeyBindingSet keySet, bool Function() isBlocked) {
     _xSpeed = xSpeed;
     _ySpeed = ySpeed;
     _keySet = keySet;

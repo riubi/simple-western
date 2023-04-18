@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 class Cloud extends SpriteComponent with HasGameRef {
   final double speed;
 
-  Cloud(this.speed, sprite, position)
+  Cloud(this.speed, Sprite sprite, Vector2 position)
       : super(sprite: sprite, position: position);
 
   @override
