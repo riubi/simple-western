@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_western/config/audio_set.dart';
-import 'package:simple_western/ui/text_builder.dart';
+import 'package:simple_western/ui/menu_builder.dart';
 
 class Menu extends Component with HasGameRef, KeyboardHandler {
   static const lobbyAsset = 'assets/images/ui/logo.png';
@@ -22,7 +22,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     gameRef.overlays
       ..addEntry(
         'LobbyMenu',
-        (context, game) => TextBuilder.buildMenu({
+        (context, game) => MenuBuilder.buildMenu({
           'DUEL': _duelStart,
           'BATTLE': _battleStart,
           'OPTIONS': _menuSwitcher('Options'),
@@ -33,12 +33,12 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
               fit: BoxFit.cover,
               color: Colors.black,
               colorBlendMode: BlendMode.softLight,
-              width: 500,
+              width: 600,
             )),
       )
       ..addEntry(
         'PauseMenu',
-        (context, game) => TextBuilder.buildMenu({
+        (context, game) => MenuBuilder.buildMenu({
           'NEW DUEL': _duelStart,
           'NEW BATTLE': _battleStart,
           'TO LOBBY': openLobbyMenu,
@@ -46,11 +46,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       )
       ..addEntry(
         'Options',
-        (context, game) => TextBuilder.buildMenu({
-          'AUDIO ON': AudioSet.enable,
-          'AUDIO OFF': AudioSet.disable,
-          'BACK': _menuSwitcher('LobbyMenu')
-        }, title: 'OPTIONS'),
+        _optionsMenuBuilder,
       )
       ..addEntry(
         'Credits',
@@ -135,7 +131,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     }
   }
 
-  Widget _creditsMenuBuilder(context, game) => TextBuilder.buildMenu(
+  Widget _creditsMenuBuilder(context, game) => MenuBuilder.buildMenu(
         {'BACK': _menuSwitcher('LobbyMenu')},
         title: 'CREDITS',
         header: Column(
@@ -150,23 +146,43 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
         ),
       );
 
+  Widget _optionsMenuBuilder(context, game) {
+    String audioSwitcher =
+        AudioSet.isEnabled() ? 'DISABLE AUDIO' : 'ENABLE AUDIO';
+
+    return MenuBuilder.buildMenu({
+      audioSwitcher: () {
+        AudioSet.toogle();
+
+        gameRef.overlays
+          ..addEntry(
+            'Options',
+            _optionsMenuBuilder,
+          )
+          ..remove('Options')
+          ..add('Options');
+      },
+      'BACK': _menuSwitcher('LobbyMenu')
+    }, title: 'OPTIONS');
+  }
+
   Text _prepareCreditsText() {
     return Text.rich(
       TextSpan(
         text: '',
-        style: TextBuilder.buildStyle(false, fontSize: 18),
+        style: MenuBuilder.buildStyle(false, fontSize: 18, fontFamily: null),
         children: [
           const TextSpan(text: 'Contacts: clu@tut.by, '),
-          TextBuilder.buildUrl(
+          MenuBuilder.buildUrl(
               'LinkedIn', 'https://www.linkedin.com/in/ruslan-papina/'),
           const TextSpan(text: ', '),
-          TextBuilder.buildUrl(
+          MenuBuilder.buildUrl(
               'Github', 'https://github.com/riubi/simple_western'),
           const TextSpan(text: '\n'),
           const TextSpan(text: 'Assets created by: '),
-          TextBuilder.buildUrl('@dara90', 'https://www.fiverr.com/dara90'),
+          MenuBuilder.buildUrl('@dara90', 'https://www.fiverr.com/dara90'),
           const TextSpan(text: ', '),
-          TextBuilder.buildUrl(
+          MenuBuilder.buildUrl(
               '@surajrenuka', 'https://www.fiverr.com/surajrenuka'),
         ],
       ),

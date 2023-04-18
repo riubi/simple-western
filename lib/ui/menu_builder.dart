@@ -2,14 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TextBuilder {
+class MenuBuilder {
   static Widget buildMenu(
     Map<String, void Function()> buttons, {
     String? title,
     Widget? header,
   }) {
     Widget widget = Padding(
-        padding: const EdgeInsets.all(60),
+        padding: const EdgeInsets.all(20),
         child: Column(
             children: buttons.entries
                 .map((entry) => buildElement(entry.key, entry.value))
@@ -27,7 +27,7 @@ class TextBuilder {
 
     if (list.isNotEmpty) {
       widget = Padding(
-          padding: const EdgeInsets.all(60),
+          padding: const EdgeInsets.all(40),
           child: Column(children: [...list, widget]));
     }
 
@@ -58,9 +58,10 @@ class TextBuilder {
   static TextStyle buildStyle(bool isTitle,
       {double? fontSize,
       lineHeight = 1.6,
+      String? fontFamily = 'RaleWay',
       TextDecoration decoration = TextDecoration.none}) {
     return TextStyle(
-      fontFamily: 'RaleWay',
+      fontFamily: fontFamily,
       height: 1.6,
       decoration: decoration,
       decorationColor:
@@ -71,10 +72,10 @@ class TextBuilder {
     );
   }
 
-  static TextSpan buildUrl(String text, String link) {
+  static TextSpan buildUrl(String text, String link, {String? fontFamily}) {
     return TextSpan(
       text: text,
-      style: buildStyle(true),
+      style: buildStyle(true, fontFamily: fontFamily),
       mouseCursor: SystemMouseCursors.click,
       recognizer: TapGestureRecognizer()
         ..onTap = () async {

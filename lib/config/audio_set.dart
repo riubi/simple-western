@@ -86,6 +86,10 @@ class AudioSet {
     FlameAudio.bgm.play(match, volume: volume);
   }
 
+  static bool isEnabled() {
+    return _audioEnabled;
+  }
+
   static void disable() {
     print('Audio disabled.');
     FlameAudio.bgm.stop();
@@ -96,5 +100,9 @@ class AudioSet {
     print('Audio enabled.');
 
     _audioEnabled = true;
+  }
+
+  static void toogle() {
+    isEnabled() ? disable() : enable();
   }
 }
