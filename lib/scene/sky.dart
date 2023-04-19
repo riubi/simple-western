@@ -4,7 +4,8 @@ import 'package:flame/components.dart';
 import 'package:simple_western/object/cloud.dart';
 
 class Sky extends SpriteComponent {
-  static const _sunOffset = 225.0;
+  static const _sunLeftMargin = 125.0;
+  static const _sunTopMargin = 125.0;
   static const _cloudMinSpeed = 10.0;
   static const _cloudMaxSpeed = 30.0;
   static const _bottomLimiter = 275;
@@ -18,7 +19,7 @@ class Sky extends SpriteComponent {
 
   final List<Sprite> cloudSprites = [];
 
-  Sky() : super(anchor: Anchor.bottomCenter, autoResize: true);
+  Sky() : super(anchor: Anchor.bottomCenter);
 
   @override
   FutureOr<void> onLoad() async {
@@ -30,8 +31,8 @@ class Sky extends SpriteComponent {
 
     add(SpriteComponent(
         sprite: sunSprite,
-        position: Vector2(position.x / 2 + _sunOffset, position.y / 2),
-        anchor: Anchor.center));
+        position: Vector2(
+            position.x - _sunLeftMargin, position.y / 2 - _sunLeftMargin)));
 
     cloudSprites.addAll([sprite1, sprite2]);
 
@@ -67,7 +68,7 @@ class Sky extends SpriteComponent {
   }
 
   void createClouds(List<double> list) {
-    for (var element in list) {
+    for (final element in list) {
       createCloud(x: element);
     }
   }

@@ -3,6 +3,7 @@ import 'package:simple_western/behavioral/object_state.dart';
 import 'package:simple_western/config/player_animation_set.dart';
 
 class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
+  static const _bottomPositionOffset = 6;
   static final defaultSize = Vector2.all(70);
 
   late SpriteAnimation going;
@@ -32,7 +33,7 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
       this._set)
       : super(size: defaultSize) {
     position
-      ..y = 6 + parentSize.y - size.y
+      ..y = _bottomPositionOffset + parentSize.y - size.y
       ..x = parentSize.x / 2 - size.x / 2;
   }
 

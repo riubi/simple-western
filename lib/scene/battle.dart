@@ -2,14 +2,12 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/object/common_object.dart';
-import 'package:simple_western/ui/clip_bar.dart';
-import 'package:simple_western/ui/hp_bar.dart';
 import 'package:simple_western/object/player.dart';
 import 'package:simple_western/config/global_config.dart';
 import 'package:simple_western/behavioral/bordarable.dart';
+import 'package:simple_western/ui/player_bars.dart';
 
 class Battle extends PositionComponent with Bordarable {
-  static const _barOffset = 30.0;
   static const _barStep = 16.0;
   static const _positionStep = 40.0;
 
@@ -30,33 +28,6 @@ class Battle extends PositionComponent with Bordarable {
     debugMode = GlobalConfig.debugMode;
   }
 
-  void _loadTeam(Anchor anchor, Set<Player> team) {
-    var yPos = _positionStep * 2;
-    var xPos = anchor.x == Anchor.centerLeft.x ? size.x * 0.3 : size.x * 0.7;
-
-    var xBarPos =
-        anchor.x == Anchor.centerLeft.x ? _barOffset : size.x - _barOffset;
-
-    var hpPosition = Vector2(xBarPos, size.y - _barOffset);
-    var clipPosition = Vector2(xBarPos - _barOffset, size.y - _barOffset / 3);
-
-    for (final partner in team) {
-      if (anchor.x == Anchor.centerRight.x) {
-        partner.turnLeft();
-      }
-
-      partner.position = Vector2(xPos, yPos);
-      yPos += _positionStep;
-
-      add(partner);
-      add(HpBar(partner, hpPosition, anchor));
-      add(ClipBar(partner.gun, clipPosition, anchor));
-
-      hpPosition = Vector2(hpPosition.x, hpPosition.y += _barStep);
-      clipPosition = Vector2(clipPosition.x, clipPosition.y += _barStep);
-    }
-  }
-
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
@@ -67,5 +38,34 @@ class Battle extends PositionComponent with Bordarable {
 
     _loadTeam(Anchor.bottomLeft, _leftTeam);
     _loadTeam(Anchor.bottomRight, _rightTeam);
+  }
+
+  void _loadTeam(Anchor anchor, Set<Player> team) {
+    var parent = PositionComponent(anchor: anchor);
+    var yPos = _positionStep * 2;
+    var xPos = anchor.x == Anchor.centerLeft.x ? size.x * 0.3 : size.x * 0.7;
+
+    var barsPosition = anchor.x == Anchor.centerRight.x
+        ? Vector2(size.x + _barStep, size.y - _barStep)
+        : Vector2(-_barStep, size.y - _barStep);
+
+    for (final partner in team) {
+      var bars = PlayerBars(partner, barsPosition);
+
+      if (anchor.x == Anchor.centerRight.x) {
+        partner.turnLeft();
+        bars.flipHorizontally();
+      }
+
+      partner.position = Vector2(xPos, yPos);
+      yPos += _positionStep;
+
+      add(partner);
+      parent.add(bars);
+
+      barsPosition = Vector2(barsPosition.x, barsPosition.y += _barStep);
+    }
+
+    add(parent);
   }
 }

@@ -11,6 +11,7 @@ class Match extends PositionComponent with HasGameRef {
   static const _landAsset = 'backgrounds/land-bg.png';
   static const _bgColor = Color.fromRGBO(194, 142, 50, 1);
   static const _topOffset = 320;
+  static const _minSkyHeight = 500.0;
 
   static final battleSize = Vector2(800, 320);
   final Vector2 battlePosition = Vector2.all(0);
@@ -71,7 +72,11 @@ class Match extends PositionComponent with HasGameRef {
 
     skyComponent
       ..position = battlePosition + Vector2(0, 1)
-      ..size = Vector2(parentSize.x, skyComponent.size.y);
+      ..size = Vector2(
+          parentSize.x,
+          skyComponent.size.y < _minSkyHeight
+              ? _minSkyHeight
+              : skyComponent.size.y);
 
     landComponent.position = battlePosition;
     battleLayer.position = battlePosition;

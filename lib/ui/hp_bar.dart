@@ -8,14 +8,13 @@ class HpBar extends Component {
 
   late int hp;
   final Vector2 position;
-  final Anchor anchor;
 
   late final Sprite _fullHpSprite;
   late final Sprite _noHpSprite;
 
   final List<SpriteComponent> sprites = [];
 
-  HpBar(Player player, this.position, this.anchor) {
+  HpBar(Player player, this.position) {
     hp = player.hp;
     player.addDamageHandler(_onDamage);
   }
@@ -29,8 +28,7 @@ class HpBar extends Component {
       sprites.add(SpriteComponent(
           sprite: _fullHpSprite,
           size: Vector2.all(18),
-          position: Vector2(position.x + i * 22, position.y),
-          anchor: anchor));
+          position: Vector2(position.x + i * 22, position.y)));
     }
 
     await addAll(sprites);

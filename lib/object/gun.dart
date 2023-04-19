@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/object/bullet.dart';
 
-class Gun extends PositionComponent {
+class Gun extends Component {
   static const _defaultClipSize = 6;
 
   final Set<PositionComponent> _ignoreList;

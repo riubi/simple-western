@@ -24,8 +24,8 @@ class Player extends PositionComponent
         HasGameRef {
   static const _xSpeed = 180;
   static const _ySpeed = 120;
-  static const _hp = 5;
   static final _defaultSize = Vector2(21, 27);
+  static final _bulletOffset = Vector2(32, 8);
 
   late final PlayerAnimation animation;
 
@@ -33,7 +33,7 @@ class Player extends PositionComponent
   late final Gun gun = Gun({this});
 
   @override
-  late int hp = _hp;
+  int hp = 5;
 
   Player(KeyBindingSet keySet, PlayerAnimationSet animationSet)
       : super(size: _defaultSize) {
@@ -59,12 +59,10 @@ class Player extends PositionComponent
     if (type == ChildrenChangeType.added && child is Bullet) {
       child.changeParent(parent!);
 
-      var offset = Vector2(32, 8);
-
       var isTurnedLeft = anchor.x == 1.0;
-      child.position = position + offset;
+      child.position = position + _bulletOffset;
       if (isTurnedLeft) {
-        child.position.x -= 35 + offset.x;
+        child.position.x -= animation.size.x / 2 + _bulletOffset.x;
       }
     }
   }
