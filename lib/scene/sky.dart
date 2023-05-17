@@ -5,7 +5,6 @@ import 'package:simple_western/object/cloud.dart';
 
 class Sky extends SpriteComponent {
   static const _sunLeftMargin = 125.0;
-  static const _sunTopMargin = 125.0;
   static const _cloudMinSpeed = 10.0;
   static const _cloudMaxSpeed = 30.0;
   static const _bottomLimiter = 275;

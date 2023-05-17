@@ -33,6 +33,7 @@ class Player extends PositionComponent
   late final Gun gun = Gun({this});
 
   @override
+  // ignore: overridden_fields
   int hp = 5;
 
   Player(KeyBindingSet keySet, PlayerAnimationSet animationSet)
@@ -57,7 +58,7 @@ class Player extends PositionComponent
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     if (type == ChildrenChangeType.added && child is Bullet) {
-      child.changeParent(parent!);
+      child.parent = parent!;
 
       var isTurnedLeft = anchor.x == 1.0;
       child.position = position + _bulletOffset;
@@ -69,6 +70,8 @@ class Player extends PositionComponent
 
   @override
   void onEliminating() {
+    super.onEliminating();
+
     AudioSet.play(AudioSet.manDeath);
 
     hitbox.size.y /= 2;
