@@ -3,11 +3,11 @@ import 'package:flame/components.dart';
 class PlayerAnimationSet {
   static final Vector2 size = Vector2.all(192);
 
-  final (String, SpriteAnimationData) standingData;
-  final (String, SpriteAnimationData) goingData;
-  final (String, SpriteAnimationData) deathData;
-  final (String, SpriteAnimationData) shootingData;
-  final (String, SpriteAnimationData) reloadData;
+  final (String asset, SpriteAnimationData data) standingData;
+  final (String asset, SpriteAnimationData data) goingData;
+  final (String asset, SpriteAnimationData data) deathData;
+  final (String asset, SpriteAnimationData data) shootingData;
+  final (String asset, SpriteAnimationData data) reloadData;
 
   PlayerAnimationSet({
     required this.standingData, 
@@ -39,7 +39,7 @@ class PlayerAnimationSet {
     String deathAsset,
     String shootingAsset,
     String reloadAsset) => PlayerAnimationSet(
-       standingData:(standingAsset, _defData(2, 0.3, true)),
+       standingData: (standingAsset, _defData(2, 0.3, true)),
        goingData: (goingAsset, _defData(4, 0.2, true)),
        deathData: (deathAsset, _defData(4, 0.3, false)),
        shootingData: (shootingAsset, _defData(3, 0.15, false)),

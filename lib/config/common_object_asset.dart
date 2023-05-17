@@ -12,7 +12,7 @@ enum CommonObjectAsset {
   });
 
   final String asset;
-  final (double, double) hitbox;
+  final (double x, double y) hitbox;
 
   static CommonObjectAsset getRandom() {
     return values[Random().nextInt(values.length)];

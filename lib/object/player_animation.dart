@@ -114,5 +114,5 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   }
 
   Future<SpriteAnimation> _loadSprite((String, SpriteAnimationData) spriteData) =>
-      gameRef.loadSpriteAnimation(spriteData.$0, spriteData.$1);
+      gameRef.loadSpriteAnimation(spriteData.$1, spriteData.$2);
 }

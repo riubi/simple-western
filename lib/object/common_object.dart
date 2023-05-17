@@ -13,7 +13,7 @@ class CommonObject extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    size = Vector2(_asset.hitbox.$0, _asset.hitbox.$1);
+    size = Vector2(_asset.hitbox.$1, _asset.hitbox.$2);
     final sprite = await Sprite.load(_asset.asset);
     final spriteSize = sprite.originalSize / 2;
     final spriteComponent = SpriteComponent(sprite: sprite, size: spriteSize)
