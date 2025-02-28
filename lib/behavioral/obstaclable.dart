@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/inhiber.dart';
 

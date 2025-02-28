@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +9,9 @@ import 'package:simple_western/ui/menu_builder.dart';
 class Menu extends Component with HasGameRef, KeyboardHandler {
   static const lobbyAsset = 'assets/images/ui/logo.png';
   static const creditsAsset = 'assets/images/ui/credits.gif';
+  static const creditsWidth = 700.0;
+  static const creditsPadding = 60.0;
+  static const contactFontSize = 18.0;
 
   final void Function() _duelInit;
   final void Function() _teamBattleInit;
@@ -23,8 +26,8 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       ..addEntry(
         'LobbyMenu',
         (context, game) => MenuBuilder.buildMenu({
-          'DUEL': _duelStart,
-          'BATTLE': _battleStart,
+          'DUEL 1P vs 2P': _duelStart,
+          'BATTLE vs Bots': _battleStart,
           'OPTIONS': _menuSwitcher('Options'),
           'CREDITS': _menuSwitcher('Credits'),
         },
@@ -45,6 +48,14 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
         }, title: 'PAUSED'),
       )
       ..addEntry(
+        'GameOver',
+        (context, game) => MenuBuilder.buildMenu({
+          'NEW DUEL': _duelStart,
+          'NEW BATTLE': _battleStart,
+          'TO LOBBY': openLobbyMenu,
+        }, title: 'Game Over'),
+      )
+      ..addEntry(
         'Options',
         _optionsMenuBuilder,
       )
@@ -58,9 +69,9 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (keysPressed.contains(LogicalKeyboardKey.escape)) {
-      toogleMenu();
+      toggleMenu();
     }
 
     return true;
@@ -81,11 +92,11 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
 
     gameRef
       ..overlays.clear()
-      ..overlays.add('PauseMenu')
+      ..overlays.add('GameOver')
       ..pauseEngine();
   }
 
-  void toogleMenu() {
+  void toggleMenu() {
     if (!_isMenuHiddable) {
       return;
     }
@@ -123,14 +134,6 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     }
   }
 
-  void _exit(BuildContext context) {
-    try {
-      exit(0);
-    } catch (e) {
-      Navigator.of(context).pop(true);
-    }
-  }
-
   Widget _creditsMenuBuilder(context, game) => MenuBuilder.buildMenu(
         {'BACK': _menuSwitcher('LobbyMenu')},
         title: 'CREDITS',
@@ -138,8 +141,8 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
           textDirection: TextDirection.ltr,
           children: [
             Padding(
-              padding: const EdgeInsets.all(60),
-              child: Image.asset(creditsAsset, width: 700),
+              padding: const EdgeInsets.all(creditsPadding),
+              child: Image.asset(creditsAsset, width: creditsWidth),
             ),
             _prepareCreditsText(),
           ],
@@ -152,7 +155,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
 
     return MenuBuilder.buildMenu({
       audioSwitcher: () {
-        AudioSet.toogle();
+        AudioSet.toggle();
 
         gameRef.overlays
           ..addEntry(
@@ -170,8 +173,10 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     return Text.rich(
       TextSpan(
         text: '',
-        style: MenuBuilder.buildStyle(false, fontSize: 18, fontFamily: null),
+        style: MenuBuilder.buildStyle(false,
+            fontSize: contactFontSize, fontFamily: null),
         children: [
+          const TextSpan(text: 'Created by: Papina Ruslan\n'),
           const TextSpan(text: 'Contacts: clu@tut.by, '),
           MenuBuilder.buildUrl(
               'LinkedIn', 'https://www.linkedin.com/in/ruslan-papina/'),

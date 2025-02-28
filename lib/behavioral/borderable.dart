@@ -1,8 +1,9 @@
 import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/inhiber.dart';
 
-mixin Bordarable on PositionComponent implements Inhiber {
+mixin Borderable on PositionComponent implements Inhiber {
   @override
   Offset inhib(PositionComponent movable, Offset positionDelta) {
     if (positionDelta.dy != 0) {

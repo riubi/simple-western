@@ -1,8 +1,11 @@
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:simple_western/behavioral/object_state.dart';
+import 'package:simple_western/behavioral/shadowable.dart';
 import 'package:simple_western/config/player_animation_set.dart';
 
-class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
+class PlayerAnimation extends SpriteAnimationComponent
+    with HasGameRef, Shadowable {
   static const _bottomPositionOffset = 6;
   static final defaultSize = Vector2.all(70);
 
@@ -10,18 +13,19 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
   late SpriteAnimation standing;
   late SpriteAnimation shooting;
   late SpriteAnimation reloading;
-  late SpriteAnimation dead;
+  late SpriteAnimation death;
+  late SpriteAnimationTicker shootingTicker;
 
   bool get isBlocked =>
       _currentStates.contains(ObjectState.dead) ||
-      ((animation == shooting || animation == reloading) && !animation!.done());
+      ((animation == shooting || animation == reloading) &&
+          !(animationTicker?.done() ?? true));
 
   final PlayerAnimationSet _set;
   final Set<ObjectState> _currentStates;
   final void Function()? _preShootCallback;
   final void Function()? _shootCallback;
   final void Function() _reloadCallback;
-  final void Function() _deathCallback;
 
   PlayerAnimation(
       Vector2 parentSize,
@@ -29,33 +33,26 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
       this._preShootCallback,
       this._shootCallback,
       this._reloadCallback,
-      this._deathCallback,
       this._set)
       : super(size: defaultSize) {
     position
       ..y = _bottomPositionOffset + parentSize.y - size.y
       ..x = parentSize.x / 2 - size.x / 2;
+
+    anchor = Anchor.topLeft;
   }
 
   @override
-  void onLoad() async {
+  Future<void> onLoad() async {
     standing = await _loadSprite(_set.standingData);
-
     going = await _loadSprite(_set.goingData);
-
-    dead = await _loadSprite(_set.deathData)
-      ..onComplete = _deathCallback;
-
-    shooting = await _loadSprite(_set.shootingData)
-      ..onComplete = _shootCallback
-      ..onStart = _preShootCallback;
-
-    reloading = await _loadSprite(_set.reloadData)
-      ..onComplete = _reloadCallback;
+    death = await _loadSprite(_set.deathData);
+    shooting = await _loadSprite(_set.shootingData);
+    reloading = await _loadSprite(_set.reloadData);
 
     animation = standing;
 
-    super.onLoad();
+    await super.onLoad();
   }
 
   @override
@@ -66,53 +63,75 @@ class PlayerAnimation extends SpriteAnimationComponent with HasGameRef {
 
   void updatePlayerAnimationBasedOnState() {
     if (_isPlayerDead()) {
-      animation = dead;
-    } else if (_isPlayerReloading()) {
-      if (animation != reloading) {
-        animation = reloading;
-      }
-      if (reloading.done()) {
-        reloading
-          ..reset()
-          ..currentIndex = 1;
-      }
-    } else if (_isPlayerShooting()) {
-      if (animation != shooting) {
-        animation = shooting;
-      }
-      if (shooting.done()) {
-        shooting
-          ..reset()
-          ..currentIndex = 1;
-      }
-    } else if (_isPlayerBlockedOrNoCurrentStates()) {
-      if (animation != shooting) {
-        animation = standing;
-      }
+      return _death();
+    }
+
+    if (_isPlayerReloading()) {
+      return _reloading();
+    }
+
+    if (_isPlayerShooting()) {
+      return _handleShooting();
+    }
+
+    if (_isPlayerBlockedOrNoCurrentStates()) {
+      _standing();
     } else {
-      if (animation == shooting) {
-        shooting.reset();
-      }
-      animation = going;
+      _going();
     }
   }
 
-  bool _isPlayerDead() {
-    return _currentStates.contains(ObjectState.dead);
+  void _handleShooting() {
+    if (animation != shooting) {
+      animation = shooting;
+      animationTicker?.onComplete = _shootCallback;
+      // ..onStart = _preShootCallback;
+    }
+    if (animationTicker!.done()) {
+      animationTicker
+        ?..reset()
+        ..currentIndex = 1;
+    }
   }
 
-  bool _isPlayerShooting() {
-    return _currentStates.contains(ObjectState.shoot);
+  void _death() {
+    if (animation != death) {
+      animation = death;
+    }
   }
 
-  bool _isPlayerReloading() {
-    return _currentStates.contains(ObjectState.reload);
+  void _going() {
+    animation = going;
   }
 
-  bool _isPlayerBlockedOrNoCurrentStates() {
-    return isBlocked || _currentStates.isEmpty;
+  void _standing() {
+    if (animation != shooting) {
+      animation = standing;
+    }
   }
 
-  Future<SpriteAnimation> _loadSprite((String, SpriteAnimationData) spriteData) =>
+  void _reloading() {
+    if (animation != reloading) {
+      animation = reloading;
+      animationTicker?.onStart = _reloadCallback;
+    }
+    if (animationTicker!.done()) {
+      animationTicker
+        ?..reset()
+        ..currentIndex = 1;
+    }
+  }
+
+  bool _isPlayerDead() => _currentStates.contains(ObjectState.dead);
+
+  bool _isPlayerShooting() => _currentStates.contains(ObjectState.shoot);
+
+  bool _isPlayerReloading() => _currentStates.contains(ObjectState.reload);
+
+  bool _isPlayerBlockedOrNoCurrentStates() =>
+      isBlocked || _currentStates.isEmpty;
+
+  Future<SpriteAnimation> _loadSprite(
+          (String, SpriteAnimationData) spriteData) =>
       gameRef.loadSpriteAnimation(spriteData.$1, spriteData.$2);
 }

@@ -5,7 +5,7 @@ import 'package:simple_western/behavioral/inhiber.dart';
 import 'package:simple_western/behavioral/object_state.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 
-mixin Controlable on PositionComponent
+mixin Controllable on PositionComponent
     implements CollisionCallbacks, KeyboardHandler {
   final Set<ObjectState> currentStates = {};
 
@@ -14,6 +14,8 @@ mixin Controlable on PositionComponent
   late final KeyBindingSet _keySet;
   late final int _xSpeed;
   late final int _ySpeed;
+
+  PositionComponent get animation;
 
   void initControl(
       int xSpeed, int ySpeed, KeyBindingSet keySet, bool Function() isBlocked) {
@@ -53,18 +55,14 @@ mixin Controlable on PositionComponent
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (_keySet.mapToState.containsKey(event.physicalKey)) {
-      switch (event.runtimeType) {
-        case RawKeyUpEvent:
-          currentStates.remove(_keySet.mapToState[event.physicalKey]!);
-          break;
-        case RawKeyDownEvent:
-          currentStates.add(_keySet.mapToState[event.physicalKey]!);
-          break;
+      if (event is KeyUpEvent) {
+        currentStates.remove(_keySet.mapToState[event.physicalKey]!);
+      } else if (event is KeyDownEvent) {
+        currentStates.add(_keySet.mapToState[event.physicalKey]!);
       }
     }
-
     return true;
   }
 
@@ -74,19 +72,23 @@ mixin Controlable on PositionComponent
       ..add(ObjectState.dead);
   }
 
+  bool isTurnLeft() => animation.anchor.x == Anchor.topRight.x;
+
+  bool isTurnRight() => animation.anchor.x == Anchor.topLeft.x;
+
   void turnLeft() {
-    if (anchor.x == Anchor.centerLeft.x) {
-      flipHorizontallyAroundCenter();
-      anchor = Anchor.topRight;
-      position.x -= size.x;
+    if (!isTurnLeft()) {
+      animation.flipHorizontallyAroundCenter();
+      animation.anchor = Anchor.topRight;
+      animation.position.x -= animation.size.x;
     }
   }
 
   void turnRight() {
-    if (anchor.x == Anchor.centerRight.x) {
-      flipHorizontallyAroundCenter();
-      anchor = Anchor.topLeft;
-      position.x -= size.x;
+    if (!isTurnRight()) {
+      animation.flipHorizontallyAroundCenter();
+      animation.anchor = Anchor.topLeft;
+      animation.position.x -= animation.size.x;
     }
   }
 

@@ -1,12 +1,12 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/obstaclable.dart';
-import 'package:simple_western/behavioral/prioritizable.dart';
+import 'package:simple_western/behavioral/prioritized.dart';
 import 'package:simple_western/behavioral/shadowable.dart';
 import 'package:simple_western/config/common_object_asset.dart';
 
 class CommonObject extends PositionComponent
-    with Obstaclable, Prioritizable, Shadowable {
+    with Obstaclable, Prioritized, Shadowable {
   final CommonObjectAsset _asset;
 
   CommonObject(Vector2 position, this._asset) : super(position: position);

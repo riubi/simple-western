@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
+import 'package:simple_western/behavioral/controllable.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/object/bullet.dart';
 
 class Gun extends Component {
-  static const _defaultClipSize = 6;
+  static const _defaultClipSize = 5;
 
   final Set<PositionComponent> _ignoreList;
   final List<void Function(int)> _handlers = [];
@@ -44,10 +45,8 @@ class Gun extends Component {
 
     _handleCallbacks();
 
-    var positionParent = parent as PositionComponent;
-    var isTurnedLeft = positionParent.anchor.x == Anchor.centerLeft.x;
-
-    parent!.add(Bullet(isTurnedLeft ? 1 : -1, _ignoreList));
+    var controllableParent = parent as Controllable;
+    parent!.add(Bullet(controllableParent.isTurnRight() ? 1 : -1, _ignoreList));
 
     return true;
   }

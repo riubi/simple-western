@@ -58,6 +58,7 @@ class MenuBuilder {
   static TextStyle buildStyle(bool isTitle,
       {double? fontSize,
       lineHeight = 1.6,
+      double? letterSpacing = 5,
       String? fontFamily = 'RaleWay',
       TextDecoration decoration = TextDecoration.none}) {
     return TextStyle(
@@ -66,7 +67,7 @@ class MenuBuilder {
       decoration: decoration,
       decorationColor:
           isTitle ? const Color.fromRGBO(218, 77, 54, 0.9) : Colors.white,
-      letterSpacing: 5,
+      letterSpacing: letterSpacing,
       fontSize: fontSize,
       color: isTitle ? const Color.fromRGBO(218, 77, 54, 0.9) : Colors.white,
     );

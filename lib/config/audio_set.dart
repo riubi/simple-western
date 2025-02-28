@@ -6,20 +6,32 @@ class AudioSet {
   static const bulletAudio1 = 'bullet-1.mp3';
   static const bulletAudio2 = 'bullet-2.mp3';
   static const bulletAudio3 = 'bullet-3.mp3';
-  static const bulletAudioMain = 'bullet-4.mp3';
+  static const bulletAudio4 = 'bullet-4.mp3';
   static const bulletDelivery = 'bullet-delivery.mp3';
   static const gunTrigger = 'gun-trigger.mp3';
   static const gunReload = 'gun-reload.mp3';
   static const gunEmptyClip = 'gun-empty-clip.mp3';
+  static const manDeath = 'man-death.mp3';
 
-  static final bulletsAudio = [
+  static const audioAssets = [
+    manDeath,
     bulletAudio1,
     bulletAudio2,
     bulletAudio3,
-    bulletAudioMain
+    bulletAudio4,
+    bulletDelivery,
+    gunEmptyClip,
+    gunTrigger,
+    gunReload,
   ];
 
-  static const manDeath = 'man-death.mp3';
+  static const introVolume = .55;
+  static const matchVolume = .30;
+  static const lobbyVolume = .28;
+  static const defaultVolume = .65;
+
+  static final bulletsAudio = [bulletAudio1, bulletAudio2, bulletAudio3, bulletAudio4];
+  static final Map<String, AudioPool> audioPool = {};
 
   static const match = 'match.mp3';
   static const lobby = 'lobby.mp3';
@@ -27,52 +39,49 @@ class AudioSet {
 
   static bool _audioEnabled = true;
 
-  static Future<List<Uri>> preload() async {
-    return FlameAudio.audioCache.loadAll([
-      manDeath,
-      match,
-      lobby,
-      intro,
-      bulletAudio1,
-      bulletAudio2,
-      bulletAudio3,
-      bulletAudioMain,
-      bulletDelivery,
-    ]);
+  static Future<void> preload() async {
+    await FlameAudio.audioCache.loadAll(audioAssets);
+    await FlameAudio.audioCache.loadAll([match, lobby, intro]);
+
+    for (final soundName in audioAssets) {
+      createPool(soundName).then((pool) => audioPool[soundName] = pool);
+    }
   }
 
-  static void preloadAndPlayIntro() async {
-    await FlameAudio.audioCache.load(intro);
+  static Future<AudioPool> createPool(String soundName) {
+    return FlameAudio.createPool(soundName, maxPlayers: 5, minPlayers: 2);
+  }
+
+  static void playIntro() async {
     playIntroAudio();
   }
 
   static void playMatchAudio() {
-    _bgmPlay(match, .35);
+    _bgmPlay(match, matchVolume);
   }
 
   static void playIntroAudio() {
-    _bgmPlay(intro, .35);
+    _bgmPlay(intro, introVolume);
   }
 
   static void playLobbyAudio() {
-    _bgmPlay(lobby, .25);
+    _bgmPlay(lobby, lobbyVolume);
   }
 
   static void playBulletShot() {
-    final random = Random().nextInt(bulletsAudio.length * 3);
-    if (random >= bulletsAudio.length) {
-      play(bulletsAudio.elementAt(bulletsAudio.length - 1));
-    } else {
-      play(bulletsAudio.elementAt(random));
+    var randomIndex = Random().nextInt(bulletsAudio.length * 2);
+    if (randomIndex >= bulletsAudio.length) {
+      randomIndex = bulletsAudio.length - 1;
     }
+    play(bulletsAudio[randomIndex]);
   }
 
-  static void play(String name, {double volume = 0.8}) {
+  static void play(String soundName, {double volume = defaultVolume}) {
     if (!_audioEnabled) {
       return;
     }
 
-    FlameAudio.playLongAudio(name, volume: volume);
+    audioPool[soundName]!.start(volume: volume);
   }
 
   static void _bgmPlay(String match, double volume) {
@@ -102,7 +111,7 @@ class AudioSet {
     _audioEnabled = true;
   }
 
-  static void toogle() {
+  static void toggle() {
     isEnabled() ? disable() : enable();
   }
 }

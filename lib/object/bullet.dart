@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:simple_western/config/audio_set.dart';
-import 'package:simple_western/config/global_config.dart';
+import 'package:simple_western/behavioral/damageable.dart';
 import 'package:simple_western/behavioral/obstaclable.dart';
-import 'package:simple_western/behavioral/damagable.dart';
+import 'package:simple_western/config/audio_set.dart';
 
 class Bullet extends PositionComponent with CollisionCallbacks {
   static const _strength = 1;
@@ -28,8 +28,6 @@ class Bullet extends PositionComponent with CollisionCallbacks {
   final Set<PositionComponent> ignored;
 
   Bullet(this._directionModifier, this.ignored) : super(size: _defaultSize) {
-    debugMode = GlobalConfig.debugMode;
-
     _maxDistance = Random().nextInt(_extraDistance) + _distance;
     if (_directionModifier < 0) {
       anchor = Anchor.topRight;
@@ -60,7 +58,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       return;
     }
 
-    if (other is Damagable) {
+    if (other is Damageable) {
       AudioSet.play(AudioSet.bulletDelivery);
       other.damage(_strength);
     }
@@ -77,7 +75,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
     position.x += _speed * dt.toDouble() * _directionModifier;
     _maxDistance -= _speed * dt;
     if (_maxDistance < 0) {
-      parent?.remove(this);
+      removeFromParent();
     }
 
     super.update(dt);

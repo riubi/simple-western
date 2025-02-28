@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_western/config/global_config.dart';
-import 'package:simple_western/scene/battle.dart';
 import 'package:simple_western/object/player.dart';
+import 'package:simple_western/scene/battle.dart';
 import 'package:simple_western/scene/sky.dart';
 
 class Match extends PositionComponent with HasGameRef {
@@ -12,6 +12,8 @@ class Match extends PositionComponent with HasGameRef {
   static const _bgColor = Color.fromRGBO(194, 142, 50, 1);
   static const _topOffset = 320;
   static const _minSkyHeight = 500.0;
+  static const _resizeFactorX = .5;
+  static const _resizeFactorY = .9;
 
   static final battleSize = Vector2(800, 320);
   final Vector2 battlePosition = Vector2.all(0);
@@ -24,23 +26,12 @@ class Match extends PositionComponent with HasGameRef {
   late SpriteComponent skyComponent;
 
   Match(this._leftTeam, this._rightTeam, void Function() battleFinisher) {
-    debugMode = GlobalConfig.debugMode;
-
     skyComponent = Sky();
     landComponent = SpriteComponent(anchor: Anchor.topCenter);
     battleLayer = Battle(_leftTeam, _rightTeam, battleSize, battlePosition);
 
-    for (final team in {_leftTeam, _rightTeam}) {
-      var teamSize = team.length;
-      for (final partner in team) {
-        partner.addEliminatingHandler(() {
-          teamSize--;
-          if (teamSize <= 0) {
-            battleFinisher();
-          }
-        });
-      }
-    }
+    _handleElimination(_leftTeam, battleFinisher);
+    _handleElimination(_rightTeam, battleFinisher);
   }
 
   @override
@@ -67,8 +58,8 @@ class Match extends PositionComponent with HasGameRef {
   }
 
   void resize(Vector2 parentSize) {
-    battlePosition.x = parentSize.x * 0.5;
-    battlePosition.y = parentSize.y * 0.9 - _topOffset;
+    battlePosition.x = parentSize.x * _resizeFactorX;
+    battlePosition.y = parentSize.y * _resizeFactorY - _topOffset;
 
     skyComponent
       ..position = battlePosition + Vector2(0, 1)
@@ -80,5 +71,19 @@ class Match extends PositionComponent with HasGameRef {
 
     landComponent.position = battlePosition;
     battleLayer.position = battlePosition;
+  }
+
+  void _handleElimination(Set<Player> team, void Function() battleFinisher) {
+    var teamSize = team.length;
+    for (final player in team) {
+      player.addEliminatingHandler(() async {
+        teamSize--;
+        if (teamSize <= 0) {
+          Future.delayed(const Duration(seconds: 1), () {
+            battleFinisher();
+          });
+        }
+      });
+    }
   }
 }
