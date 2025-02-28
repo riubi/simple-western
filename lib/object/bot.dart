@@ -9,11 +9,12 @@ class Bot extends Player {
   static const double _minReactionTime = 0.3;
   static const double _maxExtraReactionTime = 1.0;
   static const double _shootingTime = 0.35;
-  static const double _reloadingTime = 0.75;
+  static const double _reloadingTime = 0.95;
   static const double _stopToShootDistance = 280.0;
   static const double _changeDirectionCooldown = 1.0;
   static const double _acceptableDistanceX = 250;
   static const double _acceptableDistanceY = 4;
+  static const double _turnThreshold = 20;
 
   final _movementActions = [
     ObjectState.up,
@@ -42,6 +43,7 @@ class Bot extends Player {
     }
 
     if (_timeToAction <= 0) {
+      _checkAndTurnToTarget();
       if (_target != null) {
         _chaseOrShoot();
       } else {
@@ -72,11 +74,23 @@ class Bot extends Player {
     _target = closestPlayer;
   }
 
+  void _checkAndTurnToTarget() {
+    if (_target == null) return;
+
+    final targetX = _target!.position.x;
+    final botX = position.x;
+
+    if ((targetX - botX).abs() < _turnThreshold) return;
+
+    if (targetX < botX && isTurnRight()) return turnLeft();
+
+    if (targetX > botX && isTurnLeft()) return turnRight();
+  }
+
   void _chaseOrShoot() {
     if (_target == null) return;
 
     final distance = position.distanceTo(_target!.position);
-
     if (distance < _stopToShootDistance && _hasOneLineWithTarget(_target!)) {
       _stopAndShoot();
     } else {

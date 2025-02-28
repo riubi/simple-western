@@ -4,9 +4,9 @@ import 'package:flutter/painting.dart';
 import 'package:simple_western/ui/text_builder.dart';
 
 class FloatingText extends PositionComponent {
-  static const _fadeOutTime = 1.4;
+  static const _fadeOutTime = 1.5;
   static const _riseSpeed = 10.0;
-  static const _topPadding = 15;
+  static const _topPadding = 17;
 
   final String text;
   final TextPaint textPaint;
