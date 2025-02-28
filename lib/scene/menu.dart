@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_western/config/audio_set.dart';
-import 'package:simple_western/ui/menu_builder.dart';
+import 'package:simple_western/ui/text_builder.dart';
 
 class Menu extends Component with HasGameRef, KeyboardHandler {
   static const lobbyAsset = 'assets/images/ui/logo.png';
@@ -13,21 +13,23 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
   static const creditsPadding = 60.0;
   static const contactFontSize = 18.0;
 
-  final void Function() _duelInit;
+  final void Function() _pvpInit;
+  final void Function() _pveInit;
   final void Function() _teamBattleInit;
   final void Function() _gameStop;
   bool _isMenuHiddable = false;
 
-  Menu(this._duelInit, this._teamBattleInit, this._gameStop);
+  Menu(this._pvpInit, this._pveInit, this._teamBattleInit, this._gameStop);
 
   @override
   FutureOr<void> onLoad() {
     gameRef.overlays
       ..addEntry(
         'LobbyMenu',
-        (context, game) => MenuBuilder.buildMenu({
-          'DUEL 1P vs 2P': _duelStart,
-          'BATTLE vs Bots': _battleStart,
+        (context, game) => TextBuilder.buildMenu({
+          'Duel vs Bot': _pveStart,
+          'Players Duel': _pvpStart,
+          'Team Showdown': _battleStart,
           'OPTIONS': _menuSwitcher('Options'),
           'CREDITS': _menuSwitcher('Credits'),
         },
@@ -41,17 +43,19 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
       )
       ..addEntry(
         'PauseMenu',
-        (context, game) => MenuBuilder.buildMenu({
-          'NEW DUEL': _duelStart,
-          'NEW BATTLE': _battleStart,
+        (context, game) => TextBuilder.buildMenu({
+          'Duel vs Bot': _pveStart,
+          'Players Duel': _pvpStart,
+          'Team Showdown': _battleStart,
           'TO LOBBY': openLobbyMenu,
         }, title: 'PAUSED'),
       )
       ..addEntry(
         'GameOver',
-        (context, game) => MenuBuilder.buildMenu({
-          'NEW DUEL': _duelStart,
-          'NEW BATTLE': _battleStart,
+        (context, game) => TextBuilder.buildMenu({
+          'Duel vs Bot': _pveStart,
+          'Players Duel': _pvpStart,
+          'Team Showdown': _battleStart,
           'TO LOBBY': openLobbyMenu,
         }, title: 'Game Over'),
       )
@@ -117,8 +121,12 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     ..clear()
     ..add(title);
 
-  void _duelStart() {
-    _gameStart(_duelInit);
+  void _pvpStart() {
+    _gameStart(_pvpInit);
+  }
+
+  void _pveStart() {
+    _gameStart(_pveInit);
   }
 
   void _battleStart() {
@@ -134,7 +142,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     }
   }
 
-  Widget _creditsMenuBuilder(context, game) => MenuBuilder.buildMenu(
+  Widget _creditsMenuBuilder(context, game) => TextBuilder.buildMenu(
         {'BACK': _menuSwitcher('LobbyMenu')},
         title: 'CREDITS',
         header: Column(
@@ -153,7 +161,7 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     String audioSwitcher =
         AudioSet.isEnabled() ? 'DISABLE AUDIO' : 'ENABLE AUDIO';
 
-    return MenuBuilder.buildMenu({
+    return TextBuilder.buildMenu({
       audioSwitcher: () {
         AudioSet.toggle();
 
@@ -173,21 +181,21 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
     return Text.rich(
       TextSpan(
         text: '',
-        style: MenuBuilder.buildStyle(false,
+        style: TextBuilder.buildStyle(false,
             fontSize: contactFontSize, fontFamily: null),
         children: [
           const TextSpan(text: 'Created by: Papina Ruslan\n'),
           const TextSpan(text: 'Contacts: clu@tut.by, '),
-          MenuBuilder.buildUrl(
+          TextBuilder.buildUrl(
               'LinkedIn', 'https://www.linkedin.com/in/ruslan-papina/'),
           const TextSpan(text: ', '),
-          MenuBuilder.buildUrl(
+          TextBuilder.buildUrl(
               'Github', 'https://github.com/riubi/simple_western'),
           const TextSpan(text: '\n'),
           const TextSpan(text: 'Assets created by: '),
-          MenuBuilder.buildUrl('@dara90', 'https://www.fiverr.com/dara90'),
+          TextBuilder.buildUrl('@dara90', 'https://www.fiverr.com/dara90'),
           const TextSpan(text: ', '),
-          MenuBuilder.buildUrl(
+          TextBuilder.buildUrl(
               '@surajrenuka', 'https://www.fiverr.com/surajrenuka'),
         ],
       ),

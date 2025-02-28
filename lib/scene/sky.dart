@@ -5,11 +5,12 @@ import 'package:flame/components.dart';
 import 'package:simple_western/object/cloud.dart';
 
 class Sky extends SpriteComponent {
-  static const _sunLeftMargin = 125.0;
+  static const _maxSkyWidth = 650.0;
+  static const _sunTopMargin = 75.0;
   static const _cloudMinSpeed = 10.0;
   static const _cloudMaxSpeed = 30.0;
-  static const _bottomLimiter = 275;
-  static const _topLimiter = 100;
+  static const _bottomLimiter = 175;
+  static const _topLimiter = -75;
 
   static const sun = 'objects/sun.png';
   static const sky = 'backgrounds/sky-bg.png';
@@ -24,6 +25,7 @@ class Sky extends SpriteComponent {
   @override
   FutureOr<void> onLoad() async {
     sprite = await Sprite.load(sky);
+    size.x = size.x.clamp(0, _maxSkyWidth);
 
     final sprite1 = await Sprite.load(cloud1);
     final sprite2 = await Sprite.load(cloud2);
@@ -31,8 +33,9 @@ class Sky extends SpriteComponent {
 
     add(SpriteComponent(
         sprite: sunSprite,
+        anchor: Anchor.topLeft,
         position: Vector2(
-            position.x - _sunLeftMargin, position.y / 2 - _sunLeftMargin)));
+            position.x / 2 + sunSprite.image.width / 2, _sunTopMargin)));
 
     cloudSprites.addAll([sprite1, sprite2]);
 
@@ -46,7 +49,6 @@ class Sky extends SpriteComponent {
     if (type == ChildrenChangeType.removed) {
       createCloud();
     }
-
     super.onChildrenChanged(child, type);
   }
 

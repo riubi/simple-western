@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MenuBuilder {
+class TextBuilder {
   static Widget buildMenu(
     Map<String, void Function()> buttons, {
     String? title,
@@ -58,18 +58,22 @@ class MenuBuilder {
   static TextStyle buildStyle(bool isTitle,
       {double? fontSize,
       lineHeight = 1.6,
+      double? height = 1.6,
       double? letterSpacing = 5,
       String? fontFamily = 'RaleWay',
       TextDecoration decoration = TextDecoration.none}) {
     return TextStyle(
       fontFamily: fontFamily,
-      height: 1.6,
+      height: height,
       decoration: decoration,
       decorationColor:
           isTitle ? const Color.fromRGBO(218, 77, 54, 0.9) : Colors.white,
       letterSpacing: letterSpacing,
       fontSize: fontSize,
       color: isTitle ? const Color.fromRGBO(218, 77, 54, 0.9) : Colors.white,
+      shadows: [
+        Shadow(offset: Offset(1, 1), blurRadius: 2, color: Color(0xFF000000))
+      ],
     );
   }
 

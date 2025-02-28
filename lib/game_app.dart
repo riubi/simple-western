@@ -5,10 +5,10 @@ import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 import 'package:simple_western/config/player_animation_set.dart';
 import 'package:simple_western/object/player.dart';
+import 'package:simple_western/scene/guide_screen.dart';
 import 'package:simple_western/scene/match.dart';
 import 'package:simple_western/scene/menu.dart';
-import 'package:simple_western/ui/guide_screen.dart';
-import 'package:simple_western/ui/splash_screen.dart';
+import 'package:simple_western/scene/splash_screen.dart';
 
 import 'object/bot.dart';
 
@@ -31,8 +31,8 @@ class GameApp extends FlameGame
   }
 
   void _showMenu() {
-    _menu =
-        Menu(_wrapWithGuide(startDuel), _wrapWithGuide(startBattle), _stopGame);
+    _menu = Menu(_wrapWithGuide(startPvpDuel), _wrapWithGuide(startPveDuel),
+        _wrapWithGuide(startBattle), _stopGame);
 
     add(_menu);
 
@@ -49,25 +49,17 @@ class GameApp extends FlameGame
     };
   }
 
-  void startDuel() {
-    _startMatch({
-      Player(KeyBindingSet.wasd(), PlayerAnimationSet.firstSkin(), label: '1')
-    }, {
-      Player(KeyBindingSet.arrows(), PlayerAnimationSet.secondSkin(), label: '2')
-    });
-  }
+  void startPvpDuel() =>
+      _startMatch({Player.createFirst()}, {Player.createSecond()});
+
+  void startPveDuel() => _startMatchWithBots({Player.createFirst()}, 1);
 
   void startBattle() {
-    final Set<Bot> bots = {};
-
-    for (var i = 0; i < 3; i++) {
-      bots.add(Bot(KeyBindingSet.bot(), PlayerAnimationSet.firstSkin()));
-    }
-
-    _startMatch({
-      Player(KeyBindingSet.wasd(), PlayerAnimationSet.secondSkin(), label: '1'),
-      Player(KeyBindingSet.arrows(), PlayerAnimationSet.secondSkin(), label: '2'),
-    }, bots);
+    _startMatchWithBots({
+      Player.createFirst(),
+      Player(KeyBindingSet.arrows(), PlayerAnimationSet.firstSkin(),
+          label: '2'),
+    }, 2);
   }
 
   void _startMatch(Set<Player> leftParty, Set<Player> rightParty) async {
@@ -81,6 +73,15 @@ class GameApp extends FlameGame
     AudioSet.playMatchAudio();
 
     await add(_match!);
+  }
+
+  void _startMatchWithBots(Set<Player> leftParty, int botsAmount) async {
+    final Set<Bot> bots = {};
+    for (var i = 0; i < botsAmount; i++) {
+      bots.add(Bot(PlayerAnimationSet.secondSkin(), () => leftParty.toList()));
+    }
+
+    _startMatch(leftParty, bots);
   }
 
   void _stopGame() {

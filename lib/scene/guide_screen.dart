@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/dismissible.dart';
-import 'package:simple_western/ui/menu_builder.dart';
+import 'package:simple_western/ui/text_builder.dart';
 
 class GuideScreen extends PositionComponent
     with HasGameRef, KeyboardHandler, Dismissible {
@@ -18,7 +18,7 @@ class GuideScreen extends PositionComponent
     final title = TextComponent(
       text: 'Controls Guide',
       textRenderer: TextPaint(
-        style: MenuBuilder.buildStyle(true, fontSize: 38),
+        style: TextBuilder.buildStyle(true, fontSize: 38),
       ),
     );
 
@@ -27,21 +27,21 @@ class GuideScreen extends PositionComponent
     final player1Text = TextComponent(
       text: 'Player 1:\n\nW,A,S,D - Move\nQ - Shoot\nE - Reload',
       textRenderer: TextPaint(
-        style: MenuBuilder.buildStyle(false, fontSize: 18),
+        style: TextBuilder.buildStyle(false, fontSize: 18),
       ),
     )..position = gameRef.size / 2 + Vector2(-250, -100);
 
     final player2Text = TextComponent(
       text: 'Player 2:\n\nArrows - Move\nShift - Shoot\nEnter - Reload',
       textRenderer: TextPaint(
-        style: MenuBuilder.buildStyle(false, fontSize: 18),
+        style: TextBuilder.buildStyle(false, fontSize: 18),
       ),
     )..position = gameRef.size / 2 + Vector2(50, -100);
 
     final pressText = TextComponent(
       text: '<Press any key to continue>',
       textRenderer: TextPaint(
-        style: MenuBuilder.buildStyle(true, fontSize: 24),
+        style: TextBuilder.buildStyle(true, fontSize: 24),
       ),
     );
 

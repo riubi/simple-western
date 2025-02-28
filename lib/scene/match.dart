@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -12,6 +13,7 @@ class Match extends PositionComponent with HasGameRef {
   static const _bgColor = Color.fromRGBO(194, 142, 50, 1);
   static const _topOffset = 320;
   static const _minSkyHeight = 500.0;
+  static const _maxSkyWidth = 1720.0;
   static const _resizeFactorX = .5;
   static const _resizeFactorY = .9;
 
@@ -32,6 +34,7 @@ class Match extends PositionComponent with HasGameRef {
 
     _handleElimination(_leftTeam, battleFinisher);
     _handleElimination(_rightTeam, battleFinisher);
+    _handleHelloPhrase(_leftTeam.union(_rightTeam).toList());
   }
 
   @override
@@ -64,7 +67,7 @@ class Match extends PositionComponent with HasGameRef {
     skyComponent
       ..position = battlePosition + Vector2(0, 1)
       ..size = Vector2(
-          parentSize.x,
+          min(parentSize.x, _maxSkyWidth),
           skyComponent.size.y < _minSkyHeight
               ? _minSkyHeight
               : skyComponent.size.y);
@@ -86,4 +89,7 @@ class Match extends PositionComponent with HasGameRef {
       });
     }
   }
+
+  void _handleHelloPhrase(List<Player> players) =>
+      players[Random().nextInt(players.length)].sayHello();
 }

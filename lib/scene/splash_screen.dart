@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/dismissible.dart';
-import 'package:simple_western/ui/menu_builder.dart';
+import 'package:simple_western/ui/text_builder.dart';
 
 class SplashScreen extends PositionComponent
     with HasGameRef, KeyboardHandler, Dismissible {
@@ -19,13 +19,13 @@ class SplashScreen extends PositionComponent
 
     final logo = SpriteComponent()
       ..sprite = await gameRef.loadSprite(logoAsset)
-      ..size = Vector2(650, 176)
+      ..size = Vector2(650, 96)
       ..position = gameRef.size / 2 - Vector2(325, 88);
 
     final pressText = TextComponent(
       text: '<Press any key to continue>',
       textRenderer:
-          TextPaint(style: MenuBuilder.buildStyle(true, fontSize: 24)),
+          TextPaint(style: TextBuilder.buildStyle(true, fontSize: 24)),
     );
 
     pressText.position =
