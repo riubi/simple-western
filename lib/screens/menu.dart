@@ -12,11 +12,14 @@ import 'package:simple_western/screens/splash_screen.dart';
 enum GameMode { pvp, pve, battle }
 
 class Menu extends Component with HasGameRef, KeyboardHandler {
-  final List<Map<String, String>> _creditsLinks = [
+  final List<Map<String, String>> _authLinks = [
     {'label': 'LinkedIn', 'url': 'https://www.linkedin.com/in/ruslan-papina/'},
     {'label': 'Github', 'url': 'https://github.com/riubi/simple_western'},
+  ];
+
+  final List<Map<String, String>> _assetsLinks = [
     {'label': '@dara90', 'url': 'https://www.fiverr.com/dara90'},
-    {'label': '@surajrenuka', 'url': 'https://www.fiverr.com/surajrenuka'}
+    {'label': '@surajrenuka', 'url': 'https://www.fiverr.com/surajrenuka'},
   ];
 
   static const lobbyAsset = 'assets/images/ui/logo.png';
@@ -191,20 +194,37 @@ class Menu extends Component with HasGameRef, KeyboardHandler {
         game.resumeEngine();
       }).build(context);
 
-  Text _prepareCreditsText() {
-    return Text.rich(
-      TextSpan(
-        text: '',
-        style: InterfaceBuilder.buildStyle(false, fontSize: contactFontSize),
-        children: [
-          const TextSpan(
-              text: 'Created by: Papina Ruslan\nContacts: clu@tut.by, '),
-          ..._creditsLinks
-              .map((e) => InterfaceBuilder.buildUrl(e['label']!, e['url']!))
-        ],
-      ),
-    );
-  }
+  Text _prepareCreditsText() => Text.rich(
+        TextSpan(
+          text: '',
+          style: InterfaceBuilder.buildStyle(false,
+              fontSize: contactFontSize, fontFamily: null),
+          children: [
+            const TextSpan(text: 'Created by: Papina Ruslan\n'),
+            _buildLinkText('Contacts: clu@tut.by, ', _authLinks),
+            const TextSpan(text: '\n'),
+            _buildLinkText('Assets created by: ', _assetsLinks),
+          ],
+        ),
+      );
 
   void Function() _menuSwitcher(String title) => () => _openOverlay(title);
+
+  TextSpan _buildLinkText(String title, List<Map<String, String>> mapLinks) {
+    List<TextSpan> links = [];
+
+    for (var i = 0; i < mapLinks.length; i++) {
+      links.add(InterfaceBuilder.buildUrl(
+          mapLinks[i]['label']!, mapLinks[i]['url']!));
+
+      if (i != mapLinks.length - 1) {
+        links.add(const TextSpan(text: ', '));
+      }
+    }
+
+    return TextSpan(
+      text: title,
+      children: links,
+    );
+  }
 }

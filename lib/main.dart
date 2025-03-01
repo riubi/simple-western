@@ -13,6 +13,7 @@ void main() {
   final game = GameWidget(game: GameApp());
 
   runApp(MaterialApp(
+    title: 'Simple Western - 2D Pixel Shooter.',
     home: Scaffold(
       body: FlameSplashScreen(
         theme: FlameSplashTheme.dark,

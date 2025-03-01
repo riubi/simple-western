@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <title>Simple Western - 2D Pixel Shooter</title>
   <meta name="description" content="2D pixel-art western shooter.">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Simple Western">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-status-bar-style" content="black">
+  <meta name="mobile-web-app-title" content="Simple Western">
 
   <meta property="og:title" content="Simple Western - 2D Pixel-Art Shooter">
   <meta property="og:description" content="Duels and battles in this pixel-art western shooter!">
@@ -18,27 +17,21 @@
   <meta property="og:type" content="game">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Simple Western - 2D Pixel-Art Shooter">
+  <meta name="twitter:title" content="Simple Western - 2D Pixel Shooter">
   <meta name="twitter:description" content="Duels and battles in this pixel-art western shooter!">
   <meta name="twitter:image" content="https://western.clu.by/assets/assets/images/ui/logo.png">
 
-  <title>simple_western</title>
-
   <link rel="manifest" href="manifest.json">
-
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-  <link rel="dns-prefetch" href="https://western.clu.by">
 
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = "{{flutter_service_worker_version}}";
+    var serviceWorkerVersion = {{flutter_service_worker_version}};
   </script>
   <!-- This script adds the flutter initialization JS code -->
-<!--  <script src="flutter.js" defer></script>-->
-<!--  <script src="flutter_bootstrap.js" async></script>-->
 
   <style>
     body {
@@ -88,11 +81,7 @@
 <body>
   <span class="loader"></span>
 
-  <script>
-    window.addEventListener('load', function(ev) {
-      {{flutter_bootstrap_js}}
-    });
-  </script>
+  <script src="flutter_bootstrap.js" async></script>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNGT2B5R8W"></script>
