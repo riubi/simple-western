@@ -26,7 +26,7 @@ class Battle extends PositionComponent with Borderable {
   final Set<Player> _rightTeam;
 
   Battle(this._leftTeam, this._rightTeam, Vector2 size, Vector2 position)
-      : super(size: size, position: position, anchor: Anchor.topCenter);
+      : super(size: size, position: position);
 
   @override
   FutureOr<void> onLoad() async {

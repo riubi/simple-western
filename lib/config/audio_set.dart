@@ -30,7 +30,13 @@ class AudioSet {
   static const lobbyVolume = .28;
   static const defaultVolume = .65;
 
-  static final bulletsAudio = [bulletAudio1, bulletAudio2, bulletAudio3, bulletAudio4];
+  static final bulletsAudio = [
+    bulletAudio1,
+    bulletAudio2,
+    bulletAudio3,
+    bulletAudio4
+  ];
+
   static final Map<String, AudioPool> audioPool = {};
 
   static const match = 'match.mp3';

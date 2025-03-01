@@ -7,6 +7,9 @@ import 'package:simple_western/ui/text_builder.dart';
 class SplashScreen extends PositionComponent
     with HasGameRef, KeyboardHandler, Dismissible {
   static const logoAsset = 'ui/logo.png';
+  static const _logoWidth = 650.0;
+  static const _logoHeight = 96.0;
+  static const _defaultPadding = 40.0;
 
   @override
   void Function() onDismiss;
@@ -15,12 +18,14 @@ class SplashScreen extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    anchor = Anchor.topCenter;
+    position = Vector2(gameRef.size.x / 2, 0);
 
     final logo = SpriteComponent()
       ..sprite = await gameRef.loadSprite(logoAsset)
-      ..size = Vector2(650, 96)
-      ..position = gameRef.size / 2 - Vector2(325, 88);
+      ..size = Vector2(_logoWidth, _logoHeight)
+      ..anchor = Anchor.topCenter
+      ..position = Vector2(0, _defaultPadding);
 
     final pressText = TextComponent(
       text: '<Press any key to continue>',
@@ -28,9 +33,12 @@ class SplashScreen extends PositionComponent
           TextPaint(style: TextBuilder.buildStyle(true, fontSize: 24)),
     );
 
-    pressText.position =
-        gameRef.size / 2 + Vector2(-pressText.scaledSize.x / 2, 80);
+    pressText
+      ..anchor = Anchor.topCenter
+      ..position = Vector2(0, gameRef.size.y * 3 / 4);
 
     addAll([logo, pressText]);
+
+    await super.onLoad();
   }
 }

@@ -24,10 +24,10 @@ class GameApp extends FlameGame
 
   @override
   Future<void> onLoad() async {
+    add(SplashScreen(_showMenu));
+
     await AudioSet.preload();
     await super.onLoad();
-
-    add(SplashScreen(_showMenu));
   }
 
   void _showMenu() {

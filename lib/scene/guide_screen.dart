@@ -9,11 +9,14 @@ class GuideScreen extends PositionComponent
   @override
   void Function() onDismiss;
 
+  static const _defaultPadding = 40.0;
+
   GuideScreen(this.onDismiss);
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    anchor = Anchor.topCenter;
+    position = Vector2(gameRef.size.x / 2, 0);
 
     final title = TextComponent(
       text: 'Controls Guide',
@@ -21,33 +24,36 @@ class GuideScreen extends PositionComponent
         style: TextBuilder.buildStyle(true, fontSize: 38),
       ),
     );
-
-    title.position = gameRef.size / 2 + Vector2(-title.scaledSize.x / 2, -200);
+    title.anchor = Anchor.topCenter;
+    title.position = Vector2(0, _defaultPadding);
 
     final player1Text = TextComponent(
-      text: 'Player 1:\n\nW,A,S,D - Move\nQ - Shoot\nE - Reload',
-      textRenderer: TextPaint(
-        style: TextBuilder.buildStyle(false, fontSize: 18),
-      ),
-    )..position = gameRef.size / 2 + Vector2(-250, -100);
+        text: 'Player 1:\n\nW,A,S,D - Move\nQ - Shoot\nE - Reload',
+        textRenderer: TextPaint(
+          style: TextBuilder.buildStyle(false, fontSize: 18),
+        ),
+        anchor: Anchor.topRight);
 
     final player2Text = TextComponent(
-      text: 'Player 2:\n\nArrows - Move\nShift - Shoot\nEnter - Reload',
-      textRenderer: TextPaint(
-        style: TextBuilder.buildStyle(false, fontSize: 18),
-      ),
-    )..position = gameRef.size / 2 + Vector2(50, -100);
+        text: 'Player 2:\n\nArrows - Move\nShift - Shoot\nEnter - Reload',
+        textRenderer: TextPaint(
+          style: TextBuilder.buildStyle(false, fontSize: 18),
+        ),
+        anchor: Anchor.topLeft);
+
+    player1Text.position = Vector2(-_defaultPadding, 200);
+    player2Text.position = Vector2(_defaultPadding, 200);
 
     final pressText = TextComponent(
-      text: '<Press any key to continue>',
-      textRenderer: TextPaint(
-        style: TextBuilder.buildStyle(true, fontSize: 24),
-      ),
-    );
+        text: '<Press any key to continue>',
+        textRenderer:
+            TextPaint(style: TextBuilder.buildStyle(true, fontSize: 24)),
+        anchor: Anchor.topCenter);
 
-    pressText.position =
-        gameRef.size / 2 + Vector2(-pressText.scaledSize.x / 2, 150);
+    pressText.position = Vector2(0, gameRef.size.y * 3 / 4);
 
     addAll([title, player1Text, player2Text, pressText]);
+
+    await super.onLoad();
   }
 }

@@ -70,8 +70,7 @@ jobs:
           name: flutter-web-build
           path: build/web
 
-      # 😞It's better not to ask why 'curl' is the only way to upload to my host...
-
+      # 😞Don't ask me why 'curl' is the only way to upload build to this host...
       - name: Clear Remote Directory
         run: |
           echo "Removing old files..."
