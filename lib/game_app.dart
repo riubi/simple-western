@@ -4,19 +4,15 @@ import 'package:flame/game.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 import 'package:simple_western/config/player_animation_set.dart';
-import 'package:simple_western/object/player.dart';
-import 'package:simple_western/scene/guide_screen.dart';
-import 'package:simple_western/scene/match.dart';
-import 'package:simple_western/scene/menu.dart';
-import 'package:simple_western/scene/splash_screen.dart';
-
-import 'object/bot.dart';
+import 'package:simple_western/entity/bot.dart';
+import 'package:simple_western/entity/player.dart';
+import 'package:simple_western/screens/match.dart';
+import 'package:simple_western/screens/menu.dart';
 
 class GameApp extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
   Match? _match;
   late Menu _menu;
-  bool _guideSeen = false;
 
   GameApp() : super() {
     collisionDetection = StandardCollisionDetection();
@@ -24,29 +20,11 @@ class GameApp extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    add(SplashScreen(_showMenu));
+    _menu = Menu(startPvpDuel, startPveDuel, startBattle, _stopGame);
+    add(_menu);
 
     await AudioSet.preload();
     await super.onLoad();
-  }
-
-  void _showMenu() {
-    _menu = Menu(_wrapWithGuide(startPvpDuel), _wrapWithGuide(startPveDuel),
-        _wrapWithGuide(startBattle), _stopGame);
-
-    add(_menu);
-
-    AudioSet.playIntro();
-  }
-
-  void Function() _wrapWithGuide(void Function() onComplete) {
-    return () {
-      if (_guideSeen) {
-        return onComplete();
-      }
-      _guideSeen = true;
-      add(GuideScreen(onComplete));
-    };
   }
 
   void startPvpDuel() =>

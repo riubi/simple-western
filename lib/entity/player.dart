@@ -9,11 +9,10 @@ import 'package:simple_western/behavioral/prioritized.dart';
 import 'package:simple_western/config/audio_set.dart';
 import 'package:simple_western/config/key_binging_set.dart';
 import 'package:simple_western/config/player_animation_set.dart';
-import 'package:simple_western/object/bullet.dart';
-import 'package:simple_western/object/gun.dart';
-import 'package:simple_western/object/player_animation.dart';
-
-import '../ui/floating_text.dart';
+import 'package:simple_western/entity/bullet.dart';
+import 'package:simple_western/entity/gun.dart';
+import 'package:simple_western/entity/player_animation.dart';
+import 'package:simple_western/interface/floating_text.dart';
 
 class Player extends PositionComponent
     with

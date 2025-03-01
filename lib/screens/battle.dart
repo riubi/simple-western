@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/borderable.dart';
+import 'package:simple_western/entity/player.dart';
+import 'package:simple_western/interface/player_bars.dart';
 import 'package:simple_western/object/common_object.dart';
-import 'package:simple_western/object/player.dart';
-import 'package:simple_western/ui/player_bars.dart';
 
 class Battle extends PositionComponent with Borderable {
   static const _barStep = 16.0;

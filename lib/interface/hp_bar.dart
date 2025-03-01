@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
-import 'package:simple_western/object/player.dart';
+import 'package:simple_western/entity/player.dart';
 
 class HpBar extends PositionComponent {
   static const double barWidth = 28;

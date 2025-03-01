@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
-import 'package:simple_western/object/gun.dart';
+import 'package:simple_western/entity/gun.dart';
 
 class ClipBar extends PositionComponent {
   static const double bulletWidth = 4;
@@ -21,7 +21,7 @@ class ClipBar extends PositionComponent {
     for (int i = 0; i < gun.bulletCounts; i++) {
       var bullet = RectangleComponent(
         size: Vector2(bulletWidth, bulletHeight),
-        paint: BasicPalette.yellow.paint(), // Цвет пуль
+        paint: BasicPalette.yellow.paint(),
         anchor: Anchor.topCenter,
         position: Vector2(i * (bulletWidth + bulletSpacing), 0),
       );

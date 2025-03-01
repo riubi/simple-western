@@ -4,9 +4,9 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_western/object/player.dart';
-import 'package:simple_western/scene/battle.dart';
-import 'package:simple_western/scene/sky.dart';
+import 'package:simple_western/entity/player.dart';
+import 'package:simple_western/screens/battle.dart';
+import 'package:simple_western/screens/sky.dart';
 
 class Match extends PositionComponent with HasGameRef {
   static const _landAsset = 'backgrounds/land-bg.png';

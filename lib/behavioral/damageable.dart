@@ -22,7 +22,7 @@ mixin Damageable on PositionComponent {
   }
 
   void onDamaging(int strength) async {
-    print('Target damaged: $strength, hp: $hp');
+    debugPrint('Target damaged: $strength, hp: $hp');
     for (final fn in _onDamage) {
       fn(hp);
     }
@@ -30,7 +30,7 @@ mixin Damageable on PositionComponent {
 
   @mustCallSuper
   void onEliminating() {
-    print('Target eliminating.');
+    debugPrint('Target eliminating.');
     for (final fn in _onEliminate) {
       fn();
     }

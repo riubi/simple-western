@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/controllable.dart';
 import 'package:simple_western/config/audio_set.dart';
-import 'package:simple_western/object/bullet.dart';
+import 'package:simple_western/entity/bullet.dart';
 
 class Gun extends Component {
   static const _defaultClipSize = 5;

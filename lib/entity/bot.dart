@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:simple_western/behavioral/object_state.dart';
-import 'package:simple_western/object/player.dart';
+import 'package:simple_western/entity/player.dart';
 import '../config/key_binging_set.dart';
 import '../config/player_animation_set.dart';
 

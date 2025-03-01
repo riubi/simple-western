@@ -1,46 +1,67 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TextBuilder {
+class InterfaceBuilder {
   static Widget buildMenu(
     Map<String, void Function()> buttons, {
     String? title,
     Widget? header,
+    List<Widget>? textContent,
   }) {
-    Widget widget = Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-            children: buttons.entries
-                .map((entry) => buildElement(entry.key, entry.value))
-                .toList()));
-
-    final List<Widget> list = [];
+    List<Widget> elements = [];
 
     if (title != null) {
-      list.add(buildText(title, true));
+      elements.add(buildText(title, true));
     }
 
     if (header != null) {
-      list.add(header);
+      elements.add(header);
     }
 
-    if (list.isNotEmpty) {
-      widget = Padding(
-          padding: const EdgeInsets.all(40),
-          child: Column(children: [...list, widget]));
+    if (textContent != null) {
+      elements.addAll(textContent);
     }
 
-    return Center(child: widget);
+    if (buttons.isNotEmpty) {
+      elements.add(Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: buttons.entries
+              .map((entry) => buildOnTapText(entry.key, entry.value))
+              .toList(),
+        ),
+      ));
+    }
+
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.all(40),
+      child: Column(
+        children: elements,
+      ),
+    ));
   }
 
-  static Widget buildElement(String text, void Function() onTap) => MouseRegion(
+  static Widget buildOnTapText(String text, void Function() onTap) =>
+      MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: onTap,
           child: buildText(text, false),
         ),
       );
+
+  static Widget buildKeySkipWidget(VoidCallback onKeyPress) => KeyboardListener(
+      focusNode: FocusNode()..requestFocus(),
+      onKeyEvent: (event) {
+        if (event is KeyDownEvent) {
+          onKeyPress();
+        }
+      },
+      child: InterfaceBuilder.buildText('<Press any key to continue>', true,
+          fontSize: 32));
 
   static Text buildText(String text, bool isTitle,
       {double? fontSize, TextAlign? align}) {
@@ -88,7 +109,7 @@ class TextBuilder {
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           } else {
-            throw Exception('Could not launch $url');
+            debugPrint('Could not launch $url');
           }
         },
     );

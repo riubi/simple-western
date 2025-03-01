@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
-import 'package:simple_western/ui/text_builder.dart';
+import 'package:simple_western/interface/interface_builder.dart';
 
 class FloatingText extends PositionComponent {
   static const _fadeOutTime = 1.5;
@@ -13,7 +14,7 @@ class FloatingText extends PositionComponent {
 
   FloatingText(this.text, Vector2 position)
       : textPaint = TextPaint(
-            style: TextBuilder.buildStyle(false,
+            style: InterfaceBuilder.buildStyle(false,
                 fontSize: 14, letterSpacing: 0, lineHeight: 1, height: 1)),
         super(position: position, anchor: Anchor.bottomCenter);
 

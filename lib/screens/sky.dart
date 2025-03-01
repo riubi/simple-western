@@ -3,10 +3,9 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:simple_western/interface/gradient_background.dart';
+import 'package:simple_western/interface/painted_background.dart';
 import 'package:simple_western/object/cloud.dart';
-import 'package:simple_western/ui/painted_background.dart';
-
-import '../ui/gradient_background.dart';
 
 class Sky extends PositionComponent with HasGameRef {
   static const _minSkyHeight = 500.0;
@@ -44,9 +43,9 @@ class Sky extends PositionComponent with HasGameRef {
     _gradientBgComponent = GradientBackground(_topBgColor, _bottomBgColor)
       ..anchor = Anchor.bottomCenter;
 
-    final background = await Sprite.load(_sky);
+    final skyBackground = await Sprite.load(_sky);
     _skyComponent = SpriteComponent(
-        sprite: background,
+        sprite: skyBackground,
         position: Vector2(0, height / 5),
         anchor: Anchor.bottomCenter);
 

@@ -1,9 +1,8 @@
 import 'package:flame/components.dart';
-import 'package:flutter/painting.dart';
-import 'package:simple_western/object/player.dart';
-import 'package:simple_western/ui/clip_bar.dart';
-import 'package:simple_western/ui/hp_bar.dart';
-import 'package:simple_western/ui/text_builder.dart';
+import 'package:simple_western/entity/player.dart';
+import 'package:simple_western/interface/clip_bar.dart';
+import 'package:simple_western/interface/hp_bar.dart';
+import 'package:simple_western/interface/interface_builder.dart';
 
 class PlayerBars extends PositionComponent {
   final Player player;
@@ -25,7 +24,7 @@ class PlayerBars extends PositionComponent {
       text: player.label,
       priority: 100,
       textRenderer: TextPaint(
-        style: TextBuilder.buildStyle(false, fontSize: 12, letterSpacing: 0),
+        style: InterfaceBuilder.buildStyle(false, fontSize: 12, letterSpacing: 0),
       ),
     )
       ..position = Vector2(-2, -12)

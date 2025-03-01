@@ -106,14 +106,11 @@ class AudioSet {
   }
 
   static void disable() {
-    print('Audio disabled.');
     FlameAudio.bgm.stop();
     _audioEnabled = false;
   }
 
   static void enable() {
-    print('Audio enabled.');
-
     _audioEnabled = true;
   }
 
