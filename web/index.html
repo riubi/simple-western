@@ -37,8 +37,8 @@
     var serviceWorkerVersion = "{{flutter_service_worker_version}}";
   </script>
   <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
-  <script src="flutter_bootstrap.js" async></script>
+<!--  <script src="flutter.js" defer></script>-->
+<!--  <script src="flutter_bootstrap.js" async></script>-->
 
   <style>
     body {
@@ -89,16 +89,8 @@
   <span class="loader"></span>
 
   <script>
-    function isMobileDevice() {
-      return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
-
     window.addEventListener('load', function(ev) {
-      if (isMobileDevice()) {
-        document.body.innerHTML = '<div style="text-align:center; font-size:24px; color:white; padding:20px;">⚠️ This game is not supported on mobile devices. ⚠️<br />Please use a desktop browser.</div>';
-      } else {
-        {{flutter_bootstrap_js}}
-      }
+      {{flutter_bootstrap_js}}
     });
   </script>
 
