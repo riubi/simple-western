@@ -4,18 +4,20 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'lib/**'
+      - 'web/**'
+      - 'assets/**'
+      - 'pubspec.yaml'
 
 jobs:
-  test:
-    name: Run Flutter Tests
+  build:
+    name: Setup Flutter & Dependencies
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.1'
           channel: stable
@@ -25,26 +27,9 @@ jobs:
 
       - name: Run tests
         run: flutter test
-  build:
-    name: Build Flutter Web
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.27.1'
-          channel: stable
 
       - name: Enable Flutter Web
         run: flutter config --enable-web
-
-      - name: Install dependencies
-        run: flutter pub get
 
       - name: Build Flutter Web
         run: flutter build web --release
@@ -54,40 +39,20 @@ jobs:
         with:
           name: flutter-web-build
           path: build/web
+          retention-days: 7
+          if-no-files-found: error
 
-  deploy:
-    name: Deploy to FTP
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: flutter-web-build
-          path: build/web
 
       # 😞Don't ask me why 'curl' is the only way to upload build to this host...
-      - name: Clear Remote Directory
-        run: |
-          echo "Removing old files..."
-          curl --ftp-pasv -u "$FTP_USER:$FTP_PASSWORD" ftp://$FTP_HOST/$FTP_PATH -Q "DELE *" || true
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_PATH: ${{ secrets.FTP_PATH }}
+      - name: Install GNU Parallel
+        run: sudo apt-get install -y parallel
 
-      - name: Upload Files to FTP
+      - name: Upload Archive to FTP and Install
         run: |
-          find build/web -type f | while read file; do
-            remote_path="${file#build/web/}"
-            echo "Uploading $remote_path..."
-            curl --ftp-create-dirs --ftp-pasv -T "$file" --user "$FTP_USER:$FTP_PASSWORD" "ftp://$FTP_HOST/$FTP_PATH/$remote_path"
-          done
+          echo "Finding all files in build directory..."
+          find build/web -type f > files.txt
+          echo "Uploading files in parallel..."
+          cat files.txt | parallel -j4 "curl --ftp-create-dirs --ftp-pasv -T {} --user '$FTP_USER:$FTP_PASSWORD' 'ftp://$FTP_HOST/$FTP_PATH/{= s#build/web/## =}'"
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
