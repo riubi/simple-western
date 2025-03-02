@@ -20,13 +20,14 @@ class FloatingText extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     position.y -= _topPadding;
 
     add(TimerComponent(
       period: _fadeOutTime,
       onTick: () => removeFromParent(),
     ));
+
+    await super.onLoad();
   }
 
   @override

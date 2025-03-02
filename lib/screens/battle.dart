@@ -30,18 +30,17 @@ class Battle extends PositionComponent with Borderable {
 
   @override
   FutureOr<void> onLoad() async {
-    await super.onLoad();
-
     final commonObjects = CommonObject.getRandoms(_commonObjects);
-
-    await addAll({RectangleHitbox(), ...commonObjects});
 
     _loadTeam(Anchor.bottomLeft, _leftTeam);
     _loadTeam(Anchor.bottomRight, _rightTeam);
+
+    await addAll({RectangleHitbox(), ...commonObjects});
+
+    await super.onLoad();
   }
 
-  void _loadTeam(Anchor anchor, Set<Player> team) {
-    var parent = PositionComponent(anchor: anchor);
+  void _loadTeam(Anchor anchor, Set<Player> team) async {
     var yPos = _positionStep * 2;
     var xPos = anchor.x == Anchor.centerLeft.x
         ? size.x * _leftPositionFactor
@@ -57,10 +56,9 @@ class Battle extends PositionComponent with Borderable {
       player.position = Vector2(xPos, yPos);
       yPos += _positionStep;
 
-      add(player);
-      player.add(bars);
+      await player.add(bars);
     }
 
-    add(parent);
+    await addAll(team);
   }
 }

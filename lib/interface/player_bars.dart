@@ -24,14 +24,17 @@ class PlayerBars extends PositionComponent {
       text: player.label,
       priority: 100,
       textRenderer: TextPaint(
-        style: InterfaceBuilder.buildStyle(false, fontSize: 12, letterSpacing: 0),
+        style:
+            InterfaceBuilder.buildStyle(false, fontSize: 12, letterSpacing: 0),
       ),
     )
       ..position = Vector2(-2, -12)
       ..anchor = Anchor.topRight;
 
-    addAll([playerLabel, hpBar, clipBar]);
-
     player.addEliminatingHandler(() => removeFromParent());
+
+    await addAll([playerLabel, hpBar, clipBar]);
+
+    return super.onLoad();
   }
 }

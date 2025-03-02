@@ -6,7 +6,7 @@ mixin Prioritized on PositionComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    super.onLoad();
+
     updatePriority();
   }
 

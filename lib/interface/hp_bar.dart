@@ -37,7 +37,7 @@ class HpBar extends PositionComponent {
       position: Vector2(borderWidth, borderWidth),
     );
 
-    addAll([_border, _fill]);
+    await addAll([_border, _fill]);
 
     return super.onLoad();
   }

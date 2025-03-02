@@ -16,8 +16,6 @@ class ClipBar extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     for (int i = 0; i < gun.bulletCounts; i++) {
       var bullet = RectangleComponent(
         size: Vector2(bulletWidth, bulletHeight),
@@ -29,6 +27,8 @@ class ClipBar extends PositionComponent {
       _bullets.add(bullet);
       add(bullet);
     }
+
+    await super.onLoad();
   }
 
   void _onClipUpdate(int clipSize) {

@@ -24,6 +24,7 @@ class GameApp extends FlameGame
     add(_menu);
 
     await AudioSet.preload();
+
     await super.onLoad();
   }
 

@@ -16,6 +16,7 @@ class Sky extends PositionComponent with HasGameRef {
   static const _cloudMaxSpeed = 30.0;
   static const _bottomLimiter = 150;
   static const _topLimiter = 75;
+  static const _starterCloudPositions = [-.9, -.4, 0.6, 0.9];
 
   static const _sun = 'objects/sun.png';
   static const _sky = 'backgrounds/sky-bg.png';
@@ -26,22 +27,24 @@ class Sky extends PositionComponent with HasGameRef {
   static const _topBgColor = Color(0xFFEDA540);
   static const _bottomBgColor = Color(0xFFFADF9E);
 
+  final PaintedBackground _paintedBgComponent;
+  final GradientBackground _gradientBgComponent;
   late SpriteComponent _sunComponent;
   late SpriteComponent _skyComponent;
-  late PaintedBackground _paintedBgComponent;
-  late GradientBackground _gradientBgComponent;
 
   final List<Sprite> cloudSprites = [];
 
-  Sky();
+  Sky()
+      : _paintedBgComponent = PaintedBackground(_topBgColor)
+          ..anchor = Anchor.bottomCenter,
+        _gradientBgComponent = GradientBackground(_topBgColor, _bottomBgColor)
+          ..anchor = Anchor.bottomCenter;
 
   @override
   FutureOr<void> onLoad() async {
-    _paintedBgComponent = PaintedBackground(_topBgColor)
-      ..anchor = Anchor.bottomCenter;
-
-    _gradientBgComponent = GradientBackground(_topBgColor, _bottomBgColor)
-      ..anchor = Anchor.bottomCenter;
+    final sunSprite = await Sprite.load(_sun);
+    _sunComponent =
+        SpriteComponent(sprite: sunSprite, anchor: Anchor.topCenter);
 
     final skyBackground = await Sprite.load(_sky);
     _skyComponent = SpriteComponent(
@@ -49,11 +52,12 @@ class Sky extends PositionComponent with HasGameRef {
         position: Vector2(0, height / 5),
         anchor: Anchor.bottomCenter);
 
-    final sunSprite = await Sprite.load(_sun);
-    _sunComponent =
-        SpriteComponent(sprite: sunSprite, anchor: Anchor.topCenter);
+    final sprite1 = await Sprite.load(_cloud1);
+    final sprite2 = await Sprite.load(_cloud2);
+    cloudSprites.addAll([sprite1, sprite2]);
 
-    addAll([
+    await addAll([
+      ...createClouds(_skyComponent.width / 2),
       _paintedBgComponent,
       _gradientBgComponent,
       _skyComponent,
@@ -62,25 +66,19 @@ class Sky extends PositionComponent with HasGameRef {
 
     resize(gameRef.canvasSize);
 
-    final sprite1 = await Sprite.load(_cloud1);
-    final sprite2 = await Sprite.load(_cloud2);
-    cloudSprites.addAll([sprite1, sprite2]);
-
-    final bdWidth = _skyComponent.width / 2;
-    createClouds([-bdWidth * .9, -bdWidth * .4, bdWidth * 0.6, bdWidth * 0.9]);
-
     return super.onLoad();
   }
 
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     if (type == ChildrenChangeType.removed) {
-      createCloud();
+      add(createCloud());
     }
+
     super.onChildrenChanged(child, type);
   }
 
-  void createCloud({double? x}) {
+  Cloud createCloud({double? x}) {
     final randomFactor = Random().nextInt(10) / 9;
 
     final speed =
@@ -98,16 +96,17 @@ class Sky extends PositionComponent with HasGameRef {
 
     final cloudPosition = Vector2(cloudStartPosition, verticalPosition);
 
-    final cloud = Cloud(speed, sprite, cloudPosition)
-      ..anchor = Anchor.bottomCenter;
-
-    add(cloud);
+    return Cloud(speed, sprite, cloudPosition)..anchor = Anchor.bottomCenter;
   }
 
-  void createClouds(List<double> list) {
-    for (final element in list) {
-      createCloud(x: element);
+  List<Cloud> createClouds(double bgWidth) {
+    final clouds = <Cloud>[];
+
+    for (final horizontalFactor in _starterCloudPositions) {
+      clouds.add(createCloud(x: bgWidth * horizontalFactor));
     }
+
+    return clouds;
   }
 
   @override
