@@ -5,7 +5,7 @@ class GradientBackground extends PositionComponent {
   final Color _from;
   final Color _to;
 
-  GradientBackground(this._from, this._to);
+  GradientBackground(this._from, this._to) : super(anchor: Anchor.bottomCenter);
 
   @override
   void render(Canvas canvas) {

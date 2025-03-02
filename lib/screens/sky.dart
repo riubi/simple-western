@@ -29,39 +29,34 @@ class Sky extends PositionComponent with HasGameRef {
 
   final PaintedBackground _paintedBgComponent;
   final GradientBackground _gradientBgComponent;
-  late SpriteComponent _sunComponent;
-  late SpriteComponent _skyComponent;
+  final SpriteComponent _sunComponent;
+  final SpriteComponent _skyComponent;
 
   final List<Sprite> cloudSprites = [];
 
   Sky()
-      : _paintedBgComponent = PaintedBackground(_topBgColor)
-          ..anchor = Anchor.bottomCenter,
-        _gradientBgComponent = GradientBackground(_topBgColor, _bottomBgColor)
-          ..anchor = Anchor.bottomCenter;
+      : _paintedBgComponent = PaintedBackground(_topBgColor),
+        _gradientBgComponent = GradientBackground(_topBgColor, _bottomBgColor),
+        _sunComponent = SpriteComponent(anchor: Anchor.topCenter),
+        _skyComponent = SpriteComponent(anchor: Anchor.bottomCenter),
+        super(anchor: Anchor.bottomCenter);
 
   @override
   FutureOr<void> onLoad() async {
-    final sunSprite = await Sprite.load(_sun);
-    _sunComponent =
-        SpriteComponent(sprite: sunSprite, anchor: Anchor.topCenter);
-
-    final skyBackground = await Sprite.load(_sky);
-    _skyComponent = SpriteComponent(
-        sprite: skyBackground,
-        position: Vector2(0, height / 5),
-        anchor: Anchor.bottomCenter);
+    _sunComponent.sprite = await Sprite.load(_sun);
+    _skyComponent.sprite = await Sprite.load(_sky);
 
     final sprite1 = await Sprite.load(_cloud1);
     final sprite2 = await Sprite.load(_cloud2);
+
     cloudSprites.addAll([sprite1, sprite2]);
 
     await addAll([
-      ...createClouds(_skyComponent.width / 2),
       _paintedBgComponent,
       _gradientBgComponent,
       _skyComponent,
-      _sunComponent
+      _sunComponent,
+      ...createClouds(_skyComponent.width / 2)
     ]);
 
     resize(gameRef.canvasSize);
@@ -96,7 +91,7 @@ class Sky extends PositionComponent with HasGameRef {
 
     final cloudPosition = Vector2(cloudStartPosition, verticalPosition);
 
-    return Cloud(speed, sprite, cloudPosition)..anchor = Anchor.bottomCenter;
+    return Cloud(speed, sprite, cloudPosition);
   }
 
   List<Cloud> createClouds(double bgWidth) {

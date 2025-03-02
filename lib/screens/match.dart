@@ -13,27 +13,22 @@ class Match extends PositionComponent with HasGameRef {
   static const _bgColor = Color.fromRGBO(194, 142, 50, 1);
 
   static final battleSize = Vector2(800, 320);
-  final Vector2 battlePosition = Vector2(0, 50);
+  static final Vector2 battlePosition = Vector2(0, 50);
 
   final Set<Player> _leftTeam;
   final Set<Player> _rightTeam;
 
-  late SpriteComponent _landComponent;
-  late Battle _battleLayer;
-  late PositionComponent _skyComponent;
+  final SpriteComponent _landComponent;
+  final Battle _battleLayer;
+  final PositionComponent _skyComponent;
 
   Match(this._leftTeam, this._rightTeam, void Function() battleFinisher)
-      : super(anchor: Anchor.topCenter) {
-    _skyComponent = Sky()
-      ..anchor = Anchor.bottomCenter
-      ..position = battlePosition;
-
-    _landComponent = SpriteComponent(anchor: Anchor.topCenter)
-      ..position = battlePosition;
-
-    _battleLayer = Battle(_leftTeam, _rightTeam, battleSize, battlePosition)
-      ..anchor = Anchor.topCenter;
-
+      : _skyComponent = Sky()..position = battlePosition,
+        _landComponent =
+            SpriteComponent(anchor: Anchor.topCenter, position: battlePosition),
+        _battleLayer =
+            Battle(_leftTeam, _rightTeam, battleSize, battlePosition),
+        super(anchor: Anchor.topCenter) {
     _handleElimination(_leftTeam, battleFinisher);
     _handleElimination(_rightTeam, battleFinisher);
     _handleHelloPhrase(_leftTeam.union(_rightTeam).toList());
